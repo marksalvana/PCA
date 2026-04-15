@@ -118,6 +118,80 @@ lines.push('-- Dynasty connections are always refreshed (derived data).')
 lines.push('-- ============================================================')
 lines.push('')
 
+// ── SECTION 1: Fix all existing education scores ────────────────────────────
+// Rewrites institution_score for every verified education record using the
+// current CHED formula, including the 0.75× incomplete-degree penalty.
+// This corrects any stale scores left over from previous seed runs.
+lines.push('-- ── Fix existing education scores (CHED accreditation × completion) ──')
+lines.push(`UPDATE public.education_records
+SET institution_score = CASE
+  WHEN ched_accreditation = 'deregulated'  THEN ROUND(100 * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'autonomous'   THEN ROUND(95  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'foreign'      THEN ROUND(90  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'level_4'      THEN ROUND(85  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'level_3'      THEN ROUND(70  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'level_2'      THEN ROUND(55  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'level_1'      THEN ROUND(40  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  WHEN ched_accreditation = 'unaccredited' THEN ROUND(20  * CASE WHEN is_completed THEN 1.0 ELSE 0.75 END)
+  ELSE NULL
+END
+WHERE is_verified = true;`)
+lines.push('')
+
+// ── SECTION 2: Fix all existing track record scores ─────────────────────────
+// Rewrites performance_score using COA findings where available, falls back to
+// bills-based legislative effectiveness for senators/representatives, and sets
+// NULL (excluded from average) when neither data source is available.
+// This eliminates the old fake "30" (unknown) and "50" (not_applicable) values.
+lines.push('-- ── Fix existing track record scores (COA finding or bills-based) ──')
+lines.push(`UPDATE public.track_records
+SET performance_score = CASE
+  WHEN coa_finding = 'unqualified' THEN 100
+  WHEN coa_finding = 'qualified'   THEN 60
+  WHEN coa_finding = 'adverse'     THEN 20
+  WHEN coa_finding = 'disclaimer'  THEN 10
+  WHEN (coa_finding IN ('not_applicable', 'unknown') OR coa_finding IS NULL)
+       AND bills_authored IS NOT NULL AND bills_authored > 0
+    THEN LEAST(85, 30 + ROUND((COALESCE(bills_passed, 0)::numeric / bills_authored::numeric) * 55))
+  ELSE NULL
+END
+WHERE is_verified = true;`)
+lines.push('')
+
+// ── SECTION 3: Recompute all politicians' objective scores ───────────────────
+// Recalculates from the now-corrected sub-record scores.
+// Weights: 30% education + 70% track record (renormalizes when one is missing).
+// Returns NULL when no scorable verified data exists at all.
+lines.push('-- ── Recompute objective scores from fixed sub-records ──')
+lines.push(`UPDATE public.politicians p
+SET objective_score = (
+  SELECT CASE
+    WHEN edu IS NOT NULL AND track IS NOT NULL
+      THEN GREATEST(0, LEAST(100, (edu * 0.3) + (track * 0.7) + COALESCE(legal, 0)))
+    WHEN track IS NOT NULL
+      THEN GREATEST(0, LEAST(100, track + COALESCE(legal, 0)))
+    WHEN edu IS NOT NULL
+      THEN GREATEST(0, LEAST(100, edu  + COALESCE(legal, 0)))
+    ELSE NULL
+  END
+  FROM (
+    SELECT
+      (SELECT AVG(institution_score)
+         FROM public.education_records
+        WHERE politician_id = p.id AND institution_score IS NOT NULL AND is_verified = true) AS edu,
+      (SELECT AVG(performance_score)
+         FROM public.track_records
+        WHERE politician_id = p.id AND performance_score IS NOT NULL AND is_verified = true) AS track,
+      (SELECT COALESCE(SUM(CASE
+           WHEN status = 'pending'   THEN -10
+           WHEN status = 'convicted' THEN -20
+           ELSE 0 END), 0)
+         FROM public.legal_records
+        WHERE politician_id = p.id AND is_verified = true) AS legal
+  ) sub
+);`)
+lines.push('')
+
 for (const p of politicians) {
   const politicianId = randomUUID()
 
