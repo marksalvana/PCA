@@ -45,9 +45,24 @@ export interface Politician {
   status: PoliticianStatus
   objective_score: number | null
   civic_trust_score: number | null
+  dynasty_name: string | null
+  dynasty_generation: number | null
   created_by: string | null
   created_at: string
   updated_at: string
+}
+
+export interface DynastyConnection {
+  id: string
+  politician_id: string
+  related_name: string
+  relationship: string
+  position_held: string | null
+  in_dataset: boolean
+  related_slug: string | null
+  source_url: string
+  source_label: string
+  created_at: string
 }
 
 export interface EducationRecord {
@@ -185,6 +200,7 @@ export interface PoliticianWithDetails extends Politician {
   legal_records: LegalRecord[]
   achievements: Achievement[]
   net_worth_records: NetWorthRecord[]
+  dynasty_connections: DynastyConnection[]
   creator: UserProfile | null
   vetters: UserProfile[]
 }
@@ -208,6 +224,7 @@ export interface Database {
       civic_trust_ratings: { Row: CivicTrustRating; Insert: Omit<CivicTrustRating, 'id' | 'created_at'>; Update: Partial<Omit<CivicTrustRating, 'id' | 'created_at'>> }
       petitions: { Row: Petition; Insert: Omit<Petition, 'id' | 'created_at'>; Update: Partial<Omit<Petition, 'id' | 'created_at'>> }
       scoring_benchmarks: { Row: ScoringBenchmark; Insert: Omit<ScoringBenchmark, 'id'>; Update: Partial<Omit<ScoringBenchmark, 'id'>> }
+      dynasty_connections: { Row: DynastyConnection; Insert: Omit<DynastyConnection, 'id' | 'created_at'>; Update: Partial<Omit<DynastyConnection, 'id' | 'created_at'>> }
     }
   }
 }

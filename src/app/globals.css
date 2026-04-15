@@ -1,29 +1,73 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @theme {
+  /* Brand */
   --color-ph-blue: #0038a8;
+  --color-ph-blue-light: #1d4ed8;
   --color-ph-red: #ce1126;
   --color-ph-gold: #fcd116;
-  --color-surface-0: #0a0a0f;
-  --color-surface-1: #111827;
-  --color-surface-2: #1f2937;
-  --color-surface-3: #374151;
-  --color-score-high: #22c55e;
-  --color-score-mid: #f59e0b;
-  --color-score-low: #ef4444;
+
+  /* Light surfaces */
+  --color-surface-0: #f8fafc;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #f1f5f9;
+  --color-surface-3: #e2e8f0;
+
+  /* Text */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+
+  /* Score colors */
+  --color-score-high: #16a34a;
+  --color-score-mid: #d97706;
+  --color-score-low: #dc2626;
+
+  /* Border */
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+}
+
+* {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
   background-color: var(--color-surface-0);
-  color: #f9fafb;
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  color: var(--color-text-primary);
 }
 
-/* Score bar animation */
+/* Smooth score bar animation */
 @keyframes fill-bar {
   from { width: 0% }
 }
 
 .score-bar-fill {
   animation: fill-bar 0.8s ease-out forwards;
+}
+
+/* Card shadow */
+.card {
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 16px 0 rgb(0 56 168 / 0.10);
+  border-color: #bfdbfe;
+  transform: translateY(-1px);
+  transition: all 0.15s ease;
+}
+
+/* Dynasty badge pulse */
+@keyframes dynasty-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.dynasty-badge {
+  animation: dynasty-pulse 3s ease-in-out infinite;
 }

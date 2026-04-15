@@ -1,31 +1,17 @@
-type Props = {
-  label: string
-  scoreA: number | null
-  scoreB: number | null
+type Props = { label: string; scoreA: number | null; scoreB: number | null }
+
+function barColor(score: number | null) {
+  if (score == null) return '#e2e8f0'
+  if (score >= 70) return '#16a34a'
+  if (score >= 40) return '#d97706'
+  return '#dc2626'
 }
 
-function bar(score: number | null, winner: boolean) {
-  const color = score == null ? '#374151'
-    : score >= 70 ? '#22c55e'
-    : score >= 40 ? '#f59e0b'
-    : '#ef4444'
-
-  return (
-    <div className="flex-1 flex flex-col gap-1">
-      <div className={`h-2 rounded-full bg-[#1f2937] overflow-hidden`}>
-        <div
-          className="h-full rounded-full score-bar-fill"
-          style={{ width: `${score ?? 0}%`, backgroundColor: color }}
-        />
-      </div>
-      <span
-        className={`text-sm font-black tabular-nums ${winner ? 'text-white' : 'text-gray-500'}`}
-        style={{ color: score != null ? color : undefined }}
-      >
-        {score != null ? Math.round(score) : '—'}
-      </span>
-    </div>
-  )
+function textColor(score: number | null) {
+  if (score == null) return 'text-slate-400'
+  if (score >= 70) return 'text-green-700'
+  if (score >= 40) return 'text-amber-700'
+  return 'text-red-700'
 }
 
 export default function StatDuel({ label, scoreA, scoreB }: Props) {
@@ -33,20 +19,29 @@ export default function StatDuel({ label, scoreA, scoreB }: Props) {
   const bWins = scoreB != null && (scoreA == null || scoreB > scoreA)
 
   return (
-    <div className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
-      {/* A side */}
+    <div className="flex items-center gap-3 py-2.5 border-b border-slate-100 last:border-0">
+      {/* A side — reversed */}
       <div className="flex-1 flex flex-row-reverse items-center gap-2">
-        {bar(scoreA, aWins)}
+        <span className={`text-sm font-black tabular-nums w-7 text-right ${textColor(scoreA)} ${aWins ? 'opacity-100' : 'opacity-50'}`}>
+          {scoreA != null ? Math.round(scoreA) : '—'}
+        </span>
+        <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-full rounded-full score-bar-fill ml-auto" style={{ width: `${scoreA ?? 0}%`, backgroundColor: barColor(scoreA) }} />
+        </div>
       </div>
 
-      {/* Label */}
       <div className="w-28 shrink-0 text-center">
-        <span className="text-xs text-gray-500 uppercase tracking-wide">{label}</span>
+        <span className="text-xs text-slate-500 font-semibold uppercase tracking-wide">{label}</span>
       </div>
 
       {/* B side */}
       <div className="flex-1 flex items-center gap-2">
-        {bar(scoreB, bWins)}
+        <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-full rounded-full score-bar-fill" style={{ width: `${scoreB ?? 0}%`, backgroundColor: barColor(scoreB) }} />
+        </div>
+        <span className={`text-sm font-black tabular-nums w-7 ${textColor(scoreB)} ${bWins ? 'opacity-100' : 'opacity-50'}`}>
+          {scoreB != null ? Math.round(scoreB) : '—'}
+        </span>
       </div>
     </div>
   )

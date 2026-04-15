@@ -14,6 +14,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const politicians = JSON.parse(
   readFileSync(join(__dirname, '../data/politicians-seed.json'), 'utf8')
 )
+const dynasties = JSON.parse(
+  readFileSync(join(__dirname, '../data/dynasties.json'), 'utf8')
+)
 
 // Scoring maps (mirrors scoring_benchmarks seed data)
 const CHED_SCORES = {
@@ -114,8 +117,10 @@ for (const p of politicians) {
 
   lines.push(`-- ---- ${p.full_name} ----`)
 
+  const dynasty = dynasties[p.slug] ?? null
+
   // INSERT politician
-  lines.push(`INSERT INTO public.politicians (id, slug, full_name, preferred_name, photo_url, birth_date, current_position, party_affiliation, region, is_incumbent, is_candidate, status, objective_score) VALUES (`)
+  lines.push(`INSERT INTO public.politicians (id, slug, full_name, preferred_name, photo_url, birth_date, current_position, party_affiliation, region, is_incumbent, is_candidate, status, objective_score, dynasty_name, dynasty_generation) VALUES (`)
   lines.push(`  ${sql(politicianId)},`)
   lines.push(`  ${sql(p.slug)},`)
   lines.push(`  ${sql(p.full_name)},`)
@@ -128,7 +133,9 @@ for (const p of politicians) {
   lines.push(`  ${sql(p.is_incumbent ?? false)},`)
   lines.push(`  ${sql(p.is_candidate ?? false)},`)
   lines.push(`  'published',`)
-  lines.push(`  ${sql(parseFloat(objectiveScore))}`)
+  lines.push(`  ${sql(parseFloat(objectiveScore))},`)
+  lines.push(`  ${sql(dynasty?.is_dynasty_member ? dynasty.dynasty_name : null)},`)
+  lines.push(`  ${sql(dynasty?.is_dynasty_member ? dynasty.dynasty_generation : null)}`)
   lines.push(`);`)
   lines.push('')
 
@@ -175,6 +182,19 @@ for (const p of politicians) {
     lines.push(`);`)
   }
   if (achievements.length) lines.push('')
+
+  // INSERT dynasty_connections
+  if (dynasty?.is_dynasty_member && dynasty.family_members?.length) {
+    for (const member of dynasty.family_members) {
+      lines.push(`INSERT INTO public.dynasty_connections (id, politician_id, related_name, relationship, position_held, in_dataset, related_slug, source_url, source_label) VALUES (`)
+      lines.push(`  ${sql(randomUUID())}, ${sql(politicianId)},`)
+      lines.push(`  ${sql(member.name)}, ${sql(member.relationship)}, ${sql(member.position ?? null)},`)
+      lines.push(`  ${sql(member.in_dataset ?? false)}, ${sql(member.slug ?? null)},`)
+      lines.push(`  'https://en.wikipedia.org/wiki/Political_families_in_the_Philippines', 'Wikipedia – Political Families in the Philippines'`)
+      lines.push(`);`)
+    }
+    lines.push('')
+  }
 
   lines.push('')
 }

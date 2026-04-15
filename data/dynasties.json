@@ -1,0 +1,481 @@
+{
+  "bongbong-marcos": {
+    "dynasty_name": "Marcos Dynasty",
+    "dynasty_generation": 2,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Ferdinand Marcos Sr.",
+        "relationship": "Father",
+        "position": "President of the Philippines (1965–1986), Senator (1959–1965), Representative for Ilocos Norte 2nd District (1949–1959)",
+        "in_dataset": false
+      },
+      {
+        "name": "Imelda Romualdez Marcos",
+        "relationship": "Mother",
+        "position": "First Lady (1965–1986), Governor of Metro Manila (1975–1986), Representative for Ilocos Norte (1995–1998, 1998–2007)",
+        "in_dataset": false
+      },
+      {
+        "name": "Imee Marcos",
+        "relationship": "Sister (older)",
+        "position": "Senator (2019–present), Governor of Ilocos Norte (2010–2019), Representative for Ilocos Norte 2nd District (1998–2007)",
+        "in_dataset": true,
+        "slug": "imee-marcos"
+      },
+      {
+        "name": "Mariano Marcos Sr.",
+        "relationship": "Paternal grandfather",
+        "position": "Representative for Ilocos Norte 2nd District (1925–1931)",
+        "in_dataset": false
+      },
+      {
+        "name": "Ferdinand Alexander 'Sandro' Marcos III",
+        "relationship": "Son",
+        "position": "House Majority Leader (2025–present), Representative for Ilocos Norte 1st District (2022–present)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [
+      {
+        "slug": "imee-marcos",
+        "relationship": "Siblings — Bongbong Marcos and Imee Marcos are brother and sister, both children of Ferdinand Marcos Sr. and Imelda Marcos"
+      }
+    ],
+    "dynasty_summary": "Part of the Marcos political dynasty of Ilocos Norte, one of the most powerful in Philippine history. His father Ferdinand Marcos Sr. ruled the Philippines for 21 years including a 14-year dictatorship under Martial Law. The family was exiled after the 1986 EDSA People Power Revolution but returned to power in subsequent decades. Bongbong's 2022 presidential win represents a full restoration of the dynasty to Malacañang."
+  },
+
+  "sara-duterte": {
+    "dynasty_name": "Duterte Family",
+    "dynasty_generation": 2,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Rodrigo Roa Duterte",
+        "relationship": "Father",
+        "position": "President of the Philippines (2016–2022), Mayor of Davao City (multiple terms, 1988–2016)",
+        "in_dataset": true,
+        "slug": "rodrigo-duterte"
+      },
+      {
+        "name": "Paolo 'Pulong' Duterte",
+        "relationship": "Brother",
+        "position": "Representative for Davao City 1st District (2019–present), Vice Mayor of Davao City (2013–2018), Barangay Captain (2007–2013)",
+        "in_dataset": false
+      },
+      {
+        "name": "Sebastian 'Baste' Duterte",
+        "relationship": "Brother",
+        "position": "Mayor of Davao City (2022–present), Vice Mayor of Davao City (2019–2022)",
+        "in_dataset": false
+      },
+      {
+        "name": "Omar Duterte",
+        "relationship": "Brother",
+        "position": "Representative for Davao City 2nd District (2025–present), Barangay Captain (2023–2025)",
+        "in_dataset": false
+      },
+      {
+        "name": "Rodrigo 'Rigo' Duterte II",
+        "relationship": "Brother",
+        "position": "Vice Mayor of Davao City (2025–present), Davao City Councilor",
+        "in_dataset": false
+      },
+      {
+        "name": "Vicente Duterte",
+        "relationship": "Paternal grandfather",
+        "position": "Governor of Davao Province (1959)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [
+      {
+        "slug": "rodrigo-duterte",
+        "relationship": "Father and daughter — Rodrigo Duterte is Sara Duterte's father; both served as Davao City mayor before ascending to national office"
+      }
+    ],
+    "dynasty_summary": "Second-generation member of the Duterte political dynasty of Davao City, one of the most dominant regional dynasties in Mindanao. Her father Rodrigo became the first Mindanaoan president. Multiple siblings simultaneously hold local offices in Davao City, making it one of the most concentrated single-family political holds in the Philippines."
+  },
+
+  "rodrigo-duterte": {
+    "dynasty_name": "Duterte Family",
+    "dynasty_generation": 1,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Vicente Duterte",
+        "relationship": "Father",
+        "position": "Governor of Davao Province (1959)",
+        "in_dataset": false
+      },
+      {
+        "name": "Sara Duterte-Carpio",
+        "relationship": "Daughter",
+        "position": "Vice President of the Philippines (2022–present), Mayor of Davao City (2010–2013, 2016–2022), Vice Mayor of Davao City (2007–2010)",
+        "in_dataset": true,
+        "slug": "sara-duterte"
+      },
+      {
+        "name": "Paolo 'Pulong' Duterte",
+        "relationship": "Son",
+        "position": "Representative for Davao City 1st District (2019–present), Vice Mayor of Davao City (2013–2018)",
+        "in_dataset": false
+      },
+      {
+        "name": "Sebastian 'Baste' Duterte",
+        "relationship": "Son",
+        "position": "Mayor of Davao City (2022–present), Vice Mayor of Davao City (2019–2022)",
+        "in_dataset": false
+      },
+      {
+        "name": "Omar Duterte",
+        "relationship": "Son",
+        "position": "Representative for Davao City 2nd District (2025–present)",
+        "in_dataset": false
+      },
+      {
+        "name": "Rodrigo 'Rigo' Duterte II",
+        "relationship": "Son",
+        "position": "Vice Mayor of Davao City (2025–present)",
+        "in_dataset": false
+      },
+      {
+        "name": "Ronald Duterte",
+        "relationship": "Cousin",
+        "position": "Mayor of Cebu City (1983–1986), Vice Mayor of Cebu City (1980–1983), Councilor of Cebu City (1963–1980)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [
+      {
+        "slug": "sara-duterte",
+        "relationship": "Father and daughter — Rodrigo Duterte is the father of Sara Duterte; he preceded her as Mayor of Davao City before his presidential term"
+      }
+    ],
+    "dynasty_summary": "Patriarch and founder of the modern Duterte political dynasty of Davao City. His father Vicente was a provincial governor, but Rodrigo built the dynasty into a national force through his 21-year hold on Davao City's mayoralty before winning the presidency in 2016. Multiple children and relatives now hold positions across Davao, creating a concentrated family grip on the city."
+  },
+
+  "leni-robredo": {
+    "dynasty_name": null,
+    "dynasty_generation": null,
+    "is_dynasty_member": false,
+    "family_members": [
+      {
+        "name": "Jesse Robredo",
+        "relationship": "Late husband",
+        "position": "Mayor of Naga City (six terms, 1988–2010), Secretary of the Interior and Local Government (2010–2012); died in plane crash 2012",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Leni Robredo is a self-made first-generation politician with no dynasty background. Her late husband Jesse Robredo was a highly regarded mayor and cabinet secretary in his own right, but they represent civic service careers rather than a political dynasty. She was elected to Congress in 2013 in a by-election to fill Jesse's former congressional seat."
+  },
+
+  "gloria-macapagal-arroyo": {
+    "dynasty_name": "Macapagal-Arroyo Family",
+    "dynasty_generation": 2,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Diosdado Macapagal Sr.",
+        "relationship": "Father",
+        "position": "President of the Philippines (1961–1965), Vice President (1957–1961), Representative (1949–1957)",
+        "in_dataset": false
+      },
+      {
+        "name": "José Miguel 'Mike' Arroyo",
+        "relationship": "Husband",
+        "position": "First Gentleman of the Philippines (2001–2010); lawyer; no elected office held",
+        "in_dataset": false
+      },
+      {
+        "name": "Juan Miguel 'Mikey' Arroyo",
+        "relationship": "Son",
+        "position": "Representative for Pampanga 2nd District (2004–2010, 2019–2022), Vice Governor of Pampanga (2001–2004)",
+        "in_dataset": false
+      },
+      {
+        "name": "Diosdado 'Dato' Ignacio Macapagal Arroyo",
+        "relationship": "Son",
+        "position": "No significant elected office",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Second-generation member of the Macapagal political family of Pampanga. Her father Diosdado Macapagal was the 9th President of the Philippines, making Gloria the second president from the same family — one of only a handful of such cases in Philippine history. Her son Mikey has also served as a congressman and vice governor, extending the dynasty to a third generation."
+  },
+
+  "joseph-estrada": {
+    "dynasty_name": "Estrada-Ejercito Family",
+    "dynasty_generation": 1,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Luisa 'Loi' Pimentel Ejercito-Estrada",
+        "relationship": "Wife",
+        "position": "Senator of the Philippines (2001–2007), First Lady (1998–2001)",
+        "in_dataset": false
+      },
+      {
+        "name": "Jose Pimentel 'Jinggoy' Ejercito Jr.",
+        "relationship": "Son (with Loi Ejercito)",
+        "position": "Senator (2004–2016, 2022–present), Mayor of San Juan (1992–2001), Vice Mayor of San Juan (1988–1992)",
+        "in_dataset": false
+      },
+      {
+        "name": "Joseph Victor 'JV' Gomez Ejercito",
+        "relationship": "Son (with Guia Gomez)",
+        "position": "Senator (2013–2019, 2022–present), Representative for San Juan (2010–2013), Mayor of San Juan (2001–2010)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Patriarch of the Estrada-Ejercito political family. Though a self-made politician who rose through acting fame, Estrada founded a dynasty in San Juan and national politics. At the peak of the family's political power, Estrada himself was president while his wife Loi was a senator and his son Jinggoy was mayor of San Juan. Two of his sons — Jinggoy and JV Ejercito — subsequently became senators, while JV also served as representative and mayor."
+  },
+
+  "imee-marcos": {
+    "dynasty_name": "Marcos Dynasty",
+    "dynasty_generation": 2,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Ferdinand Marcos Sr.",
+        "relationship": "Father",
+        "position": "President of the Philippines (1965–1986), Senator (1959–1965), Representative for Ilocos Norte (1949–1959)",
+        "in_dataset": false
+      },
+      {
+        "name": "Imelda Romualdez Marcos",
+        "relationship": "Mother",
+        "position": "First Lady (1965–1986), Governor of Metro Manila (1975–1986), Representative for Ilocos Norte (1995–2007)",
+        "in_dataset": false
+      },
+      {
+        "name": "Ferdinand 'Bongbong' Marcos Jr.",
+        "relationship": "Brother (younger)",
+        "position": "President of the Philippines (2022–present), Senator (2010–2016), Governor of Ilocos Norte (1983–1986), Representative for Ilocos Norte (1992–1995, 1995–1998, 1998–2007)",
+        "in_dataset": true,
+        "slug": "bongbong-marcos"
+      },
+      {
+        "name": "Ferdinand Alexander 'Sandro' Marcos III",
+        "relationship": "Nephew (son of Bongbong)",
+        "position": "House Majority Leader (2025–present), Representative for Ilocos Norte 1st District (2022–present)",
+        "in_dataset": false
+      },
+      {
+        "name": "Mariano Marcos Sr.",
+        "relationship": "Paternal grandfather",
+        "position": "Representative for Ilocos Norte 2nd District (1925–1931)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [
+      {
+        "slug": "bongbong-marcos",
+        "relationship": "Siblings — Imee Marcos and Bongbong Marcos are sister and brother, both children of Ferdinand Marcos Sr. and Imelda Marcos"
+      }
+    ],
+    "dynasty_summary": "Oldest daughter of dictator Ferdinand Marcos Sr. and Imelda Marcos, and older sister of President Bongbong Marcos. Held positions as Ilocos Norte governor and representative before winning a Senate seat in 2019. The Marcos dynasty spans at least four generations of political office, from grandfather Mariano Marcos (1925) through to nephew Sandro Marcos (2022)."
+  },
+
+  "leila-de-lima": {
+    "dynasty_name": null,
+    "dynasty_generation": null,
+    "is_dynasty_member": false,
+    "family_members": [
+      {
+        "name": "Vicente de Lima",
+        "relationship": "Father",
+        "position": "Commissioner of the Commission on Elections (COMELEC) — appointive, not elected office",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Leila de Lima is a first-generation elected politician from Iriga, Camarines Sur. Her father Vicente de Lima served as an appointed COMELEC commissioner, not an elected official. She rose through civil society, law, and human rights advocacy — her political career is entirely her own, not inherited. She is not part of any political dynasty."
+  },
+
+  "manny-pacquiao": {
+    "dynasty_name": "Pacquiao Family",
+    "dynasty_generation": 1,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Alberto 'Bobby' Dapidran Pacquiao",
+        "relationship": "Younger brother",
+        "position": "Party-list Representative for OFW Family Club (2019–2022), Councilor of General Santos City (2016–2019), Barangay Captain of Labangal, General Santos (2023–present)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Manny Pacquiao is the first politician in his family, making him the founding member of what could be considered a nascent political family. He was elected Representative of Sarangani (2010–2016) before winning a Senate seat (2016–2022). His younger brother Bobby Pacquiao followed him into politics at the local and party-list level in General Santos City. No pre-existing political dynasty background."
+  },
+
+  "grace-poe": {
+    "dynasty_name": null,
+    "dynasty_generation": null,
+    "is_dynasty_member": false,
+    "family_members": [
+      {
+        "name": "Fernando Poe Jr. (FPJ)",
+        "relationship": "Adoptive father",
+        "position": "Presidential candidate (2004 Philippine Presidential Election) — never held elected office",
+        "in_dataset": false
+      },
+      {
+        "name": "Susan Roces",
+        "relationship": "Adoptive mother",
+        "position": "Actress; no political office",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Grace Poe is a foundling adopted by iconic Filipino actor Fernando Poe Jr. (FPJ) and actress Susan Roces. Her adoptive father ran for president in 2004 but never held elected office; he died later that year. Poe has no biological family in politics and no established dynasty. She is a first-generation elected politician who won her Senate seat on personal merit and the residual sympathy vote from her adoptive father's legacy."
+  },
+
+  "tito-sotto": {
+    "dynasty_name": "Sotto Family",
+    "dynasty_generation": 3,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Vicente Yap Sotto Sr.",
+        "relationship": "Paternal grandfather",
+        "position": "Senator of the Philippines (1946–1950), Representative for Cebu 2nd District (1922–1925); author of the Press Freedom Law",
+        "in_dataset": false
+      },
+      {
+        "name": "Filemón Yap Sotto",
+        "relationship": "Paternal great-uncle (grandfather's brother)",
+        "position": "Senator of the Philippine Legislature (1916–1922), Congressman for Cebu 3rd District in the Philippine Assembly (1907–1916), Delegate to the 1934 Constitutional Convention",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Tito Sotto is the third generation of the Sotto political family with roots in Cebu. His paternal grandfather Vicente Sotto Sr. was a senator and congressman, and his great-uncle Filemon Sotto was a congressman and senator who helped draft the 1935 Constitution. While Tito's immediate father was not in politics, the Sotto surname carries a deep legacy of Philippine public service. Tito has become the longest-serving senator in Philippine history."
+  },
+
+  "kiko-pangilinan": {
+    "dynasty_name": null,
+    "dynasty_generation": null,
+    "is_dynasty_member": false,
+    "family_members": [],
+    "dataset_relations": [],
+    "dynasty_summary": "Kiko Pangilinan is a self-made first-generation politician. His father was an engineer and entrepreneur from Pampanga, and his mother a public school teacher — neither held political office. He is married to actress and singer Sharon Cuneta, who has no political role. Pangilinan built his career through youth activism, legal work, and legislative advocacy for agriculture and food security."
+  },
+
+  "chiz-escudero": {
+    "dynasty_name": "Escudero Family",
+    "dynasty_generation": 2,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Salvador 'Sonny' Hatoc Escudero III",
+        "relationship": "Father",
+        "position": "Representative for Sorsogon 1st District (1987–1998, 2007–2012), Secretary of Agriculture (1996–1998), Minister of Food and Agriculture (1984–1986)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Second-generation member of the Escudero political family of Sorsogon. His father Salvador 'Sonny' Escudero III was a long-serving congressman and cabinet official. Chiz succeeded his father as the political representative of Sorsogon, first as congressman (1998–2007) then as senator (2007–2019, 2022–present) and governor of Sorsogon (2019–2022). He rose to become Senate President in 2024."
+  },
+
+  "ping-lacson": {
+    "dynasty_name": null,
+    "dynasty_generation": null,
+    "is_dynasty_member": false,
+    "family_members": [],
+    "dataset_relations": [],
+    "dynasty_summary": "Panfilo 'Ping' Lacson is a self-made first-generation politician with working-class origins in Imus, Cavite. His father was a jeepney driver and his mother a market vendor. He built his career through law enforcement, rising to become Director General of the Philippine National Police before entering electoral politics. He has no family members in political office."
+  },
+
+  "bam-aquino": {
+    "dynasty_name": "Aquino Family",
+    "dynasty_generation": 4,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Benigno 'Igno' Aquino Sr.",
+        "relationship": "Paternal great-grandfather",
+        "position": "Senator of the Philippines (1928–1934), Speaker of the House of Representatives (1943–1944), Representative for Tarlac (1919–1926)",
+        "in_dataset": false
+      },
+      {
+        "name": "Benigno 'Ninoy' Aquino Jr.",
+        "relationship": "Grand-uncle (grandfather's brother's son)",
+        "position": "Senator of the Philippines (1967–1972); opposition leader; assassinated on return from exile in 1983",
+        "in_dataset": false
+      },
+      {
+        "name": "Corazon 'Cory' Cojuangco-Aquino",
+        "relationship": "Grand-aunt by marriage (Ninoy's wife)",
+        "position": "President of the Philippines (1986–1992)",
+        "in_dataset": false
+      },
+      {
+        "name": "Benigno 'Noynoy' Aquino III",
+        "relationship": "First cousin (son of Ninoy and Cory)",
+        "position": "President of the Philippines (2010–2016), Senator (2007–2010), Representative for Tarlac 2nd District (1998–2007)",
+        "in_dataset": false
+      },
+      {
+        "name": "Paul Aquino",
+        "relationship": "Father",
+        "position": "Co-founder of the Laban ng Demokratikong Pilipino (LDP); political activist; no elected office",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Fourth-generation member of the Aquino political family of Tarlac, one of the Philippines' most storied political dynasties. His great-grandfather was a senator and House Speaker, his grand-uncle Ninoy Aquino was the martyred opposition leader, his grand-aunt Cory Aquino was the first female president, and his cousin Noynoy Aquino served as the 15th president. Bam himself was elected senator twice, running his cousin Noynoy's political team before launching his own successful campaigns."
+  },
+
+  "robin-padilla": {
+    "dynasty_name": "Padilla Family",
+    "dynasty_generation": 2,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Casimero 'Roy' Bustamante Padilla Sr.",
+        "relationship": "Father",
+        "position": "Governor of Camarines Norte (1986–1988, appointed), Member of the Batasang Pambansa / Assemblyman (1984–1986); assassinated during gubernatorial election campaign in 1988",
+        "in_dataset": false
+      },
+      {
+        "name": "Roy Padilla Jr.",
+        "relationship": "Half-brother (son of Roy Padilla Sr. and another partner)",
+        "position": "Succeeded father as gubernatorial candidate; served in Camarines Norte local politics",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Second-generation politician from the Padilla family of Camarines Norte. His father Roy Padilla Sr. was an assemblyman and governor who was assassinated in 1988 during his re-election campaign. Robin followed his father's footsteps into both entertainment and politics. He was elected senator in 2022 with the second-highest vote total in Philippine senate election history, and became the first Muslim senator since 1995. He currently heads the Partido Demokratiko Pilipino (PDP)."
+  },
+
+  "cynthia-villar": {
+    "dynasty_name": "Villar Family",
+    "dynasty_generation": 1,
+    "is_dynasty_member": true,
+    "family_members": [
+      {
+        "name": "Manuel 'Manny' Villar Jr.",
+        "relationship": "Husband",
+        "position": "President of the Senate (2006–2008), Senate Minority Leader, Senator (2001–2013), Speaker of the House of Representatives (1998–2000), Representative for Las Piñas–Muntinlupa / Las Piñas at-large (1992–2001)",
+        "in_dataset": false
+      },
+      {
+        "name": "Mark Aguilar Villar",
+        "relationship": "Son",
+        "position": "Senator (2022–present), Secretary of Public Works and Highways (2016–2021), Representative for Las Piñas (2010–2016)",
+        "in_dataset": false
+      },
+      {
+        "name": "Camille Aguilar Villar-Genuino",
+        "relationship": "Daughter",
+        "position": "Senator (2025–present), Representative for Las Piñas at-large District (2019–2025), Deputy Speaker of the House (2021–2022, 2022–2025)",
+        "in_dataset": false
+      }
+    ],
+    "dataset_relations": [],
+    "dynasty_summary": "Co-matriarch of the Villar political dynasty of Las Piñas, one of the most concentrated family political operations in Metro Manila. Together with husband Manny Villar (former Senate President and House Speaker), they have built a dynasty where Cynthia served two terms as senator (2013–2025), their son Mark is now a senator, and their daughter Camille is also a senator — giving Las Piñas an unprecedented three family members in the national Senate simultaneously at one point. The Villars are also the Philippines' wealthiest political family."
+  }
+}

@@ -5,72 +5,90 @@ import ScoreBadge from '@/components/ui/ScoreBadge'
 
 type Props = { politician: Politician }
 
+function scoreBarColor(score: number | null) {
+  if (score == null) return '#e2e8f0'
+  if (score >= 70) return '#16a34a'
+  if (score >= 40) return '#d97706'
+  return '#dc2626'
+}
+
 export default function ProfileCard({ politician: p }: Props) {
+  const hasLegalIssues = false // Will be enhanced when legal_records are joined
+
   return (
     <Link
       href={`/profiles/${p.slug}`}
-      className="group bg-[#111827] border border-white/10 hover:border-[#0038a8]/60 rounded-2xl p-4 flex flex-col gap-4 transition-colors"
+      className="card card-hover group block transition-all duration-150"
     >
-      {/* Header row */}
-      <div className="flex items-start gap-3">
-        <div className="shrink-0">
-          {p.photo_url ? (
-            <Image
-              src={p.photo_url}
-              alt={p.full_name}
-              width={52}
-              height={52}
-              className="rounded-full object-cover border border-white/10"
-            />
-          ) : (
-            <div className="w-13 h-13 w-[52px] h-[52px] rounded-full bg-[#1f2937] border border-white/10 flex items-center justify-center text-xl font-black text-gray-600">
-              {p.full_name.charAt(0)}
+      <div className="p-4">
+        {/* Header */}
+        <div className="flex items-start gap-3 mb-4">
+          <div className="shrink-0">
+            {p.photo_url ? (
+              <Image
+                src={p.photo_url}
+                alt={p.full_name}
+                width={56}
+                height={56}
+                className="rounded-xl object-cover border border-slate-200"
+              />
+            ) : (
+              <div className="w-14 h-14 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xl font-black text-slate-400">
+                {p.full_name.charAt(0)}
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start gap-1.5 flex-wrap mb-0.5">
+              {p.is_incumbent && (
+                <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded-md">Incumbent</span>
+              )}
+              {p.is_candidate && (
+                <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded-md">Candidate</span>
+              )}
             </div>
-          )}
+            <p className="font-bold text-slate-900 text-sm leading-tight group-hover:text-[#0038a8] transition-colors">
+              {p.preferred_name ?? p.full_name}
+            </p>
+            {p.current_position && (
+              <p className="text-slate-500 text-xs mt-0.5 truncate">{p.current_position}</p>
+            )}
+            {p.party_affiliation && (
+              <p className="text-slate-400 text-xs truncate">{p.party_affiliation}</p>
+            )}
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-white text-sm leading-tight truncate group-hover:text-[#60a5fa] transition-colors">
-            {p.preferred_name ?? p.full_name}
-          </p>
-          {p.current_position && (
-            <p className="text-gray-500 text-xs mt-0.5 truncate">{p.current_position}</p>
-          )}
-          {p.party_affiliation && (
-            <p className="text-gray-600 text-xs truncate">{p.party_affiliation}</p>
-          )}
-        </div>
-      </div>
 
-      {/* Scores */}
-      <div className="flex items-center gap-3">
-        <div className="flex-1">
-          <div className="text-xs text-gray-600 mb-1">Objective Score</div>
-          <div className="h-1.5 bg-[#1f2937] rounded-full overflow-hidden">
+        {/* Objective Score */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Objective Score</span>
+            <ScoreBadge score={p.objective_score} size="sm" />
+          </div>
+          <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full score-bar-fill"
               style={{
                 width: `${p.objective_score ?? 0}%`,
-                backgroundColor: p.objective_score != null && p.objective_score >= 70 ? '#22c55e'
-                  : p.objective_score != null && p.objective_score >= 40 ? '#f59e0b' : '#ef4444',
+                backgroundColor: scoreBarColor(p.objective_score),
               }}
             />
           </div>
         </div>
-        <ScoreBadge score={p.objective_score} size="sm" />
-      </div>
 
-      {/* Trust score — visually distinct */}
-      <div className="flex items-center gap-3 pt-2 border-t border-white/5">
-        <div className="flex-1">
-          <div className="text-xs text-gray-600 mb-1">Community Trust</div>
-          <div className="h-1.5 bg-[#1f2937] rounded-full overflow-hidden">
+        {/* Community Trust */}
+        <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Community Trust</span>
+            <ScoreBadge score={p.civic_trust_score} size="sm" variant="trust" />
+          </div>
+          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <div
-              className="h-full rounded-full bg-purple-500 score-bar-fill"
+              className="h-full rounded-full bg-purple-400 score-bar-fill"
               style={{ width: `${p.civic_trust_score ?? 0}%` }}
             />
           </div>
         </div>
-        <ScoreBadge score={p.civic_trust_score} size="sm" variant="trust" />
       </div>
     </Link>
   )

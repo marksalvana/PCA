@@ -9,7 +9,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1957-09-13",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Ferdinand_R._Marcos_Jr.jpg",
     "education_records": [
       {
         "institution": "Worth School",
@@ -179,7 +179,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1978-05-31",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/8/88/VPSD_Official_Photo.jpg",
     "education_records": [
       {
         "institution": "San Pedro College",
@@ -305,7 +305,7 @@
     "is_incumbent": false,
     "is_candidate": false,
     "birth_date": "1945-03-28",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/8/86/President_Rodrigo_Duterte_portrait.jpg",
     "education_records": [
       {
         "institution": "Lyceum of the Philippines University",
@@ -431,7 +431,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1965-04-23",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Leni_Robredo_Portrait.png",
     "education_records": [
       {
         "institution": "University of the Philippines Diliman",
@@ -522,7 +522,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1947-04-05",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Rep._Gloria_Macapagal-Arroyo_%2820th_Congress%29.jpg",
     "education_records": [
       {
         "institution": "Georgetown University",
@@ -678,7 +678,7 @@
     "is_incumbent": false,
     "is_candidate": false,
     "birth_date": "1937-04-19",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Joseph_Estrada_official_presidential_portrait.jpg",
     "education_records": [
       {
         "institution": "Mapúa Institute of Technology",
@@ -794,7 +794,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1955-11-12",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Imee_R._Marcos%2C_Senate_portrait_2025.png",
     "education_records": [
       {
         "institution": "Princeton University",
@@ -902,7 +902,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1959-08-27",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Rep._Leila_De_Lima_%2820th_Congress%29.jpg",
     "education_records": [
       {
         "institution": "De La Salle University",
@@ -1016,7 +1016,7 @@
     "is_incumbent": false,
     "is_candidate": false,
     "birth_date": "1978-12-17",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Manny_Pacquiao_%28cropped%29.jpg",
     "education_records": [
       {
         "institution": "University of Makati",
@@ -1095,7 +1095,7 @@
     "is_incumbent": false,
     "is_candidate": false,
     "birth_date": "1968-09-03",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Senator_Grace_Poe_Official_Portrait_%2818th_Congress%29.png",
     "education_records": [
       {
         "institution": "Boston College",
@@ -1175,7 +1175,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1948-08-24",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Senator_Vicente_Sotto_III_%282025%29.jpg",
     "education_records": [
       {
         "institution": "Colegio de San Juan de Letran",
@@ -1280,7 +1280,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1963-08-24",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Francis_%22Kiko%22_Pangilinan%2C_Senate_portrait_2025.png",
     "education_records": [
       {
         "institution": "University of the Philippines Diliman",
@@ -1393,7 +1393,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1969-10-10",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Francis_%22Chiz%22_G._Escudero%2C_Senate_portrait_2025.png",
     "education_records": [
       {
         "institution": "University of the Philippines Diliman",
@@ -1521,7 +1521,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1948-06-01",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Panfilo_%22Ping%22_M._Lacson%2C_Senate_portrait_2025.png",
     "education_records": [
       {
         "institution": "Philippine Military Academy",
@@ -1635,7 +1635,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1977-05-07",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/9/97/Paolo_Benigno_%22Bam%22_Aquino_IV%2C_Senate_portrait_2025.png",
     "education_records": [
       {
         "institution": "Ateneo de Manila University",
@@ -1727,7 +1727,7 @@
     "is_incumbent": true,
     "is_candidate": false,
     "birth_date": "1969-11-23",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/1/16/Robinhood_C._Padilla%2C_Senate_portrait_2025.png",
     "education_records": [
       {
         "institution": "Philippine College of Criminology",
@@ -1795,7 +1795,7 @@
     "is_incumbent": false,
     "is_candidate": false,
     "birth_date": "1950-07-29",
-    "photo_url": null,
+    "photo_url": "https://upload.wikimedia.org/wikipedia/commons/3/31/Sen._Cynthia_Villar_%28cropped%29.jpg",
     "education_records": [
       {
         "institution": "University of the Philippines Diliman",
