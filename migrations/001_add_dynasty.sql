@@ -25,6 +25,12 @@ CREATE TABLE IF NOT EXISTS public.dynasty_connections (
 -- RLS for dynasty_connections
 ALTER TABLE public.dynasty_connections ENABLE ROW LEVEL SECURITY;
 
+-- Drop policies if they already exist (makes migration safe to re-run)
+DROP POLICY IF EXISTS "Public can view dynasty connections" ON public.dynasty_connections;
+DROP POLICY IF EXISTS "Admins can insert dynasty connections" ON public.dynasty_connections;
+DROP POLICY IF EXISTS "Admins can update dynasty connections" ON public.dynasty_connections;
+DROP POLICY IF EXISTS "Staff can view all dynasty connections" ON public.dynasty_connections;
+
 -- Anyone can read dynasty connections for published politicians
 CREATE POLICY "Public can view dynasty connections"
   ON public.dynasty_connections FOR SELECT
