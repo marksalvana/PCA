@@ -1,0 +1,1878 @@
+[
+  {
+    "slug": "bongbong-marcos",
+    "full_name": "Ferdinand Romualdez Marcos Jr.",
+    "preferred_name": "Bongbong Marcos",
+    "current_position": "President of the Philippines",
+    "party_affiliation": "Partido Federal ng Pilipinas",
+    "region": "Ilocos Norte",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1957-09-13",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Worth School",
+        "degree": "Secondary Education",
+        "ched_accreditation": "foreign",
+        "year_started": 1970,
+        "year_ended": 1975,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "institution": "University of Oxford (St Edmund Hall)",
+        "degree": "Special Diploma in Social Studies",
+        "ched_accreditation": "foreign",
+        "year_started": 1975,
+        "year_ended": 1978,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "institution": "Wharton School, University of Pennsylvania",
+        "degree": "MBA (incomplete)",
+        "ched_accreditation": "foreign",
+        "year_started": 1978,
+        "year_ended": 1979,
+        "is_completed": false,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Vice Governor, Ilocos Norte",
+        "start_date": "1980-01-01",
+        "end_date": "1983-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "position": "Governor, Ilocos Norte",
+        "start_date": "1983-01-01",
+        "end_date": "1986-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "position": "Governor, Ilocos Norte",
+        "start_date": "1998-01-01",
+        "end_date": "2007-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "position": "Representative, Ilocos Norte 2nd District",
+        "start_date": "1992-06-30",
+        "end_date": "1995-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "position": "Representative, Ilocos Norte 2nd District",
+        "start_date": "2007-06-30",
+        "end_date": "2010-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2010-06-30",
+        "end_date": "2016-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      },
+      {
+        "position": "President of the Philippines",
+        "start_date": "2022-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://www.officialgazette.gov.ph/section/president/",
+        "source_label": "Official Gazette — President of the Philippines"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Failure to File Income Tax Returns (1982–1985)",
+        "case_type": "criminal",
+        "status": "convicted",
+        "court": "Court of Appeals",
+        "charge": "Failure to file income tax returns for 1982, 1983, 1984, 1985",
+        "filing_date": "1991-07-01",
+        "source_url": "https://www.rappler.com/philippines/elections/records-bongbong-marcos-1997-tax-conviction-hounds-presidential-campaign-2022-polls/",
+        "source_label": "Rappler — Marcos 1997 Tax Conviction"
+      },
+      {
+        "case_title": "Human Rights Reparations Contempt Order",
+        "case_type": "civil",
+        "status": "convicted",
+        "court": "U.S. District Court, Hawaii",
+        "charge": "Contempt of court for failure to pay US$353.6 million human rights reparations judgment",
+        "filing_date": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bongbong_Marcos",
+        "source_label": "Wikipedia — Bongbong Marcos"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Won 2022 Philippine Presidential Election",
+        "description": "Won with 31.6 million votes (58.77%), the largest electoral majority since 1981 and the first majority win since 1986",
+        "category": "other",
+        "year": 2022,
+        "source_url": "https://comelec.gov.ph",
+        "source_label": "COMELEC — 2022 National Election Results"
+      },
+      {
+        "title": "Signed New Agrarian Emancipation Act",
+        "description": "Cancelled PHP 57 billion in agrarian reform debts, freeing over 600,000 farmer-beneficiaries",
+        "category": "legislation",
+        "year": 2023,
+        "source_url": "https://www.officialgazette.gov.ph/2023/08/08/republic-act-no-11953/",
+        "source_label": "Official Gazette — RA 11953 New Agrarian Emancipation Act"
+      }
+    ]
+  },
+  {
+    "slug": "sara-duterte",
+    "full_name": "Sara Zimmerman Duterte-Carpio",
+    "preferred_name": "Inday Sara",
+    "current_position": "Vice President of the Philippines",
+    "party_affiliation": "Lakas–CMD",
+    "region": "Davao",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1978-05-31",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "San Pedro College",
+        "degree": "Bachelor of Science in Respiratory Therapy",
+        "ched_accreditation": "autonomous",
+        "year_started": 1995,
+        "year_ended": 1999,
+        "is_completed": true,
+        "source_url": "https://www.ovp.gov.ph/biography",
+        "source_label": "Office of the Vice President — Official Biography"
+      },
+      {
+        "institution": "San Sebastian College – Recoletos",
+        "degree": "Juris Doctor (LL.B.)",
+        "ched_accreditation": "autonomous",
+        "year_started": 2001,
+        "year_ended": 2005,
+        "is_completed": true,
+        "source_url": "https://www.ovp.gov.ph/biography",
+        "source_label": "Office of the Vice President — Official Biography"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Vice Mayor of Davao City",
+        "start_date": "2007-06-30",
+        "end_date": "2010-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Sara_Duterte",
+        "source_label": "Wikipedia — Sara Duterte"
+      },
+      {
+        "position": "Mayor of Davao City",
+        "start_date": "2010-06-30",
+        "end_date": "2013-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Sara_Duterte",
+        "source_label": "Wikipedia — Sara Duterte"
+      },
+      {
+        "position": "Mayor of Davao City",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Sara_Duterte",
+        "source_label": "Wikipedia — Sara Duterte"
+      },
+      {
+        "position": "Secretary of Education",
+        "start_date": "2022-06-30",
+        "end_date": "2024-06-19",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Sara_Duterte",
+        "source_label": "Wikipedia — Sara Duterte"
+      },
+      {
+        "position": "Vice President of the Philippines",
+        "start_date": "2022-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://www.ovp.gov.ph/biography",
+        "source_label": "Office of the Vice President — Official Biography"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Impeachment — Misuse of Confidential Funds, Corruption, Assassination Threats",
+        "case_type": "administrative",
+        "status": "dismissed",
+        "court": "Senate of the Philippines / Supreme Court",
+        "charge": "Betrayal of public trust, graft and corruption, culpable violation of the Constitution, misuse of confidential funds, threats to assassinate President Marcos and Speaker Romualdez",
+        "filing_date": "2024-12-01",
+        "source_url": "https://en.wikipedia.org/wiki/Impeachment_of_Sara_Duterte",
+        "source_label": "Wikipedia — Impeachment of Sara Duterte"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Received Most Votes for Any Single Office in Philippine Electoral History",
+        "description": "Won the 2022 Vice Presidential election with 32.2 million votes, the highest number of votes ever cast for a single-winner election in Philippine history",
+        "category": "other",
+        "year": 2022,
+        "source_url": "https://comelec.gov.ph",
+        "source_label": "COMELEC — 2022 National Election Results"
+      },
+      {
+        "title": "First Female Mayor of Davao City",
+        "description": "Elected as the first woman to serve as mayor of Davao City, and also the youngest mayor and vice mayor of Davao at the time of her elections",
+        "category": "other",
+        "year": 2010,
+        "source_url": "https://en.wikipedia.org/wiki/Sara_Duterte",
+        "source_label": "Wikipedia — Sara Duterte"
+      }
+    ]
+  },
+  {
+    "slug": "rodrigo-duterte",
+    "full_name": "Rodrigo Roa Duterte",
+    "preferred_name": "Digong",
+    "current_position": "Former President of the Philippines (detained at ICC)",
+    "party_affiliation": "Partido Demokratiko Pilipino–Lakas ng Bayan",
+    "region": "Davao",
+    "is_incumbent": false,
+    "is_candidate": false,
+    "birth_date": "1945-03-28",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Lyceum of the Philippines University",
+        "degree": "Bachelor of Arts in Political Science",
+        "ched_accreditation": "autonomous",
+        "year_started": 1964,
+        "year_ended": 1968,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      },
+      {
+        "institution": "San Beda College of Law",
+        "degree": "Bachelor of Laws (LL.B.)",
+        "ched_accreditation": "autonomous",
+        "year_started": 1968,
+        "year_ended": 1972,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Mayor of Davao City",
+        "start_date": "1988-02-02",
+        "end_date": "1998-03-19",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      },
+      {
+        "position": "Representative, Davao City 1st District",
+        "start_date": "1998-06-30",
+        "end_date": "2001-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      },
+      {
+        "position": "Mayor of Davao City",
+        "start_date": "2001-06-30",
+        "end_date": "2010-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      },
+      {
+        "position": "Mayor of Davao City",
+        "start_date": "2013-06-30",
+        "end_date": "2016-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      },
+      {
+        "position": "16th President of the Philippines",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Rodrigo_Duterte",
+        "source_label": "Wikipedia — Rodrigo Duterte"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "The Prosecutor v. Rodrigo Roa Duterte",
+        "case_type": "criminal",
+        "status": "pending",
+        "court": "International Criminal Court (Pre-Trial Chamber I)",
+        "charge": "Crimes against humanity — murder and attempted murder committed in the Philippines 'war on drugs' campaign between November 2011 and March 2019",
+        "filing_date": "2025-03-11",
+        "source_url": "https://www.icc-cpi.int/philippines/duterte",
+        "source_label": "International Criminal Court — Duterte Case"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Won 2016 Philippine Presidential Election",
+        "description": "Elected as the first president from Mindanao, winning the 2016 election with 39% of votes",
+        "category": "other",
+        "year": 2016,
+        "source_url": "https://comelec.gov.ph",
+        "source_label": "COMELEC — 2016 National Election Results"
+      },
+      {
+        "title": "Implemented TRAIN Law and CREATE Act",
+        "description": "Signed the Tax Reform for Acceleration and Inclusion (TRAIN) Law and Corporate Recovery and Tax Incentives for Enterprises (CREATE) Act, major tax reform packages",
+        "category": "legislation",
+        "year": 2021,
+        "source_url": "https://www.officialgazette.gov.ph/2021/03/26/republic-act-no-11534/",
+        "source_label": "Official Gazette — Republic Act 11534 (CREATE Act)"
+      }
+    ]
+  },
+  {
+    "slug": "leni-robredo",
+    "full_name": "Maria Leonor Santo Tomas Gerona Robredo",
+    "preferred_name": "Leni Robredo",
+    "current_position": "Mayor of Naga",
+    "party_affiliation": "Independent (formerly Liberal Party)",
+    "region": "Camarines Sur",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1965-04-23",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "University of the Philippines Diliman",
+        "degree": "Bachelor of Arts in Economics",
+        "ched_accreditation": "deregulated",
+        "year_started": 1982,
+        "year_ended": 1986,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Leni_Robredo",
+        "source_label": "Wikipedia — Leni Robredo"
+      },
+      {
+        "institution": "University of Nueva Caceres",
+        "degree": "Bachelor of Laws (LL.B.)",
+        "ched_accreditation": "level_3",
+        "year_started": 1988,
+        "year_ended": 1992,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Leni_Robredo",
+        "source_label": "Wikipedia — Leni Robredo"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Representative, Camarines Sur 3rd District",
+        "start_date": "2013-06-30",
+        "end_date": "2016-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leni_Robredo",
+        "source_label": "Wikipedia — Leni Robredo"
+      },
+      {
+        "position": "14th Vice President of the Philippines",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leni_Robredo",
+        "source_label": "Wikipedia — Leni Robredo"
+      },
+      {
+        "position": "Mayor of Naga",
+        "start_date": "2025-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leni_Robredo",
+        "source_label": "Wikipedia — Leni Robredo"
+      }
+    ],
+    "legal_records": [],
+    "achievements": [
+      {
+        "title": "Established Angat Buhay Anti-Poverty Program",
+        "description": "As VP, launched the Angat Buhay program delivering aid and development services to 622,000+ families in underserved communities, funded by donations",
+        "category": "other",
+        "year": 2016,
+        "source_url": "https://www.angatbuhay.ph/about-the-chairman/",
+        "source_label": "Angat Buhay — About the Chairman"
+      },
+      {
+        "title": "Named Harvard University Hauser Leader",
+        "description": "Recognized by Harvard Kennedy School's Center for Public Leadership as a Hauser Leader for exemplary civic leadership",
+        "category": "other",
+        "year": 2022,
+        "source_url": "https://www.hks.harvard.edu/centers/cpl/publications/lessons-philippines-leni-robredo-angat-buhay-and-accountable-leadership",
+        "source_label": "Harvard Kennedy School — Leni Robredo Profile"
+      }
+    ]
+  },
+  {
+    "slug": "gloria-macapagal-arroyo",
+    "full_name": "Maria Gloria Macaraeg Macapagal-Arroyo",
+    "preferred_name": "Gloria Macapagal-Arroyo",
+    "current_position": "Representative, Pampanga 2nd District",
+    "party_affiliation": "Lakas–CMD",
+    "region": "Pampanga",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1947-04-05",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Georgetown University",
+        "degree": "Bachelor of Arts in Economics (partial)",
+        "ched_accreditation": "foreign",
+        "year_started": 1964,
+        "year_ended": 1966,
+        "is_completed": false,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "institution": "Assumption College Manila",
+        "degree": "Bachelor of Science in Commerce",
+        "ched_accreditation": "autonomous",
+        "year_started": 1966,
+        "year_ended": 1968,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "institution": "Ateneo de Manila University",
+        "degree": "Master of Arts in Economics",
+        "ched_accreditation": "autonomous",
+        "year_started": 1974,
+        "year_ended": 1976,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "institution": "University of the Philippines",
+        "degree": "Doctor of Philosophy in Economics",
+        "ched_accreditation": "deregulated",
+        "year_started": 1985,
+        "year_ended": 1986,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "1992-06-30",
+        "end_date": "1998-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "position": "10th Vice President of the Philippines",
+        "start_date": "1998-06-30",
+        "end_date": "2001-01-20",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "position": "14th President of the Philippines",
+        "start_date": "2001-01-20",
+        "end_date": "2010-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "position": "Representative, Pampanga 2nd District",
+        "start_date": "2010-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "position": "Speaker of the House of Representatives",
+        "start_date": "2018-07-23",
+        "end_date": "2019-07-22",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Electoral Sabotage Case",
+        "case_type": "criminal",
+        "status": "dismissed",
+        "court": "Pasay Regional Trial Court",
+        "charge": "Electoral sabotage for allegedly manipulating 2007 Maguindanao election results ('Hello Garci' scandal)",
+        "filing_date": "2011-01-01",
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "case_title": "Plunder — Philippine Charity Sweepstakes Office Funds",
+        "case_type": "criminal",
+        "status": "acquitted",
+        "court": "Supreme Court of the Philippines",
+        "charge": "Plunder for alleged misuse of PCSO intelligence funds",
+        "filing_date": "2012-01-01",
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "First Female Vice President of the Philippines",
+        "description": "Elected as the first woman to serve as Vice President of the Philippines in 1998",
+        "category": "other",
+        "year": 1998,
+        "source_url": "https://en.wikipedia.org/wiki/Gloria_Macapagal_Arroyo",
+        "source_label": "Wikipedia — Gloria Macapagal Arroyo"
+      },
+      {
+        "title": "Abolished Capital Punishment",
+        "description": "Signed Republic Act 9346 in 2006, abolishing the death penalty in the Philippines",
+        "category": "legislation",
+        "year": 2006,
+        "source_url": "https://www.officialgazette.gov.ph/2006/06/24/republic-act-no-9346/",
+        "source_label": "Official Gazette — RA 9346 Abolition of Death Penalty"
+      }
+    ]
+  },
+  {
+    "slug": "joseph-estrada",
+    "full_name": "Joseph Ejercito Estrada",
+    "preferred_name": "Erap",
+    "current_position": "Former President and Mayor of Manila (retired from politics)",
+    "party_affiliation": "Pwersa ng Masang Pilipino",
+    "region": "Manila",
+    "is_incumbent": false,
+    "is_candidate": false,
+    "birth_date": "1937-04-19",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Mapúa Institute of Technology",
+        "degree": "High School Diploma",
+        "ched_accreditation": "unknown",
+        "year_started": 1951,
+        "year_ended": 1955,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Mayor of San Juan",
+        "start_date": "1969-08-05",
+        "end_date": "1986-03-26",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "1987-06-30",
+        "end_date": "1992-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      },
+      {
+        "position": "11th Vice President of the Philippines",
+        "start_date": "1992-06-30",
+        "end_date": "1998-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      },
+      {
+        "position": "13th President of the Philippines",
+        "start_date": "1998-06-30",
+        "end_date": "2001-01-20",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      },
+      {
+        "position": "Mayor of Manila",
+        "start_date": "2013-06-30",
+        "end_date": "2019-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "People of the Philippines v. Joseph Ejercito Estrada — Plunder",
+        "case_type": "criminal",
+        "status": "convicted",
+        "court": "Sandiganbayan",
+        "charge": "Plunder — amassing ill-gotten wealth exceeding PHP 75 million through bribery, kickbacks, and illegal gambling operations",
+        "filing_date": "2001-04-04",
+        "source_url": "https://en.wikipedia.org/wiki/Trial_of_Joseph_Estrada",
+        "source_label": "Wikipedia — Trial of Joseph Estrada"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "First Philippine President Formally Impeached in Asia",
+        "description": "The impeachment trial of Estrada marked a landmark in Philippine democratic history; he was subsequently removed through People Power II in January 2001",
+        "category": "other",
+        "year": 2001,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      },
+      {
+        "title": "Co-Founded Metro Manila Film Festival",
+        "description": "Helped establish the Metro Manila Film Festival in 1975, now one of the most prestigious film festivals in the Philippines",
+        "category": "other",
+        "year": 1975,
+        "source_url": "https://en.wikipedia.org/wiki/Joseph_Estrada",
+        "source_label": "Wikipedia — Joseph Estrada"
+      }
+    ]
+  },
+  {
+    "slug": "imee-marcos",
+    "full_name": "Maria Imelda Josefa Remedios Romualdez Marcos-Manotoc",
+    "preferred_name": "Imee Marcos",
+    "current_position": "Senator of the Philippines",
+    "party_affiliation": "Nacionalista Party",
+    "region": "Ilocos Norte",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1955-11-12",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Princeton University",
+        "degree": "No degree awarded (attended 1973–1979; graduation claim disputed and denied by Princeton)",
+        "ched_accreditation": "foreign",
+        "year_started": 1973,
+        "year_ended": 1979,
+        "is_completed": false,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos (Education Controversies)"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Chairperson, Kabataang Barangay Foundation",
+        "start_date": "1977-01-01",
+        "end_date": "1986-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos"
+      },
+      {
+        "position": "Member, Batasang Pambansa for Ilocos Norte",
+        "start_date": "1984-01-01",
+        "end_date": "1986-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos"
+      },
+      {
+        "position": "Representative, Ilocos Norte 2nd District",
+        "start_date": "1998-06-30",
+        "end_date": "2007-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos"
+      },
+      {
+        "position": "Governor of Ilocos Norte",
+        "start_date": "2010-06-30",
+        "end_date": "2019-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2019-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Trajano v. Marcos — Torture and Murder of Archimedes Trajano",
+        "case_type": "civil",
+        "status": "convicted",
+        "court": "U.S. District Court, District of Hawaii",
+        "charge": "Torture and murder of student activist Archimedes Trajano in 1977; awarded USD 2.5 million punitive damages and USD 1.25 million for mental anguish",
+        "filing_date": null,
+        "source_url": "https://en.wikipedia.org/wiki/Imee_Marcos",
+        "source_label": "Wikipedia — Imee Marcos"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Re-elected to Senate in 2025 Midterm Elections",
+        "description": "Won a second Senate term in the May 2025 midterm elections, placing 12th overall",
+        "category": "other",
+        "year": 2025,
+        "source_url": "https://comelec.gov.ph",
+        "source_label": "COMELEC — 2025 Midterm Election Results"
+      }
+    ]
+  },
+  {
+    "slug": "leila-de-lima",
+    "full_name": "Leila Norma Eulalia Josefa Magistrado de Lima",
+    "preferred_name": "Leila de Lima",
+    "current_position": "Representative, Mamamayang Liberal Party-list",
+    "party_affiliation": "Liberal Party",
+    "region": "Camarines Sur",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1959-08-27",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "De La Salle University",
+        "degree": "Bachelor of Arts in History and Political Science",
+        "ched_accreditation": "autonomous",
+        "year_started": 1976,
+        "year_ended": 1980,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      },
+      {
+        "institution": "San Beda College of Law",
+        "degree": "Bachelor of Laws (LL.B.)",
+        "ched_accreditation": "autonomous",
+        "year_started": 1981,
+        "year_ended": 1985,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Chairperson, Commission on Human Rights",
+        "start_date": "2008-05-19",
+        "end_date": "2010-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      },
+      {
+        "position": "Secretary of Justice",
+        "start_date": "2010-06-30",
+        "end_date": "2015-10-12",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      },
+      {
+        "position": "Representative, Mamamayang Liberal Party-list",
+        "start_date": "2025-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "People v. De Lima — Drug Trading",
+        "case_type": "criminal",
+        "status": "acquitted",
+        "court": "Muntinlupa Regional Trial Court (Branch 256)",
+        "charge": "Conspiracy to commit drug trading — alleged involvement in illegal drug trade at New Bilibid Prison during her tenure as Secretary of Justice",
+        "filing_date": "2017-02-24",
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Ranked in Fortune Magazine World's 50 Greatest Leaders",
+        "description": "Named to Fortune Magazine's World's 50 Greatest Leaders list in 2018 while detained, for her continued advocacy from prison",
+        "category": "other",
+        "year": 2018,
+        "source_url": "https://en.wikipedia.org/wiki/Leila_de_Lima",
+        "source_label": "Wikipedia — Leila de Lima"
+      },
+      {
+        "title": "Amnesty International Most Distinguished Human Rights Defender",
+        "description": "Recognized as Amnesty International's Most Distinguished Human Rights Defender in 2018 for her fight for human rights from detention",
+        "category": "other",
+        "year": 2018,
+        "source_url": "https://www.amnesty.org/en/latest/campaigns/2024/03/leila-de-lima-philippines/",
+        "source_label": "Amnesty International — Leila de Lima"
+      }
+    ]
+  },
+  {
+    "slug": "manny-pacquiao",
+    "full_name": "Emmanuel Dapidran Pacquiao Sr.",
+    "preferred_name": "Manny Pacquiao",
+    "current_position": "Retired from politics; active as boxer",
+    "party_affiliation": "Partido Reporma (former PDP-Laban)",
+    "region": "Sarangani",
+    "is_incumbent": false,
+    "is_candidate": false,
+    "birth_date": "1978-12-17",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "University of Makati",
+        "degree": "Bachelor of Arts in Political Science (via ETEEAP)",
+        "ched_accreditation": "level_2",
+        "year_started": 2016,
+        "year_ended": 2019,
+        "is_completed": true,
+        "source_url": "https://www.gmanetwork.com/news/topstories/nation/719093/how-manny-pacquiao-got-a-polsci-diploma-the-most-meaningful-of-his-achievements/story/",
+        "source_label": "GMA News — Pacquiao PolSci diploma"
+      },
+      {
+        "institution": "Philippine Christian University",
+        "degree": "Master of Public Administration",
+        "ched_accreditation": "autonomous",
+        "year_started": 2020,
+        "year_ended": 2022,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Manny_Pacquiao",
+        "source_label": "Wikipedia — Manny Pacquiao"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Representative, Sarangani",
+        "start_date": "2010-06-30",
+        "end_date": "2016-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Manny_Pacquiao",
+        "source_label": "Wikipedia — Manny Pacquiao"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Manny_Pacquiao",
+        "source_label": "Wikipedia — Manny Pacquiao"
+      }
+    ],
+    "legal_records": [],
+    "achievements": [
+      {
+        "title": "Only Eight-Division World Boxing Champion in History",
+        "description": "Became the only boxer to win world titles in eight different weight divisions across a professional career spanning 1995 to the 2020s",
+        "category": "other",
+        "year": 2015,
+        "source_url": "https://en.wikipedia.org/wiki/Manny_Pacquiao",
+        "source_label": "Wikipedia — Manny Pacquiao"
+      },
+      {
+        "title": "Inducted into International Boxing Hall of Fame",
+        "description": "Inducted into the International Boxing Hall of Fame in 2025 in recognition of his record-breaking boxing career",
+        "category": "other",
+        "year": 2025,
+        "source_url": "https://en.wikipedia.org/wiki/Manny_Pacquiao",
+        "source_label": "Wikipedia — Manny Pacquiao"
+      }
+    ]
+  },
+  {
+    "slug": "grace-poe",
+    "full_name": "Mary Grace Natividad Sonora Poe-Llamanzares",
+    "preferred_name": "Grace Poe",
+    "current_position": "Former Senator (term ended June 2025)",
+    "party_affiliation": "Independent",
+    "region": "National (party-list)",
+    "is_incumbent": false,
+    "is_candidate": false,
+    "birth_date": "1968-09-03",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Boston College",
+        "degree": "Bachelor of Arts in Political Science",
+        "ched_accreditation": "foreign",
+        "year_started": 1987,
+        "year_ended": 1991,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Grace_Poe",
+        "source_label": "Wikipedia — Grace Poe"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Chairwoman, Movie and Television Review and Classification Board",
+        "start_date": "2010-10-10",
+        "end_date": "2012-10-02",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Grace_Poe",
+        "source_label": "Wikipedia — Grace Poe"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2013-06-30",
+        "end_date": "2025-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": 200,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Grace_Poe",
+        "source_label": "Wikipedia — Grace Poe"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "David v. Poe — Citizenship and Residency Disqualification Challenge",
+        "case_type": "administrative",
+        "status": "dismissed",
+        "court": "Supreme Court of the Philippines",
+        "charge": "Disqualification from 2016 presidential race for alleged lack of natural-born citizenship and failure to meet 10-year residency requirement",
+        "filing_date": "2015-10-01",
+        "source_url": "https://en.wikipedia.org/wiki/Grace_Poe_2016_presidential_campaign",
+        "source_label": "Wikipedia — Grace Poe 2016 Presidential Campaign"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Topped 2013 Senate Elections",
+        "description": "Won the 2013 senatorial election with the highest number of votes — over 20.3 million — in her first political campaign",
+        "category": "other",
+        "year": 2013,
+        "source_url": "https://comelec.gov.ph",
+        "source_label": "COMELEC — 2013 Senatorial Election Results"
+      },
+      {
+        "title": "Led Mamasapano Clash Senate Investigation",
+        "description": "Chaired the Senate investigation into the 2015 Mamasapano clash, where 44 SAF commandos were killed during a counterterrorism operation in Maguindanao",
+        "category": "other",
+        "year": 2015,
+        "source_url": "https://en.wikipedia.org/wiki/Grace_Poe",
+        "source_label": "Wikipedia — Grace Poe"
+      }
+    ]
+  },
+  {
+    "slug": "tito-sotto",
+    "full_name": "Vicente Castelo Sotto III",
+    "preferred_name": "Tito Sotto",
+    "current_position": "Senator and President of the Senate",
+    "party_affiliation": "Nationalist People's Coalition",
+    "region": "Quezon City",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1948-08-24",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Colegio de San Juan de Letran",
+        "degree": "Bachelor of Arts in English",
+        "ched_accreditation": "autonomous",
+        "year_started": 1964,
+        "year_ended": 1968,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Tito_Sotto",
+        "source_label": "Wikipedia — Tito Sotto"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Vice Mayor of Quezon City",
+        "start_date": "1988-01-01",
+        "end_date": "1992-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Tito_Sotto",
+        "source_label": "Wikipedia — Tito Sotto"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "1992-06-30",
+        "end_date": "2004-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://legacy.senate.gov.ph/senators/former_senators/vicente_sotto_iii.htm",
+        "source_label": "Senate of the Philippines — Senator Vicente Sotto III Profile"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2010-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://legacy.senate.gov.ph/senators/former_senators/vicente_sotto_iii.htm",
+        "source_label": "Senate of the Philippines — Senator Vicente Sotto III Profile"
+      },
+      {
+        "position": "President of the Senate",
+        "start_date": "2018-05-21",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Tito_Sotto",
+        "source_label": "Wikipedia — Tito Sotto"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2025-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Tito_Sotto",
+        "source_label": "Wikipedia — Tito Sotto"
+      }
+    ],
+    "legal_records": [],
+    "achievements": [
+      {
+        "title": "Longest-Serving Senator in Philippine History",
+        "description": "Only senator in Philippine history to be elected five non-consecutive terms, making him the longest-serving senator on record",
+        "category": "other",
+        "year": 2025,
+        "source_url": "https://newsinfo.inquirer.net/2106339/senate-pres-sotto-longest-serving-senator-in-history-elected-5-times",
+        "source_label": "Inquirer — Sotto Longest-Serving Senator"
+      },
+      {
+        "title": "Composed 'Magkaisa' — Anthem of People Power Revolution",
+        "description": "Composed the iconic Filipino song 'Magkaisa,' which became the anthem of the 1986 People Power Revolution that ousted Ferdinand Marcos Sr.",
+        "category": "other",
+        "year": 1986,
+        "source_url": "https://en.wikipedia.org/wiki/Tito_Sotto",
+        "source_label": "Wikipedia — Tito Sotto"
+      }
+    ]
+  },
+  {
+    "slug": "kiko-pangilinan",
+    "full_name": "Francis Pancratius Nepomuceno Pangilinan",
+    "preferred_name": "Kiko Pangilinan",
+    "current_position": "Senator of the Philippines",
+    "party_affiliation": "Liberal Party",
+    "region": "Quezon City",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1963-08-24",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "University of the Philippines Diliman",
+        "degree": "Bachelor of Arts in English (Comparative Literature)",
+        "ched_accreditation": "deregulated",
+        "year_started": 1979,
+        "year_ended": 1983,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      },
+      {
+        "institution": "University of the Philippines College of Law",
+        "degree": "Bachelor of Laws (LL.B.)",
+        "ched_accreditation": "deregulated",
+        "year_started": 1983,
+        "year_ended": 1987,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      },
+      {
+        "institution": "Harvard Kennedy School",
+        "degree": "Master of Public Administration",
+        "ched_accreditation": "foreign",
+        "year_started": 2000,
+        "year_ended": 2001,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Quezon City Councilor, 4th District",
+        "start_date": "1988-01-01",
+        "end_date": "1992-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2001-06-30",
+        "end_date": "2013-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": 200,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://web.senate.gov.ph/senators/sen_bio/pangilinan_bio.asp",
+        "source_label": "Senate of the Philippines — Senator Kiko Pangilinan Profile"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://web.senate.gov.ph/senators/sen_bio/pangilinan_bio.asp",
+        "source_label": "Senate of the Philippines — Senator Kiko Pangilinan Profile"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2025-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      }
+    ],
+    "legal_records": [],
+    "achievements": [
+      {
+        "title": "Authored Sagip Saka Act",
+        "description": "Principal author of RA 11321 (Sagip Saka Act), which improved market access and income for farmers and fisherfolk through direct government purchasing",
+        "category": "legislation",
+        "year": 2019,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      },
+      {
+        "title": "Co-Authored Universal Access to Quality Tertiary Education Act",
+        "description": "Co-authored RA 10931 providing free tuition and miscellaneous fees in all State Universities, Colleges, and TESDA institutions",
+        "category": "legislation",
+        "year": 2017,
+        "source_url": "https://en.wikipedia.org/wiki/Kiko_Pangilinan",
+        "source_label": "Wikipedia — Kiko Pangilinan"
+      }
+    ]
+  },
+  {
+    "slug": "chiz-escudero",
+    "full_name": "Francis Joseph Guevara Escudero",
+    "preferred_name": "Chiz Escudero",
+    "current_position": "Senator of the Philippines",
+    "party_affiliation": "Nationalist People's Coalition",
+    "region": "Sorsogon",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1969-10-10",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "University of the Philippines Diliman",
+        "degree": "Bachelor of Arts in Political Science",
+        "ched_accreditation": "deregulated",
+        "year_started": 1985,
+        "year_ended": 1989,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      },
+      {
+        "institution": "University of the Philippines College of Law",
+        "degree": "Bachelor of Laws (LL.B.)",
+        "ched_accreditation": "deregulated",
+        "year_started": 1989,
+        "year_ended": 1993,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      },
+      {
+        "institution": "Georgetown University Law Center",
+        "degree": "Master of Laws in International and Comparative Law (LL.M.)",
+        "ched_accreditation": "foreign",
+        "year_started": 1995,
+        "year_ended": 1996,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Representative, Sorsogon 1st District",
+        "start_date": "1998-06-30",
+        "end_date": "2007-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": 273,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2007-06-30",
+        "end_date": "2019-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      },
+      {
+        "position": "Governor of Sorsogon",
+        "start_date": "2019-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2022-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      },
+      {
+        "position": "President of the Senate",
+        "start_date": "2024-05-20",
+        "end_date": "2025-09-08",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Kickback Allegations — DPWH Flood Control Projects",
+        "case_type": "criminal",
+        "status": "pending",
+        "court": "Under investigation",
+        "charge": "Alleged receipt of PHP 160 million kickback (20% of project cost) from DPWH flood control projects, per testimony of former DPWH undersecretary Roberto Bernardo",
+        "filing_date": "2025-09-01",
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Named World Economic Forum Young Global Leader",
+        "description": "Recognized as a Young Global Leader by the World Economic Forum in 2008 for his contributions to Philippine governance and legislation",
+        "category": "other",
+        "year": 2008,
+        "source_url": "https://en.wikipedia.org/wiki/Francis_Escudero",
+        "source_label": "Wikipedia — Francis Escudero"
+      }
+    ]
+  },
+  {
+    "slug": "ping-lacson",
+    "full_name": "Panfilo Morena Lacson Sr.",
+    "preferred_name": "Ping Lacson",
+    "current_position": "Senator of the Philippines",
+    "party_affiliation": "Independent",
+    "region": "Cavite",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1948-06-01",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Philippine Military Academy",
+        "degree": "Bachelor of Science",
+        "ched_accreditation": "level_4",
+        "year_started": 1967,
+        "year_ended": 1971,
+        "is_completed": true,
+        "source_url": "https://web.senate.gov.ph/senators/sen_bio/lacson_resume.asp",
+        "source_label": "Senate of the Philippines — Senator Lacson Resume"
+      },
+      {
+        "institution": "Pamantasan ng Lungsod ng Maynila",
+        "degree": "Master in Government Management",
+        "ched_accreditation": "level_3",
+        "year_started": 1995,
+        "year_ended": 1996,
+        "is_completed": true,
+        "source_url": "https://web.senate.gov.ph/senators/sen_bio/lacson_resume.asp",
+        "source_label": "Senate of the Philippines — Senator Lacson Resume"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Director General, Philippine National Police",
+        "start_date": "1999-11-01",
+        "end_date": "2001-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Panfilo_Lacson",
+        "source_label": "Wikipedia — Panfilo Lacson"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2001-06-30",
+        "end_date": "2013-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": 72,
+        "bills_passed": 72,
+        "attendance_rate": null,
+        "source_url": "https://pinglacson.net/about/",
+        "source_label": "Official Website — Ping Lacson About"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2016-06-30",
+        "end_date": "2022-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://pinglacson.net/about/",
+        "source_label": "Official Website — Ping Lacson About"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2025-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Panfilo_Lacson",
+        "source_label": "Wikipedia — Panfilo Lacson"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "People v. Lacson — Kuratong Baleleng Multiple Murder",
+        "case_type": "criminal",
+        "status": "dismissed",
+        "court": "Supreme Court of the Philippines",
+        "charge": "Multiple murder in connection with the killing of 11 Kuratong Baleleng gang members by the Presidential Anti-Organized Crime Task Force on May 18, 1995",
+        "filing_date": "1995-06-01",
+        "source_url": "https://newsinfo.inquirer.net/368301/sc-dismisses-kuratong-murder-raps-vs-lacson",
+        "source_label": "Inquirer — SC Dismisses Kuratong Murder Case vs Lacson"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Authored Anti-Terrorism Act of 2020",
+        "description": "Principal author and sponsor of RA 11479, the Anti-Terrorism Act of 2020, which replaced the Human Security Act and strengthened the legal framework against terrorism",
+        "category": "legislation",
+        "year": 2020,
+        "source_url": "https://en.wikipedia.org/wiki/Panfilo_Lacson",
+        "source_label": "Wikipedia — Panfilo Lacson"
+      },
+      {
+        "title": "Led Typhoon Haiyan Rehabilitation",
+        "description": "Appointed Presidential Assistant for Rehabilitation and Recovery after Typhoon Haiyan (Yolanda), overseeing recovery efforts for affected provinces from 2013 to 2015",
+        "category": "other",
+        "year": 2013,
+        "source_url": "https://pinglacson.net/about/",
+        "source_label": "Official Website — Ping Lacson About"
+      }
+    ]
+  },
+  {
+    "slug": "bam-aquino",
+    "full_name": "Paolo Benigno Aguirre Aquino IV",
+    "preferred_name": "Bam Aquino",
+    "current_position": "Senator of the Philippines",
+    "party_affiliation": "Katipunan ng Nagkakaisang Pilipino (KANP)",
+    "region": "Manila",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1977-05-07",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Ateneo de Manila University",
+        "degree": "Bachelor of Science in Management Engineering (Summa Cum Laude, Valedictorian)",
+        "ched_accreditation": "autonomous",
+        "year_started": 1995,
+        "year_ended": 1999,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Chairman, National Youth Commission",
+        "start_date": "2003-01-01",
+        "end_date": "2006-01-01",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2013-06-30",
+        "end_date": "2019-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": 19,
+        "bills_passed": 19,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2025-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Sedition, Cyber Libel, and Related Charges",
+        "case_type": "criminal",
+        "status": "dismissed",
+        "court": "Philippine National Police Criminal Investigation and Detection Group",
+        "charge": "Sedition, cyber libel, libel, estafa, harboring a criminal, and obstruction of justice; charges filed July 2019 amid broader political crackdown on opposition",
+        "filing_date": "2019-07-01",
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Authored Universal Access to Quality Tertiary Education Act",
+        "description": "Co-authored RA 10931, which provides free tuition and other school fees in State Universities and Colleges and TESDA-accredited institutions",
+        "category": "legislation",
+        "year": 2017,
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      },
+      {
+        "title": "Authored Go Negosyo Act",
+        "description": "Principal author of RA 10644 (Go Negosyo Act), establishing Negosyo Centers nationwide to support micro, small, and medium enterprise development",
+        "category": "legislation",
+        "year": 2014,
+        "source_url": "https://en.wikipedia.org/wiki/Bam_Aquino",
+        "source_label": "Wikipedia — Bam Aquino"
+      }
+    ]
+  },
+  {
+    "slug": "robin-padilla",
+    "full_name": "Robinhood Ferdinand Cariño Padilla",
+    "preferred_name": "Robin Padilla",
+    "current_position": "Senator of the Philippines",
+    "party_affiliation": "Partido Demokratiko Pilipino",
+    "region": "Camarines Norte",
+    "is_incumbent": true,
+    "is_candidate": false,
+    "birth_date": "1969-11-23",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "Philippine College of Criminology",
+        "degree": "Bachelor of Science in Criminology",
+        "ched_accreditation": "level_2",
+        "year_started": 1995,
+        "year_ended": 2000,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Robin_Padilla",
+        "source_label": "Wikipedia — Robin Padilla"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2022-06-30",
+        "end_date": null,
+        "is_current": true,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://legacy.senate.gov.ph/senators/sen_bio/padilla_bio.asp",
+        "source_label": "Senate of the Philippines — Senator Robin Padilla Profile"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Illegal Possession of Firearms",
+        "case_type": "criminal",
+        "status": "convicted",
+        "court": "Philippine Regional Trial Court",
+        "charge": "Illegal possession of three firearms following a traffic incident in October 1992; convicted April 1994 and sentenced to up to 21 years",
+        "filing_date": "1992-10-01",
+        "source_url": "https://en.wikipedia.org/wiki/Robin_Padilla",
+        "source_label": "Wikipedia — Robin Padilla"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Second Most Votes in Philippine Senate Election History",
+        "description": "Topped the 2022 Senate elections with the second-highest number of votes ever recorded in a Philippine senatorial election",
+        "category": "other",
+        "year": 2022,
+        "source_url": "https://comelec.gov.ph",
+        "source_label": "COMELEC — 2022 Senate Election Results"
+      },
+      {
+        "title": "First Muslim Senator Since 1995",
+        "description": "Became the first Muslim senator in the Philippine Senate since Santanina Rasul's term ended in 1995, representing the Muslim Filipino community in the upper chamber",
+        "category": "other",
+        "year": 2022,
+        "source_url": "https://en.wikipedia.org/wiki/Robin_Padilla",
+        "source_label": "Wikipedia — Robin Padilla"
+      }
+    ]
+  },
+  {
+    "slug": "cynthia-villar",
+    "full_name": "Cynthia Ampaya Aguilar Villar",
+    "preferred_name": "Cynthia Villar",
+    "current_position": "Former Senator (term ended June 2025)",
+    "party_affiliation": "Nacionalista Party",
+    "region": "Las Piñas",
+    "is_incumbent": false,
+    "is_candidate": false,
+    "birth_date": "1950-07-29",
+    "photo_url": null,
+    "education_records": [
+      {
+        "institution": "University of the Philippines Diliman",
+        "degree": "Bachelor of Science in Business Administration",
+        "ched_accreditation": "deregulated",
+        "year_started": 1966,
+        "year_ended": 1970,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Cynthia_Villar",
+        "source_label": "Wikipedia — Cynthia Villar"
+      },
+      {
+        "institution": "New York University",
+        "degree": "Master of Business Administration",
+        "ched_accreditation": "foreign",
+        "year_started": 1970,
+        "year_ended": 1972,
+        "is_completed": true,
+        "source_url": "https://en.wikipedia.org/wiki/Cynthia_Villar",
+        "source_label": "Wikipedia — Cynthia Villar"
+      }
+    ],
+    "track_records": [
+      {
+        "position": "Representative, Las Piñas Lone District",
+        "start_date": "2001-06-30",
+        "end_date": "2010-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://en.wikipedia.org/wiki/Cynthia_Villar",
+        "source_label": "Wikipedia — Cynthia Villar"
+      },
+      {
+        "position": "Senator of the Philippines",
+        "start_date": "2013-06-30",
+        "end_date": "2025-06-30",
+        "is_current": false,
+        "coa_finding": "unknown",
+        "bills_authored": null,
+        "bills_passed": null,
+        "attendance_rate": null,
+        "source_url": "https://web.senate.gov.ph/senators/sen_bio/villar_cynthia_bio.asp",
+        "source_label": "Senate of the Philippines — Senator Cynthia Villar Profile"
+      }
+    ],
+    "legal_records": [
+      {
+        "case_title": "Plunder — Central Bank Deal",
+        "case_type": "criminal",
+        "status": "dismissed",
+        "court": "Office of the Ombudsman",
+        "charge": "Alleged fraudulent deal in 1998 with the central bank (Bangko Sentral ng Pilipinas); charges filed 2008, cleared by Ombudsman 2010",
+        "filing_date": "2008-01-01",
+        "source_url": "https://en.wikipedia.org/wiki/Cynthia_Villar",
+        "source_label": "Wikipedia — Cynthia Villar"
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Authored 2019 Rice Tariffication Law",
+        "description": "Principal author of RA 11203 (Rice Tariffication Law), which liberalized rice importation and allocated the Rice Competitiveness Enhancement Fund to support local farmers",
+        "category": "legislation",
+        "year": 2019,
+        "source_url": "https://en.wikipedia.org/wiki/Cynthia_Villar",
+        "source_label": "Wikipedia — Cynthia Villar"
+      },
+      {
+        "title": "UN Human Rights Award for Sustainable Development",
+        "description": "Received the UN Association of the Philippines Human Rights Award in 2024 for her work on poverty eradication and biodiversity/environmental well-being",
+        "category": "other",
+        "year": 2024,
+        "source_url": "https://en.wikipedia.org/wiki/Cynthia_Villar",
+        "source_label": "Wikipedia — Cynthia Villar"
+      }
+    ]
+  }
+]
