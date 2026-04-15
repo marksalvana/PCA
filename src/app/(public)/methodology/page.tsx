@@ -22,7 +22,6 @@ const COA_TABLE = [
   { finding: 'Qualified', score: 60, color: 'text-amber-700 bg-amber-50 border-amber-200', description: 'COA found issues in specific areas but not pervasive enough to issue an adverse opinion. Some misstatements, limitations in scope, or departures from acceptable accounting standards.' },
   { finding: 'Adverse', score: 20, color: 'text-red-700 bg-red-50 border-red-200', description: 'COA found the financial statements to be materially misstated and pervasively so. Serious financial management problems. Funds may have been misused or irregularly disbursed.' },
   { finding: 'Disclaimer', score: 10, color: 'text-red-800 bg-red-100 border-red-300', description: 'COA was unable to form an opinion due to insufficient, unavailable, or unreliable records. Inability to audit is itself a serious governance red flag.' },
-  { finding: 'Not Applicable', score: 50, color: 'text-slate-600 bg-slate-50 border-slate-200', description: 'Position does not involve direct management of public funds (e.g., party-list representative with no separate budget). Neutral score applied.' },
 ]
 
 function ScoreBar({ score, max = 100 }: { score: number; max?: number }) {
@@ -72,7 +71,7 @@ export default function MethodologyPage() {
             <div className="w-10 h-10 rounded-lg bg-green-50 border-2 border-green-200 flex items-center justify-center font-black text-green-700 text-sm shrink-0">OBJ</div>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-slate-900 text-sm">Objective Score <span className="text-slate-400 font-normal">(0–100)</span></p>
-              <p className="text-xs text-slate-500 mt-0.5">30% Education + 70% Track Record − Legal Penalties</p>
+              <p className="text-xs text-slate-500 mt-0.5">Education + Track Record − Legal Penalties · weights renormalize when only one component has data · null when no verified data exists</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-slate-100">
@@ -110,13 +109,24 @@ export default function MethodologyPage() {
             ))}
           </div>
           <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600">
-            score = (edu_avg × 0.30) + (track_avg × 0.70) − legal_penalty<br />
-            result = clamp(score, 0, 100)
+            <span className="text-slate-400">// Both components available:</span><br />
+            score = (edu_avg × 0.30) + (track_avg × 0.70) − legal_penalty<br /><br />
+            <span className="text-slate-400">// Only one component has data:</span><br />
+            score = available_component − legal_penalty<br /><br />
+            <span className="text-slate-400">// No verified data at all:</span><br />
+            score = null <span className="text-slate-400">// displayed as "—"</span>
           </div>
         </div>
 
+        <div className="card p-4 border-l-4 border-l-amber-300 mb-3">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Insufficient Data</p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            When a politician has no verified records with scorable data, their Objective Score shows <strong>"—"</strong> rather than a fabricated midpoint. A missing score is honest; a fake 50 is not. This typically happens when all track records have unknown COA findings and no legislative data is available.
+          </p>
+        </div>
+
         <div className="card p-4 border-l-4 border-l-slate-300">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Important</p>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Verified records only</p>
           <p className="text-sm text-slate-600 leading-relaxed">
             Only <strong>verified</strong> records count toward the Objective Score. A record is marked verified after a registered vetter has reviewed the source document. Unverified records are displayed on the profile but do not influence the score.
           </p>
@@ -129,11 +139,17 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Each school a politician attended is scored based on its <strong>CHED (Commission on Higher Education) accreditation status</strong> — the official Philippine government quality rating for universities. Foreign institutions receive a fixed score reflecting that most Philippine politicians who studied abroad attended established universities.
+            Each school a politician attended is scored based on its <strong>CHED (Commission on Higher Education) accreditation status</strong> — the official Philippine government quality rating for universities. Foreign institutions receive a high base score reflecting that most Philippine politicians who studied abroad attended established universities.
           </p>
           <p className="text-slate-700 leading-relaxed mb-4">
             When a politician attended multiple schools, the education component is the <strong>average institution score</strong> across all verified education records.
           </p>
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 mb-4">
+            <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Incomplete Degree Penalty</p>
+            <p className="text-sm text-amber-800 leading-relaxed">
+              Degrees that were not completed are scored at <strong>75% of the base institution score</strong>. Attendance demonstrates access to quality education; failure to complete does not. A politician who dropped out of a top university does not receive the same score as one who graduated from it.
+            </p>
+          </div>
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">CHED Accreditation → Score</p>
           <div className="flex flex-col gap-2">
             {CHED_TABLE.map(({ level, score, description }) => (
@@ -187,9 +203,20 @@ export default function MethodologyPage() {
         </div>
 
         <div className="card p-4 mb-3 border-l-4 border-l-blue-300">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Other track record data displayed (not scored)</p>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Legislative roles: bills-based scoring</p>
+          <p className="text-sm text-slate-600 leading-relaxed mb-3">
+            Senators and Representatives do not receive COA audits the way governors and mayors do — COA audits the executing department, not the legislator. Applying a fake score here would systematically penalize legislators relative to executives.
+          </p>
+          <p className="text-sm text-slate-600 leading-relaxed mb-3">
+            When <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">coa_finding</code> is <em>not_applicable</em> and bills data is available, we use a <strong>legislative effectiveness score</strong> instead:
+          </p>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600 mb-3">
+            pass_rate = bills_passed / bills_authored<br />
+            legislative_score = 30 + (pass_rate × 55)<br />
+            <span className="text-slate-400">// range: 30 (0% passed) to 85 (100% passed)</span>
+          </div>
           <p className="text-sm text-slate-600 leading-relaxed">
-            Legislative attendance rate and bills authored/passed are shown when available but are <strong>not currently included in the score formula</strong>. This is intentional — attendance data has gaps, and bills authored does not equal bills that actually became law. These fields will be incorporated in a future scoring update with clearer methodology.
+            When no COA finding <em>and</em> no bills data is present, that position contributes <strong>null</strong> to the average — it is excluded rather than injecting a fake score.
           </p>
         </div>
 

@@ -87,10 +87,20 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             <div className="text-center">
               <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Objective</div>
               <ScoreBadge score={p.objective_score} size="lg" />
+              {p.objective_score == null && (
+                <p className="text-xs text-slate-400 mt-1 w-16">No data</p>
+              )}
             </div>
             <div className="text-center">
               <div className="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Trust</div>
-              <ScoreBadge score={p.civic_trust_score} size="lg" variant="trust" />
+              {p.civic_trust_score != null ? (
+                <ScoreBadge score={p.civic_trust_score} size="lg" variant="trust" />
+              ) : (
+                <div className="w-16 h-16 rounded-2xl bg-purple-50 border-2 border-purple-100 flex flex-col items-center justify-center gap-0.5">
+                  <span className="text-xs font-bold text-purple-400 leading-tight text-center">Be first</span>
+                  <span className="text-xs font-bold text-purple-400 leading-tight text-center">to rate</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -129,7 +139,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               <div key={rec.id} className="card p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-slate-900">{rec.institution}</p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-semibold text-slate-900">{rec.institution}</p>
+                      {rec.is_completed === false && (
+                        <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-md">Incomplete</span>
+                      )}
+                    </div>
                     {rec.degree && <p className="text-slate-500 text-sm">{rec.degree}{rec.field_of_study ? ` — ${rec.field_of_study}` : ''}</p>}
                     {(rec.year_started || rec.year_ended) && (
                       <p className="text-slate-400 text-xs mt-0.5">
@@ -180,7 +195,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                     <SourceLink url={rec.source_url} label={rec.source_label} />
                   </div>
                   {rec.performance_score != null && (
-                    <ProfileStatBar score={rec.performance_score} label="performance" />
+                    <ProfileStatBar score={rec.performance_score} label={rec.coa_finding && rec.coa_finding !== 'not_applicable' && rec.coa_finding !== 'unknown' ? rec.coa_finding : 'not_applicable'} />
                   )}
                 </div>
               </div>

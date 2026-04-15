@@ -18,56 +18,92 @@ const dynasties = JSON.parse(
   readFileSync(join(__dirname, '../data/dynasties.json'), 'utf8')
 )
 
-// Scoring maps (mirrors scoring_benchmarks seed data)
+// ── CHED accreditation → institution score ──────────────────────────────────
+// "unknown" deliberately excluded: we won't inject a fake score for unknown data
 const CHED_SCORES = {
   deregulated: 100,
   autonomous: 95,
-  foreign: 90,
+  foreign: 90,   // default for any foreign institution; see billsBasedScore note
   level_4: 85,
   level_3: 70,
   level_2: 55,
   level_1: 40,
   unaccredited: 20,
-  unknown: 30,
+  // unknown → null (excluded from average)
 }
 
+// ── COA audit opinion → performance score ───────────────────────────────────
+// "not_applicable" and "unknown" deliberately excluded: use billsBasedScore instead
 const COA_SCORES = {
   unqualified: 100,
   qualified: 60,
   adverse: 20,
   disclaimer: 10,
-  not_applicable: 50,
-  unknown: 30,
+  // not_applicable → billsBasedScore or null
+  // unknown        → billsBasedScore or null
+}
+
+// ── Legislative effectiveness fallback ──────────────────────────────────────
+// Used when COA finding is not_applicable or unknown (senators, representatives)
+// If bills_authored > 0: score scales from 30 (0% pass rate) to 85 (100% pass rate)
+// Most effective legislators pass 10–30% of bills, giving typical scores of 35–50
+function billsBasedScore(bills_authored, bills_passed) {
+  if (bills_authored == null || bills_authored === 0) return null
+  const rate = (bills_passed ?? 0) / bills_authored
+  return Math.min(85, Math.round(30 + rate * 55))
+}
+
+// ── Per-track-record performance score ──────────────────────────────────────
+function getTrackScore(r) {
+  if (r.coa_finding && COA_SCORES[r.coa_finding] !== undefined) {
+    return COA_SCORES[r.coa_finding]
+  }
+  // Legislative role or missing COA → try bills-based; null if no bills data
+  return billsBasedScore(r.bills_authored, r.bills_passed)
 }
 
 function sql(value) {
   if (value === null || value === undefined) return 'NULL'
   if (typeof value === 'boolean') return value ? 'true' : 'false'
   if (typeof value === 'number') return String(value)
-  // Escape single quotes
   return `'${String(value).replace(/'/g, "''")}'`
 }
 
+// ── Objective score formula ──────────────────────────────────────────────────
+// Only scorable (non-null) records are included in each average.
+// Weights: 30% education + 70% track record. If one component has no data,
+// the other carries 100% weight rather than injecting a fake default.
+// Returns null when there is genuinely insufficient verified data.
 function computeObjectiveScore(politician, eduRecords, trackRecords) {
-  const verifiedEdu = eduRecords.filter(r => r.institution_score != null)
-  const verifiedTrack = trackRecords.filter(r => r.performance_score != null)
+  const scorableEdu   = eduRecords.filter(r => r.institution_score != null)
+  const scorableTrack = trackRecords.filter(r => r.performance_score != null)
 
-  const eduScore = verifiedEdu.length
-    ? verifiedEdu.reduce((s, r) => s + r.institution_score, 0) / verifiedEdu.length
-    : 50
+  const eduScore = scorableEdu.length
+    ? scorableEdu.reduce((s, r) => s + r.institution_score, 0) / scorableEdu.length
+    : null
 
-  const trackScore = verifiedTrack.length
-    ? verifiedTrack.reduce((s, r) => s + r.performance_score, 0) / verifiedTrack.length
-    : 50
+  const trackScore = scorableTrack.length
+    ? scorableTrack.reduce((s, r) => s + r.performance_score, 0) / scorableTrack.length
+    : null
 
   const legalPenalty = (politician.legal_records || []).reduce((pen, r) => {
-    if (r.status === 'pending') return pen - 10
+    if (r.status === 'pending')   return pen - 10
     if (r.status === 'convicted') return pen - 20
     return pen
   }, 0)
 
-  const raw = (eduScore * 0.3) + (trackScore * 0.7) + legalPenalty
-  return Math.max(0, Math.min(100, raw)).toFixed(2)
+  let raw
+  if (eduScore !== null && trackScore !== null) {
+    raw = (eduScore * 0.3) + (trackScore * 0.7)
+  } else if (trackScore !== null) {
+    raw = trackScore   // only track data — carries full weight
+  } else if (eduScore !== null) {
+    raw = eduScore     // only education data — carries full weight
+  } else {
+    return null        // insufficient verified data
+  }
+
+  return Math.max(0, Math.min(100, raw + legalPenalty)).toFixed(2)
 }
 
 const lines = []
@@ -78,24 +114,33 @@ lines.push(`-- Generated: ${new Date().toISOString()}`)
 lines.push('-- Run in Supabase SQL Editor')
 lines.push('-- ============================================================')
 lines.push('')
+lines.push('-- Clear existing seed data (safe to re-run)')
+lines.push('DELETE FROM public.dynasty_connections;')
+lines.push('DELETE FROM public.achievements;')
+lines.push('DELETE FROM public.legal_records;')
+lines.push('DELETE FROM public.track_records;')
+lines.push('DELETE FROM public.education_records;')
+lines.push('DELETE FROM public.politicians;')
+lines.push('')
 
 for (const p of politicians) {
   const politicianId = randomUUID()
 
   // Build sub-records with computed scores first
-  const eduRecords = (p.education_records || []).map(r => ({
-    ...r,
-    id: randomUUID(),
-    politician_id: politicianId,
-    institution_score: r.ched_accreditation ? (CHED_SCORES[r.ched_accreditation] ?? null) : null,
-    is_verified: true,
-  }))
+  const eduRecords = (p.education_records || []).map(r => {
+    const base = r.ched_accreditation ? (CHED_SCORES[r.ched_accreditation] ?? null) : null
+    // Incomplete degrees score 75% of the base — reward attendance, not abandonment
+    const institution_score = base != null
+      ? Math.round(base * (r.is_completed === false ? 0.75 : 1.0))
+      : null
+    return { ...r, id: randomUUID(), politician_id: politicianId, institution_score, is_verified: true }
+  })
 
   const trackRecords = (p.track_records || []).map(r => ({
     ...r,
     id: randomUUID(),
     politician_id: politicianId,
-    performance_score: r.coa_finding ? (COA_SCORES[r.coa_finding] ?? null) : null,
+    performance_score: getTrackScore(r),
     is_verified: true,
   }))
 
@@ -133,7 +178,7 @@ for (const p of politicians) {
   lines.push(`  ${sql(p.is_incumbent ?? false)},`)
   lines.push(`  ${sql(p.is_candidate ?? false)},`)
   lines.push(`  'published',`)
-  lines.push(`  ${sql(parseFloat(objectiveScore))},`)
+  lines.push(`  ${objectiveScore !== null ? sql(parseFloat(objectiveScore)) : 'NULL'},`)
   lines.push(`  ${sql(dynasty?.is_dynasty_member ? dynasty.dynasty_name : null)},`)
   lines.push(`  ${sql(dynasty?.is_dynasty_member ? dynasty.dynasty_generation : null)}`)
   lines.push(`);`)
