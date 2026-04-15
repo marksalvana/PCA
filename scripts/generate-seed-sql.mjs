@@ -112,15 +112,10 @@ lines.push('-- ============================================================')
 lines.push('-- PH Profile Compare — Seed Data Import')
 lines.push(`-- Generated: ${new Date().toISOString()}`)
 lines.push('-- Run in Supabase SQL Editor')
+lines.push('-- Safe to re-run: politicians are upserted, sub-records are')
+lines.push('-- appended only if they do not already exist (matched by name).')
+lines.push('-- Dynasty connections are always refreshed (derived data).')
 lines.push('-- ============================================================')
-lines.push('')
-lines.push('-- Clear existing seed data (safe to re-run)')
-lines.push('DELETE FROM public.dynasty_connections;')
-lines.push('DELETE FROM public.achievements;')
-lines.push('DELETE FROM public.legal_records;')
-lines.push('DELETE FROM public.track_records;')
-lines.push('DELETE FROM public.education_records;')
-lines.push('DELETE FROM public.politicians;')
 lines.push('')
 
 for (const p of politicians) {
@@ -164,9 +159,11 @@ for (const p of politicians) {
 
   const dynasty = dynasties[p.slug] ?? null
 
-  // INSERT politician
+  // UPSERT politician — inserts on first run, updates score/photo/dynasty on re-run.
+  // Manual edits made in the admin (notes, status changes, etc.) are preserved because
+  // only the listed SET columns are overwritten on conflict.
   lines.push(`INSERT INTO public.politicians (id, slug, full_name, preferred_name, photo_url, birth_date, current_position, party_affiliation, region, is_incumbent, is_candidate, status, objective_score, dynasty_name, dynasty_generation) VALUES (`)
-  lines.push(`  ${sql(politicianId)},`)
+  lines.push(`  gen_random_uuid(),`)
   lines.push(`  ${sql(p.slug)},`)
   lines.push(`  ${sql(p.full_name)},`)
   lines.push(`  ${sql(p.preferred_name ?? null)},`)
@@ -181,62 +178,82 @@ for (const p of politicians) {
   lines.push(`  ${objectiveScore !== null ? sql(parseFloat(objectiveScore)) : 'NULL'},`)
   lines.push(`  ${sql(dynasty?.is_dynasty_member ? dynasty.dynasty_name : null)},`)
   lines.push(`  ${sql(dynasty?.is_dynasty_member ? dynasty.dynasty_generation : null)}`)
-  lines.push(`);`)
+  lines.push(`) ON CONFLICT (slug) DO UPDATE SET`)
+  lines.push(`  full_name          = EXCLUDED.full_name,`)
+  lines.push(`  preferred_name     = EXCLUDED.preferred_name,`)
+  lines.push(`  photo_url          = EXCLUDED.photo_url,`)
+  lines.push(`  birth_date         = EXCLUDED.birth_date,`)
+  lines.push(`  current_position   = EXCLUDED.current_position,`)
+  lines.push(`  party_affiliation  = EXCLUDED.party_affiliation,`)
+  lines.push(`  region             = EXCLUDED.region,`)
+  lines.push(`  is_incumbent       = EXCLUDED.is_incumbent,`)
+  lines.push(`  is_candidate       = EXCLUDED.is_candidate,`)
+  lines.push(`  status             = EXCLUDED.status,`)
+  lines.push(`  objective_score    = EXCLUDED.objective_score,`)
+  lines.push(`  dynasty_name       = EXCLUDED.dynasty_name,`)
+  lines.push(`  dynasty_generation = EXCLUDED.dynasty_generation;`)
   lines.push('')
 
-  // INSERT education records
+  // INSERT education records — skips any record whose institution already exists
+  // for this politician, so manually added records are never duplicated or removed.
   for (const r of eduRecords) {
-    lines.push(`INSERT INTO public.education_records (id, politician_id, institution, degree, field_of_study, year_started, year_ended, is_completed, ched_accreditation, institution_score, source_url, source_label, is_verified) VALUES (`)
-    lines.push(`  ${sql(r.id)}, ${sql(r.politician_id)},`)
+    lines.push(`INSERT INTO public.education_records (id, politician_id, institution, degree, field_of_study, year_started, year_ended, is_completed, ched_accreditation, institution_score, source_url, source_label, is_verified)`)
+    lines.push(`SELECT gen_random_uuid(), p.id,`)
     lines.push(`  ${sql(r.institution)}, ${sql(r.degree ?? null)}, ${sql(r.field_of_study ?? null)},`)
     lines.push(`  ${sql(r.year_started ?? null)}, ${sql(r.year_ended ?? null)}, ${sql(r.is_completed ?? true)},`)
     lines.push(`  ${sql(r.ched_accreditation ?? null)}, ${sql(r.institution_score ?? null)},`)
     lines.push(`  ${sql(r.source_url)}, ${sql(r.source_label)}, true`)
-    lines.push(`);`)
+    lines.push(`FROM public.politicians p WHERE p.slug = ${sql(p.slug)}`)
+    lines.push(`  AND NOT EXISTS (SELECT 1 FROM public.education_records e WHERE e.politician_id = p.id AND e.institution = ${sql(r.institution)});`)
   }
   if (eduRecords.length) lines.push('')
 
-  // INSERT track records
+  // INSERT track records — skips any record whose position already exists
   for (const r of trackRecords) {
-    lines.push(`INSERT INTO public.track_records (id, politician_id, position, start_date, end_date, is_current, coa_finding, attendance_rate, bills_authored, bills_passed, performance_score, source_url, source_label, is_verified) VALUES (`)
-    lines.push(`  ${sql(r.id)}, ${sql(r.politician_id)},`)
+    lines.push(`INSERT INTO public.track_records (id, politician_id, position, start_date, end_date, is_current, coa_finding, attendance_rate, bills_authored, bills_passed, performance_score, source_url, source_label, is_verified)`)
+    lines.push(`SELECT gen_random_uuid(), p.id,`)
     lines.push(`  ${sql(r.position)}, ${sql(r.start_date ?? null)}, ${sql(r.end_date ?? null)}, ${sql(r.is_current ?? false)},`)
     lines.push(`  ${sql(r.coa_finding ?? null)}, ${sql(r.attendance_rate ?? null)}, ${sql(r.bills_authored ?? null)}, ${sql(r.bills_passed ?? null)},`)
     lines.push(`  ${sql(r.performance_score ?? null)}, ${sql(r.source_url)}, ${sql(r.source_label)}, true`)
-    lines.push(`);`)
+    lines.push(`FROM public.politicians p WHERE p.slug = ${sql(p.slug)}`)
+    lines.push(`  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = ${sql(r.position)});`)
   }
   if (trackRecords.length) lines.push('')
 
-  // INSERT legal records
+  // INSERT legal records — skips any record whose case_title already exists
   for (const r of legalRecords) {
-    lines.push(`INSERT INTO public.legal_records (id, politician_id, case_title, case_type, status, court, charge, filing_date, resolution_summary, source_url, source_label, is_verified) VALUES (`)
-    lines.push(`  ${sql(r.id)}, ${sql(r.politician_id)},`)
+    lines.push(`INSERT INTO public.legal_records (id, politician_id, case_title, case_type, status, court, charge, filing_date, resolution_summary, source_url, source_label, is_verified)`)
+    lines.push(`SELECT gen_random_uuid(), p.id,`)
     lines.push(`  ${sql(r.case_title)}, ${sql(r.case_type)}, ${sql(r.status)},`)
     lines.push(`  ${sql(r.court ?? null)}, ${sql(r.charge ?? null)}, ${sql(r.filing_date ?? null)},`)
     lines.push(`  ${sql(r.resolution_summary ?? null)}, ${sql(r.source_url)}, ${sql(r.source_label)}, true`)
-    lines.push(`);`)
+    lines.push(`FROM public.politicians p WHERE p.slug = ${sql(p.slug)}`)
+    lines.push(`  AND NOT EXISTS (SELECT 1 FROM public.legal_records l WHERE l.politician_id = p.id AND l.case_title = ${sql(r.case_title)});`)
   }
   if (legalRecords.length) lines.push('')
 
-  // INSERT achievements
+  // INSERT achievements — skips any achievement whose title already exists
   for (const r of achievements) {
-    lines.push(`INSERT INTO public.achievements (id, politician_id, title, description, category, year, source_url, source_label, is_verified) VALUES (`)
-    lines.push(`  ${sql(r.id)}, ${sql(r.politician_id)},`)
+    lines.push(`INSERT INTO public.achievements (id, politician_id, title, description, category, year, source_url, source_label, is_verified)`)
+    lines.push(`SELECT gen_random_uuid(), p.id,`)
     lines.push(`  ${sql(r.title)}, ${sql(r.description ?? null)}, ${sql(r.category ?? null)}, ${sql(r.year ?? null)},`)
     lines.push(`  ${sql(r.source_url)}, ${sql(r.source_label)}, true`)
-    lines.push(`);`)
+    lines.push(`FROM public.politicians p WHERE p.slug = ${sql(p.slug)}`)
+    lines.push(`  AND NOT EXISTS (SELECT 1 FROM public.achievements a WHERE a.politician_id = p.id AND a.title = ${sql(r.title)});`)
   }
   if (achievements.length) lines.push('')
 
-  // INSERT dynasty_connections
+  // Dynasty connections are always refreshed — they are derived from dynasties.json
+  // and are never manually edited in the admin, so replacing them is safe.
   if (dynasty?.is_dynasty_member && dynasty.family_members?.length) {
+    lines.push(`DELETE FROM public.dynasty_connections WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = ${sql(p.slug)});`)
     for (const member of dynasty.family_members) {
-      lines.push(`INSERT INTO public.dynasty_connections (id, politician_id, related_name, relationship, position_held, in_dataset, related_slug, source_url, source_label) VALUES (`)
-      lines.push(`  ${sql(randomUUID())}, ${sql(politicianId)},`)
+      lines.push(`INSERT INTO public.dynasty_connections (id, politician_id, related_name, relationship, position_held, in_dataset, related_slug, source_url, source_label)`)
+      lines.push(`SELECT gen_random_uuid(), p.id,`)
       lines.push(`  ${sql(member.name)}, ${sql(member.relationship)}, ${sql(member.position ?? null)},`)
       lines.push(`  ${sql(member.in_dataset ?? false)}, ${sql(member.slug ?? null)},`)
       lines.push(`  'https://en.wikipedia.org/wiki/Political_families_in_the_Philippines', 'Wikipedia – Political Families in the Philippines'`)
-      lines.push(`);`)
+      lines.push(`FROM public.politicians p WHERE p.slug = ${sql(p.slug)};`)
     }
     lines.push('')
   }
