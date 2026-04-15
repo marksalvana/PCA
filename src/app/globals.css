@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ph-blue: #0038a8;
+  --color-ph-red: #ce1126;
+  --color-ph-gold: #fcd116;
+  --color-surface-0: #0a0a0f;
+  --color-surface-1: #111827;
+  --color-surface-2: #1f2937;
+  --color-surface-3: #374151;
+  --color-score-high: #22c55e;
+  --color-score-mid: #f59e0b;
+  --color-score-low: #ef4444;
+}
+
+body {
+  background-color: var(--color-surface-0);
+  color: #f9fafb;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Score bar animation */
+@keyframes fill-bar {
+  from { width: 0% }
+}
+
+.score-bar-fill {
+  animation: fill-bar 0.8s ease-out forwards;
+}
