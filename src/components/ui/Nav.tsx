@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import LanguageToggle from './LanguageToggle'
 
 export default function Nav() {
   return (
@@ -20,7 +21,8 @@ export default function Nav() {
           <Link href="/petition" className="text-sm text-slate-600 hover:text-[#0038a8] px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors font-medium hidden sm:block">
             Request
           </Link>
-          <Link href="/login" className="ml-2 text-sm bg-[#0038a8] hover:bg-blue-800 text-white font-semibold px-4 py-1.5 rounded-lg transition-colors">
+          <LanguageToggle />
+          <Link href="/login" className="ml-1 text-sm bg-[#0038a8] hover:bg-blue-800 text-white font-semibold px-4 py-1.5 rounded-lg transition-colors">
             Admin
           </Link>
         </nav>

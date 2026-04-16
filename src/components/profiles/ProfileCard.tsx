@@ -4,7 +4,11 @@ import type { Politician } from '@/types/database'
 import ScoreBadge from '@/components/ui/ScoreBadge'
 import { objectiveScoreBarPct, objectiveScoreColor } from '@/lib/scoring'
 
-type Props = { politician: Politician }
+type Props = {
+  politician: Politician
+  /** Pass any legal records with status 'pending' | 'convicted' to show the red flag */
+  legalFlags?: { status: string }[]
+}
 
 function scoreBorderColor(score: number | null) {
   if (score == null) return 'border-slate-200'
@@ -13,8 +17,11 @@ function scoreBorderColor(score: number | null) {
   return 'border-l-red-400'
 }
 
-export default function ProfileCard({ politician: p }: Props) {
+export default function ProfileCard({ politician: p, legalFlags = [] }: Props) {
   const borderColor = scoreBorderColor(p.objective_score)
+  const hasActiveCase = legalFlags.some(
+    (r) => r.status === 'pending' || r.status === 'convicted'
+  )
 
   return (
     <Link
@@ -24,19 +31,31 @@ export default function ProfileCard({ politician: p }: Props) {
       <div className="p-4">
         {/* Header */}
         <div className="flex items-start gap-3 mb-4">
-          <div className="shrink-0">
+          <div className="shrink-0 relative">
             {p.photo_url ? (
               <Image
                 src={p.photo_url}
                 alt={p.full_name}
                 width={64}
                 height={64}
-                className="rounded-xl object-cover border border-slate-200 shadow-sm"
+                className="rounded-xl object-cover border border-slate-200 shadow-sm w-16 h-16"
               />
             ) : (
               <div className="w-16 h-16 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-2xl font-black text-slate-400">
                 {p.full_name.charAt(0)}
               </div>
+            )}
+            {hasActiveCase && (
+              <span
+                title="Has pending or convicted legal case"
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center shadow-md"
+                aria-label="Legal flag"
+              >
+                <svg viewBox="0 0 16 16" fill="white" className="w-3 h-3">
+                  <path d="M3 1v9l5-2 5 2V1H3z" />
+                  <rect x="3" y="13" width="1.5" height="3" rx="0.5" />
+                </svg>
+              </span>
             )}
           </div>
           <div className="flex-1 min-w-0">
@@ -46,6 +65,9 @@ export default function ProfileCard({ politician: p }: Props) {
               )}
               {p.is_candidate && (
                 <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded-md">Candidate</span>
+              )}
+              {hasActiveCase && (
+                <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded-md">⚑ Legal Case</span>
               )}
             </div>
             <p className="font-black text-slate-900 text-base leading-tight group-hover:text-[#0038a8] transition-colors">
