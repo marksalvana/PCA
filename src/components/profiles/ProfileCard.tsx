@@ -2,21 +2,15 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Politician } from '@/types/database'
 import ScoreBadge from '@/components/ui/ScoreBadge'
+import { objectiveScoreBarPct, objectiveScoreColor } from '@/lib/scoring'
 
 type Props = { politician: Politician }
 
 function scoreBorderColor(score: number | null) {
   if (score == null) return 'border-slate-200'
-  if (score >= 70) return 'border-l-green-400'
-  if (score >= 40) return 'border-l-amber-400'
+  if (score >= 300) return 'border-l-green-400'
+  if (score >= 100) return 'border-l-amber-400'
   return 'border-l-red-400'
-}
-
-function scoreBarBg(score: number | null) {
-  if (score == null) return '#e2e8f0'
-  if (score >= 70) return '#16a34a'
-  if (score >= 40) return '#d97706'
-  return '#dc2626'
 }
 
 export default function ProfileCard({ politician: p }: Props) {
@@ -79,8 +73,8 @@ export default function ProfileCard({ politician: p }: Props) {
             <div
               className="h-full rounded-full score-bar-fill"
               style={{
-                width: `${p.objective_score ?? 0}%`,
-                backgroundColor: scoreBarBg(p.objective_score),
+                width: `${objectiveScoreBarPct(p.objective_score)}%`,
+                backgroundColor: objectiveScoreColor(p.objective_score),
               }}
             />
           </div>

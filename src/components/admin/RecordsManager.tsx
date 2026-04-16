@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getMutationClient } from '@/lib/supabase/mutations'
-import type { PoliticianWithDetails, ChedAccreditation, CoaFinding, LegalCaseType, LegalCaseStatus, AchievementCategory } from '@/types/database'
+import type { PoliticianWithDetails, ChedAccreditation, CoaFinding, LegalCaseType, LegalCaseStatus, AchievementCategory, ImpactScope } from '@/types/database'
 import SourceLink from '@/components/ui/SourceLink'
+import { computeEducationPts, computeTrackPts, computeAchievementPts, attendanceModifier, LEGAL_PENALTIES } from '@/lib/scoring'
 
 type Tab = 'education' | 'track' | 'legal' | 'achievements'
 
@@ -53,6 +54,7 @@ export default function RecordsManager({ politician: p }: Props) {
   const [achTitle, setAchTitle] = useState('')
   const [achDesc, setAchDesc] = useState('')
   const [achCategory, setAchCategory] = useState<AchievementCategory>('other')
+  const [achImpactScope, setAchImpactScope] = useState<ImpactScope | ''>('')
   const [achYear, setAchYear] = useState('')
   const [achSourceUrl, setAchSourceUrl] = useState('')
   const [achSourceLabel, setAchSourceLabel] = useState('')
@@ -140,13 +142,14 @@ export default function RecordsManager({ politician: p }: Props) {
       title: achTitle,
       description: achDesc || null,
       category: achCategory,
+      impact_scope: achImpactScope || null,
       year: achYear ? parseInt(achYear) : null,
       source_url: achSourceUrl,
       source_label: achSourceLabel,
     })
     setSaving(false)
     if (error) { setError(error.message); return }
-    setAchTitle(''); setAchDesc(''); setAchYear(''); setAchSourceUrl(''); setAchSourceLabel('')
+    setAchTitle(''); setAchDesc(''); setAchImpactScope(''); setAchYear(''); setAchSourceUrl(''); setAchSourceLabel('')
     router.refresh()
   }
 
@@ -205,15 +208,15 @@ export default function RecordsManager({ politician: p }: Props) {
               <div>
                 <label className={labelClass}>CHED Accreditation</label>
                 <select value={eduAccreditation} onChange={(e) => setEduAccreditation(e.target.value as ChedAccreditation)} className={inputClass}>
-                  <option value="deregulated">Deregulated (100)</option>
-                  <option value="autonomous">Autonomous (95)</option>
-                  <option value="foreign">Foreign (90)</option>
-                  <option value="level_4">Level IV (85)</option>
-                  <option value="level_3">Level III (70)</option>
-                  <option value="level_2">Level II (55)</option>
-                  <option value="level_1">Level I (40)</option>
-                  <option value="unaccredited">Unaccredited (20)</option>
-                  <option value="unknown">Unknown</option>
+                  <option value="deregulated">Deregulated (+100 pts)</option>
+                  <option value="autonomous">Autonomous (+95 pts)</option>
+                  <option value="foreign">Foreign (+90 pts)</option>
+                  <option value="level_4">Level IV (+85 pts)</option>
+                  <option value="level_3">Level III (+70 pts)</option>
+                  <option value="level_2">Level II (+55 pts)</option>
+                  <option value="level_1">Level I (+40 pts)</option>
+                  <option value="unaccredited">Unaccredited (+20 pts)</option>
+                  <option value="unknown">Unknown (+0 pts)</option>
                 </select>
               </div>
             </div>
@@ -243,13 +246,27 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing Records ({p.education_records?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.education_records?.map((r) => (
-                <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                  <p className="font-semibold text-white">{r.institution}</p>
-                  {r.degree && <p className="text-gray-400 text-xs">{r.degree}</p>}
-                  <SourceLink url={r.source_url} label={r.source_label} />
-                </div>
-              ))}
+              {p.education_records?.map((r) => {
+                const pts = computeEducationPts(r)
+                return (
+                  <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white">{r.institution}</p>
+                        {r.degree && <p className="text-gray-400 text-xs">{r.degree}</p>}
+                        {!r.is_completed && <p className="text-amber-500 text-xs">Incomplete (×0.75)</p>}
+                        {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                        <SourceLink url={r.source_url} label={r.source_label} />
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <span className={`text-xs font-black tabular-nums ${r.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
+                          +{pts} pts
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
               {!p.education_records?.length && <p className="text-gray-600 text-sm">No records yet.</p>}
             </div>
           </div>
@@ -282,12 +299,12 @@ export default function RecordsManager({ politician: p }: Props) {
             <div>
               <label className={labelClass}>COA Audit Finding</label>
               <select value={trackCoa} onChange={(e) => setTrackCoa(e.target.value as CoaFinding)} className={inputClass}>
-                <option value="unqualified">Unqualified / Clean (100)</option>
-                <option value="qualified">Qualified (60)</option>
-                <option value="adverse">Adverse (20)</option>
-                <option value="disclaimer">Disclaimer (10)</option>
-                <option value="not_applicable">Not Applicable</option>
-                <option value="unknown">Unknown</option>
+                <option value="unqualified">Unqualified / Clean (+100 pts)</option>
+                <option value="qualified">Qualified (+60 pts)</option>
+                <option value="adverse">Adverse (+20 pts)</option>
+                <option value="disclaimer">Disclaimer (+10 pts)</option>
+                <option value="not_applicable">Not Applicable (bills-based)</option>
+                <option value="unknown">Unknown (+0 pts)</option>
               </select>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -304,6 +321,9 @@ export default function RecordsManager({ politician: p }: Props) {
                 <input type="number" min="0" max="100" step="0.1" value={trackAttendance} onChange={(e) => setTrackAttendance(e.target.value)} placeholder="95" className={inputClass} />
               </div>
             </div>
+            <p className="text-xs text-gray-500">
+              Attendance affects score: ≥90% +20 pts · 75–89% no change · 50–74% −20 pts · &lt;50% −50 pts. Leave blank if unknown.
+            </p>
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
               <input type="url" value={trackSourceUrl} onChange={(e) => setTrackSourceUrl(e.target.value)} required placeholder="https://..." className={inputClass} />
@@ -320,13 +340,38 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing Records ({p.track_records?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.track_records?.map((r) => (
-                <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                  <p className="font-semibold text-white">{r.position}</p>
-                  <p className="text-gray-500 text-xs">COA: {r.coa_finding}</p>
-                  <SourceLink url={r.source_url} label={r.source_label} />
-                </div>
-              ))}
+              {p.track_records?.map((r) => {
+                const pts = computeTrackPts(r)
+                const attMod = attendanceModifier(r.attendance_rate)
+                return (
+                  <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white">{r.position}</p>
+                        <p className="text-gray-500 text-xs">COA: {r.coa_finding ?? '—'}</p>
+                        {r.bills_authored != null && (
+                          <p className="text-gray-500 text-xs">{r.bills_authored} authored · {r.bills_passed ?? 0} passed</p>
+                        )}
+                        {r.attendance_rate != null && (
+                          <p className="text-xs">
+                            <span className="text-gray-500">Attendance: {r.attendance_rate}% </span>
+                            <span className={attMod > 0 ? 'text-green-400' : attMod < 0 ? 'text-red-400' : 'text-gray-600'}>
+                              ({attMod > 0 ? '+' : ''}{attMod} pts)
+                            </span>
+                          </p>
+                        )}
+                        {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                        <SourceLink url={r.source_url} label={r.source_label} />
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <span className={`text-xs font-black tabular-nums ${r.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
+                          +{pts} pts
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
               {!p.track_records?.length && <p className="text-gray-600 text-sm">No records yet.</p>}
             </div>
           </div>
@@ -393,13 +438,26 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing Records ({p.legal_records?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.legal_records?.map((r) => (
-                <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                  <p className="font-semibold text-white">{r.case_title}</p>
-                  <p className="text-gray-500 text-xs capitalize">{r.status} · {r.case_type}</p>
-                  <SourceLink url={r.source_url} label={r.source_label} />
-                </div>
-              ))}
+              {p.legal_records?.map((r) => {
+                const penalty = LEGAL_PENALTIES[r.status as keyof typeof LEGAL_PENALTIES] ?? 0
+                return (
+                  <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white">{r.case_title}</p>
+                        <p className="text-gray-500 text-xs capitalize">{r.status} · {r.case_type}</p>
+                        {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                        <SourceLink url={r.source_url} label={r.source_label} />
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <span className={`text-xs font-black tabular-nums ${penalty > 0 ? (r.is_verified ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
+                          {penalty > 0 ? `−${penalty} pts` : '0 pts'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
               {!p.legal_records?.length && <p className="text-gray-600 text-sm">No records yet.</p>}
             </div>
           </div>
@@ -438,6 +496,16 @@ export default function RecordsManager({ politician: p }: Props) {
               </div>
             </div>
             <div>
+              <label className={labelClass}>Impact Scope <span className="text-red-400">*</span></label>
+              <select value={achImpactScope} onChange={(e) => setAchImpactScope(e.target.value as ImpactScope | '')} required className={inputClass}>
+                <option value="">— Select scope —</option>
+                <option value="national">National (+100 pts)</option>
+                <option value="regional">Regional (+50 pts)</option>
+                <option value="local">Local (+20 pts)</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-1">Scope determines how this achievement contributes to the objective score.</p>
+            </div>
+            <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
               <input type="url" value={achSourceUrl} onChange={(e) => setAchSourceUrl(e.target.value)} required placeholder="https://..." className={inputClass} />
             </div>
@@ -453,13 +521,31 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing ({p.achievements?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.achievements?.map((a) => (
-                <div key={a.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                  <p className="font-semibold text-white">{a.title}</p>
-                  {a.year && <p className="text-gray-500 text-xs">{a.year}</p>}
-                  <SourceLink url={a.source_url} label={a.source_label} />
-                </div>
-              ))}
+              {p.achievements?.map((a) => {
+                const pts = computeAchievementPts(a.impact_scope)
+                return (
+                  <div key={a.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-white">{a.title}</p>
+                        {a.year && <p className="text-gray-500 text-xs">{a.year}</p>}
+                        {a.impact_scope ? (
+                          <p className="text-xs text-indigo-400 capitalize mt-0.5">{a.impact_scope}</p>
+                        ) : (
+                          <p className="text-xs text-amber-500 mt-0.5">⚠ Set impact scope</p>
+                        )}
+                        {!a.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                        <SourceLink url={a.source_url} label={a.source_label} />
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <span className={`text-xs font-black tabular-nums ${a.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
+                          +{pts} pts
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
               {!p.achievements?.length && <p className="text-gray-600 text-sm">No achievements yet.</p>}
             </div>
           </div>

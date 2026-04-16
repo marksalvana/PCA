@@ -36,7 +36,7 @@ create table public.politicians (
   is_incumbent boolean not null default false,
   is_candidate boolean not null default false, -- running in upcoming election
   status text not null default 'draft' check (status in ('draft', 'under_review', 'published', 'flagged')),
-  objective_score numeric(5,2), -- computed score 0-100 based on benchmarks
+  objective_score numeric(10,2), -- computed cumulative score (no upper cap) based on verified records
   civic_trust_score numeric(5,2), -- community sentiment score 0-100
   created_by uuid references public.user_profiles(id),
   created_at timestamptz not null default now(),
@@ -60,7 +60,7 @@ create table public.education_records (
     'level_1', 'level_2', 'level_3', 'level_4',
     'autonomous', 'deregulated', 'unaccredited', 'foreign', 'unknown'
   )),
-  institution_score numeric(5,2), -- 0-100 derived from ched_accreditation
+  institution_score numeric(10,2), -- derived from ched_accreditation (display use only; scoring reads enum directly)
   -- Source requirement (MANDATORY)
   source_url text not null,
   source_label text not null, -- "Official University Records", "Wikipedia"
@@ -93,8 +93,8 @@ create table public.track_records (
   attendance_rate numeric(5,2), -- percentage 0-100
   bills_authored integer,
   bills_passed integer,
-  -- COA/performance score derived from above
-  performance_score numeric(5,2), -- 0-100
+  -- COA/performance score derived from above (display use only; scoring reads enum directly)
+  performance_score numeric(10,2),
   notes text,
   -- Source requirement (MANDATORY)
   source_url text not null,
@@ -229,7 +229,7 @@ create table public.scoring_benchmarks (
   id uuid primary key default uuid_generate_v4(),
   category text not null, -- 'education_ched', 'coa_finding'
   key text not null,       -- 'autonomous', 'unqualified'
-  score numeric(5,2) not null, -- 0-100
+  score numeric(10,2) not null,
   label text not null,     -- human-readable label
   description text,
   unique(category, key)
@@ -531,44 +531,113 @@ create trigger on_auth_user_created
 -- HELPER FUNCTION: compute objective score for a politician
 -- (call this after adding/verifying records)
 -- ============================================================
+-- Cumulative scoring: every verified record adds to the total.
+-- Components: education (CHED) + track record (COA + attendance) +
+--             achievements (impact scope) − legal penalties.
+-- No upper cap. Floor at 0.
 create or replace function public.compute_objective_score(p_politician_id uuid)
 returns numeric as $$
 declare
-  edu_score numeric := 0;
-  track_score numeric := 0;
-  legal_penalty numeric := 0;
-  final_score numeric;
+  edu_score         numeric := 0;
+  track_score       numeric := 0;
+  achievement_score numeric := 0;
+  legal_penalty     numeric := 0;
+  final_score       numeric;
 begin
-  -- Average education score (from verified records only)
-  select coalesce(avg(institution_score), 50)
+  -- Education: SUM — each verified degree contributes its institution score.
+  -- Incomplete degrees get 75% of the base score.
+  select coalesce(sum(
+    round(
+      case ched_accreditation
+        when 'deregulated'  then 100
+        when 'autonomous'   then 95
+        when 'foreign'      then 90
+        when 'level_4'      then 85
+        when 'level_3'      then 70
+        when 'level_2'      then 55
+        when 'level_1'      then 40
+        when 'unaccredited' then 20
+        else 0
+      end
+      * case when is_completed then 1.0 else 0.75 end
+    )
+  ), 0)
   into edu_score
   from public.education_records
-  where politician_id = p_politician_id and is_verified = true;
+  where politician_id = p_politician_id
+    and is_verified = true
+    and ched_accreditation is not null
+    and ched_accreditation <> 'unknown';
 
-  -- Average track record performance score (verified only)
-  select coalesce(avg(performance_score), 50)
+  -- Track record: SUM — COA/bills base score + attendance modifier per term.
+  -- Each record is floored at 0 before summing so a poor attendance
+  -- on an already-zero record cannot go negative.
+  select coalesce(sum(
+    greatest(0,
+      -- Base COA / bills score
+      case
+        when coa_finding = 'unqualified' then 100
+        when coa_finding = 'qualified'   then 60
+        when coa_finding = 'adverse'     then 20
+        when coa_finding = 'disclaimer'  then 10
+        when coa_finding in ('not_applicable', 'unknown')
+             and bills_authored is not null and bills_authored > 0
+          then least(85, 30 + round(
+                 (coalesce(bills_passed, 0)::numeric / bills_authored::numeric) * 55
+               ))
+        else 0
+      end
+      +
+      -- Attendance modifier (only when rate is recorded)
+      case
+        when attendance_rate >= 90 then  20
+        when attendance_rate >= 75 then   0
+        when attendance_rate >= 50 then -20
+        when attendance_rate is not null then -50
+        else 0
+      end
+    )
+  ), 0)
   into track_score
   from public.track_records
-  where politician_id = p_politician_id and is_verified = true;
+  where politician_id = p_politician_id
+    and is_verified = true;
 
-  -- Legal penalty: -10 per pending case, -20 per conviction
-  select coalesce(
-    sum(case
-      when status = 'pending' then -10
-      when status = 'convicted' then -20
+  -- Achievements: SUM — national 100, regional 50, local 20.
+  -- Only verified achievements with impact_scope set contribute.
+  select coalesce(sum(
+    case impact_scope
+      when 'national'  then 100
+      when 'regional'  then  50
+      when 'local'     then  20
       else 0
-    end), 0)
+    end
+  ), 0)
+  into achievement_score
+  from public.achievements
+  where politician_id = p_politician_id
+    and is_verified = true
+    and impact_scope is not null;
+
+  -- Legal penalty: -100 pending/appeal, -300 convicted (per verified case).
+  select coalesce(sum(
+    case
+      when status = 'pending'        then 100
+      when status = 'convicted'      then 300
+      when status = 'ongoing_appeal' then 100
+      else 0
+    end
+  ), 0)
   into legal_penalty
   from public.legal_records
-  where politician_id = p_politician_id and is_verified = true;
+  where politician_id = p_politician_id
+    and is_verified = true;
 
-  -- Weighted average: 30% education, 70% track record, then apply legal penalty
-  final_score := (edu_score * 0.3) + (track_score * 0.7) + legal_penalty;
+  -- Total: education + track + achievements − legal penalties. Floor at 0.
+  final_score := greatest(0,
+    edu_score + track_score + achievement_score - legal_penalty
+  );
 
-  -- Clamp to 0-100
-  final_score := greatest(0, least(100, final_score));
-
-  -- Update the politician record
   update public.politicians
   set objective_score = final_score, updated_at = now()
   where id = p_politician_id;

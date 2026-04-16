@@ -7,32 +7,33 @@ export const metadata: Metadata = {
 }
 
 const CHED_TABLE = [
-  { level: 'Deregulated', score: 100, description: 'Highest CHED classification. Allowed to operate with maximum autonomy and set tuition independently. Awarded only to universities meeting the highest quality benchmarks.' },
-  { level: 'Autonomous', score: 95, description: 'Authorized to offer programs without prior CHED approval. Strong institutional track record, accreditation, and research output required.' },
-  { level: 'Foreign', score: 90, description: 'Degree earned abroad. Given a high default score reflecting international quality, as most Philippine politicians who studied abroad attended reputable universities.' },
-  { level: 'Level IV', score: 85, description: 'AACCUP/FAAP Level IV accredited. Top-tier domestic accreditation, demonstrating excellent faculty, research, and student outcomes.' },
-  { level: 'Level III', score: 70, description: 'AACCUP/FAAP Level III accredited. Good quality domestic institution with consistent performance across academic areas.' },
-  { level: 'Level II', score: 55, description: 'AACCUP/FAAP Level II accredited. Meets minimum quality standards; some areas still developing.' },
-  { level: 'Level I', score: 40, description: 'AACCUP/FAAP Level I accredited — the lowest accreditation tier. Basic quality standards met but limited track record.' },
-  { level: 'Unaccredited', score: 20, description: 'No CHED accreditation on record. Cannot confirm institutional quality through official channels.' },
+  { level: 'Deregulated', pts: 100, description: 'Highest CHED classification. Allowed to operate with maximum autonomy and set tuition independently. Awarded only to universities meeting the highest quality benchmarks.' },
+  { level: 'Autonomous', pts: 95, description: 'Authorized to offer programs without prior CHED approval. Strong institutional track record, accreditation, and research output required.' },
+  { level: 'Foreign', pts: 90, description: 'Degree earned abroad. Given a high base score reflecting international quality, as most Philippine politicians who studied abroad attended reputable universities.' },
+  { level: 'Level IV', pts: 85, description: 'AACCUP/FAAP Level IV accredited. Top-tier domestic accreditation, demonstrating excellent faculty, research, and student outcomes.' },
+  { level: 'Level III', pts: 70, description: 'AACCUP/FAAP Level III accredited. Good quality domestic institution with consistent performance across academic areas.' },
+  { level: 'Level II', pts: 55, description: 'AACCUP/FAAP Level II accredited. Meets minimum quality standards; some areas still developing.' },
+  { level: 'Level I', pts: 40, description: 'AACCUP/FAAP Level I accredited — the lowest accreditation tier. Basic quality standards met but limited track record.' },
+  { level: 'Unaccredited', pts: 20, description: 'No CHED accreditation on record. Cannot confirm institutional quality through official channels.' },
+  { level: 'Unknown', pts: 0, description: 'Accreditation status could not be verified. No points contributed — we do not fabricate quality ratings from unverifiable data.' },
 ]
 
 const COA_TABLE = [
-  { finding: 'Unqualified', score: 100, color: 'text-green-700 bg-green-50 border-green-200', description: 'Clean audit opinion. The COA found financial statements to be presented fairly and in accordance with applicable standards. No material misstatements or irregularities.' },
-  { finding: 'Qualified', score: 60, color: 'text-amber-700 bg-amber-50 border-amber-200', description: 'COA found issues in specific areas but not pervasive enough to issue an adverse opinion. Some misstatements, limitations in scope, or departures from acceptable accounting standards.' },
-  { finding: 'Adverse', score: 20, color: 'text-red-700 bg-red-50 border-red-200', description: 'COA found the financial statements to be materially misstated and pervasively so. Serious financial management problems. Funds may have been misused or irregularly disbursed.' },
-  { finding: 'Disclaimer', score: 10, color: 'text-red-800 bg-red-100 border-red-300', description: 'COA was unable to form an opinion due to insufficient, unavailable, or unreliable records. Inability to audit is itself a serious governance red flag.' },
+  { finding: 'Unqualified', pts: 100, color: 'text-green-700 bg-green-50 border-green-200', description: 'Clean audit opinion. The COA found financial statements to be presented fairly and in accordance with applicable standards. No material misstatements or irregularities.' },
+  { finding: 'Qualified', pts: 60, color: 'text-amber-700 bg-amber-50 border-amber-200', description: 'COA found issues in specific areas but not pervasive enough to issue an adverse opinion. Some misstatements, limitations in scope, or departures from acceptable accounting standards.' },
+  { finding: 'Adverse', pts: 20, color: 'text-red-700 bg-red-50 border-red-200', description: 'COA found the financial statements to be materially misstated and pervasively so. Serious financial management problems. Funds may have been misused or irregularly disbursed.' },
+  { finding: 'Disclaimer', pts: 10, color: 'text-red-800 bg-red-100 border-red-300', description: 'COA was unable to form an opinion due to insufficient, unavailable, or unreliable records. Inability to audit is itself a serious governance red flag.' },
 ]
 
-function ScoreBar({ score, max = 100 }: { score: number; max?: number }) {
-  const pct = (score / max) * 100
-  const color = score >= 80 ? 'bg-green-500' : score >= 50 ? 'bg-amber-400' : 'bg-red-500'
+function PtsBar({ pts, max = 100 }: { pts: number; max?: number }) {
+  const pct = Math.min(100, (pts / max) * 100)
+  const color = pts >= 80 ? 'bg-green-500' : pts >= 50 ? 'bg-amber-400' : pts > 0 ? 'bg-red-500' : 'bg-slate-300'
   return (
     <div className="flex items-center gap-3">
       <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-sm font-black tabular-nums w-8 text-right">{score}</span>
+      <span className="text-sm font-black tabular-nums w-12 text-right">+{pts} pts</span>
     </div>
   )
 }
@@ -70,8 +71,8 @@ export default function MethodologyPage() {
           <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-slate-100">
             <div className="w-10 h-10 rounded-lg bg-green-50 border-2 border-green-200 flex items-center justify-center font-black text-green-700 text-sm shrink-0">OBJ</div>
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-slate-900 text-sm">Objective Score <span className="text-slate-400 font-normal">(0–100)</span></p>
-              <p className="text-xs text-slate-500 mt-0.5">Education + Track Record − Legal Penalties · weights renormalize when only one component has data · null when no verified data exists</p>
+              <p className="font-bold text-slate-900 text-sm">Objective Score <span className="text-slate-400 font-normal">(no upper limit)</span></p>
+              <p className="text-xs text-slate-500 mt-0.5">Cumulative sum of Education + Track Record points, minus Legal Penalties · floor at 0 · null when no verified data exists</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-slate-100">
@@ -93,35 +94,41 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            The Objective Score is a composite of three factors drawn entirely from official Philippine government records. It is calculated server-side and cannot be overridden by any user or admin.
+            The Objective Score is a <strong>cumulative sum</strong> of points earned from verified public records. It is calculated server-side and cannot be entered or overridden by any user or admin — the app derives it entirely from official data.
           </p>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mb-4">
             {[
-              { label: 'Education', weight: '30%', color: 'bg-blue-500' },
-              { label: 'Track Record', weight: '70%', color: 'bg-[#0038a8]' },
-              { label: 'Legal Penalty', weight: 'deducted', color: 'bg-red-500' },
-            ].map(({ label, weight, color }) => (
+              { label: 'Education', detail: 'sum of pts per verified degree (CHED accreditation)', color: 'bg-blue-500' },
+              { label: 'Track Record', detail: 'sum of (COA/bills base + attendance modifier) per verified term', color: 'bg-[#0038a8]' },
+              { label: 'Achievements', detail: 'sum of pts per verified achievement (impact scope)', color: 'bg-indigo-400' },
+              { label: 'Legal Penalty', detail: 'deducted per verified active case', color: 'bg-red-500' },
+            ].map(({ label, detail, color }) => (
               <div key={label} className="flex items-center gap-3">
                 <div className={`w-2 h-2 rounded-full ${color} shrink-0`} />
-                <span className="text-sm text-slate-700 flex-1">{label}</span>
-                <span className="text-sm font-bold text-slate-900">{weight}</span>
+                <span className="text-sm font-semibold text-slate-700 w-28 shrink-0">{label}</span>
+                <span className="text-xs text-slate-500">{detail}</span>
               </div>
             ))}
           </div>
-          <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600">
-            <span className="text-slate-400">// Both components available:</span><br />
-            score = (edu_avg × 0.30) + (track_avg × 0.70) − legal_penalty<br /><br />
-            <span className="text-slate-400">// Only one component has data:</span><br />
-            score = available_component − legal_penalty<br /><br />
-            <span className="text-slate-400">// No verified data at all:</span><br />
-            score = null <span className="text-slate-400">// displayed as "—"</span>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600">
+            score = SUM(edu_pts) + SUM(track_pts) + SUM(achievement_pts) − SUM(legal_penalties)<br />
+            score = max(0, score) <span className="text-slate-400">// floor at 0</span><br /><br />
+            <span className="text-slate-400">// No upper cap — more verified records = higher score</span><br />
+            <span className="text-slate-400">// No verified data → score = null, displayed as "—"</span>
           </div>
         </div>
 
         <div className="card p-4 border-l-4 border-l-amber-300 mb-3">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Insufficient Data</p>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Why cumulative instead of averaged</p>
           <p className="text-sm text-slate-600 leading-relaxed">
-            When a politician has no verified records with scorable data, their Objective Score shows <strong>"—"</strong> rather than a fabricated midpoint. A missing score is honest; a fake 50 is not. This typically happens when all track records have unknown COA findings and no legislative data is available.
+            An average treats a politician with one degree the same as one with five, as long as the single degree is from a high-quality school. That is not a fair comparison. Under the cumulative model, every additional verified achievement adds real points — a richer, more complete record earns a genuinely higher score.
+          </p>
+        </div>
+
+        <div className="card p-4 border-l-4 border-l-slate-300">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">No data = no score</p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            When a politician has no verified records with scorable data, their Objective Score shows <strong>"—"</strong> rather than a fabricated zero. A missing score is honest; a fake score is not. Unknown COA findings and unverified records do not contribute any points.
           </p>
         </div>
 
@@ -139,25 +146,22 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Each school a politician attended is scored based on its <strong>CHED (Commission on Higher Education) accreditation status</strong> — the official Philippine government quality rating for universities. Foreign institutions receive a high base score reflecting that most Philippine politicians who studied abroad attended established universities.
-          </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
-            When a politician attended multiple schools, the education component is the <strong>average institution score</strong> across all verified education records.
+            Each verified degree a politician earned contributes a fixed number of points based on the school's <strong>CHED (Commission on Higher Education) accreditation status</strong>. Points are cumulative — a politician with three degrees earns points for all three. A single degree from a top school does not beat a politician who has three strong degrees.
           </p>
           <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 mb-4">
             <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Incomplete Degree Penalty</p>
             <p className="text-sm text-amber-800 leading-relaxed">
-              Degrees that were not completed are scored at <strong>75% of the base institution score</strong>. Attendance demonstrates access to quality education; failure to complete does not. A politician who dropped out of a top university does not receive the same score as one who graduated from it.
+              Degrees that were not completed contribute <strong>75% of the base institution points</strong>. Attendance demonstrates access to quality education; failure to complete does not. A politician who dropped out of a top university does not earn the same points as one who graduated.
             </p>
           </div>
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">CHED Accreditation → Score</p>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">CHED Accreditation → Points per degree</p>
           <div className="flex flex-col gap-2">
-            {CHED_TABLE.map(({ level, score, description }) => (
+            {CHED_TABLE.map(({ level, pts, description }) => (
               <div key={level} className="flex flex-col gap-1 p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-bold text-slate-900 w-28 shrink-0">{level}</span>
                   <div className="flex-1">
-                    <ScoreBar score={score} />
+                    <PtsBar pts={pts} />
                   </div>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed pl-0.5">{description}</p>
@@ -181,19 +185,16 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Each position a politician held is scored based on the <strong>COA (Commission on Audit) opinion</strong> issued for that term. The COA audits all government offices and issues an annual opinion on their financial statements — this is the most objective available measure of how responsibly a public official managed public funds.
+            Each verified term in public office contributes a fixed number of points based on the <strong>COA (Commission on Audit) opinion</strong> for that term. Points are cumulative — a politician with ten clean terms earns more than one with a single clean term. This rewards sustained, long-term clean governance rather than a one-term track record.
           </p>
-          <p className="text-slate-700 leading-relaxed mb-4">
-            When a politician held multiple positions, the track record component is the <strong>average performance score</strong> across all verified position records.
-          </p>
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">COA Audit Opinion → Score</p>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">COA Audit Opinion → Points per term</p>
           <div className="flex flex-col gap-3">
-            {COA_TABLE.map(({ finding, score, color, description }) => (
+            {COA_TABLE.map(({ finding, pts, color, description }) => (
               <div key={finding} className="flex flex-col gap-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <div className="flex items-center gap-3">
                   <span className={`text-xs font-bold px-2.5 py-1 rounded-md border ${color} w-28 shrink-0 text-center`}>{finding}</span>
                   <div className="flex-1">
-                    <ScoreBar score={score} />
+                    <PtsBar pts={pts} />
                   </div>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed">{description}</p>
@@ -205,10 +206,7 @@ export default function MethodologyPage() {
         <div className="card p-4 mb-3 border-l-4 border-l-blue-300">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Legislative roles: bills-based scoring</p>
           <p className="text-sm text-slate-600 leading-relaxed mb-3">
-            Senators and Representatives do not receive COA audits the way governors and mayors do — COA audits the executing department, not the legislator. Applying a fake score here would systematically penalize legislators relative to executives.
-          </p>
-          <p className="text-sm text-slate-600 leading-relaxed mb-3">
-            When <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">coa_finding</code> is <em>not_applicable</em> and bills data is available, we use a <strong>legislative effectiveness score</strong> instead:
+            Senators and Representatives do not receive COA audits the way governors and mayors do — COA audits the executing department, not the legislator. When <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">coa_finding</code> is <em>not_applicable</em> and bills data is available, we use a <strong>legislative effectiveness score</strong> instead:
           </p>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600 mb-3">
             pass_rate = bills_passed / bills_authored<br />
@@ -216,7 +214,30 @@ export default function MethodologyPage() {
             <span className="text-slate-400">// range: 30 (0% passed) to 85 (100% passed)</span>
           </div>
           <p className="text-sm text-slate-600 leading-relaxed">
-            When no COA finding <em>and</em> no bills data is present, that position contributes <strong>null</strong> to the average — it is excluded rather than injecting a fake score.
+            When no COA finding <em>and</em> no bills data is present, that position contributes 0 pts rather than a fabricated score.
+          </p>
+        </div>
+
+        <div className="card p-5 mb-4">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Attendance modifier</p>
+          <p className="text-sm text-slate-600 leading-relaxed mb-4">
+            Attendance rate is verifiable from Senate and House of Representatives official records. It is applied as an <strong>additive modifier on top of the COA score</strong> for each term. A high-attendance, clean-audit term earns slightly more than a clean-audit term with no attendance data.
+          </p>
+          <div className="flex flex-col gap-2 mb-3">
+            {[
+              { range: '90 – 100%', modifier: '+20 pts', color: 'text-green-700 bg-green-50 border-green-200' },
+              { range: '75 – 89%',  modifier: 'no change', color: 'text-slate-600 bg-slate-50 border-slate-200' },
+              { range: '50 – 74%',  modifier: '−20 pts', color: 'text-amber-700 bg-amber-50 border-amber-200' },
+              { range: '< 50%',     modifier: '−50 pts', color: 'text-red-700 bg-red-50 border-red-200' },
+            ].map(({ range, modifier, color }) => (
+              <div key={range} className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${color}`}>
+                <span className="text-sm font-bold w-24 shrink-0">{range}</span>
+                <span className="text-sm font-black">{modifier}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Each term&apos;s contribution is floored at 0 — a very poor attendance on an already low-scoring term does not drag down points earned by other terms.
           </p>
         </div>
 
@@ -229,21 +250,57 @@ export default function MethodologyPage() {
         </div>
       </section>
 
+      {/* ── ACHIEVEMENTS ── */}
+      <section className="mb-10">
+        <SectionHeader icon="🏅" label="Achievements Score" color="bg-[#0038a8]" />
+
+        <div className="card p-5 mb-4">
+          <p className="text-slate-700 leading-relaxed mb-4">
+            Verified achievements contribute points based on their <strong>impact scope</strong> — the geographic scale of the accomplishment. This is the most defensible objective classifier available: a Republic Act that applies to all 110 million Filipinos is categorically different from a municipal ordinance.
+          </p>
+          <div className="flex flex-col gap-3 mb-4">
+            {[
+              { scope: 'National', pts: 100, color: 'text-blue-700 bg-blue-50 border-blue-200', examples: 'Republic Acts signed into law, national awards, internationally recognised programmes' },
+              { scope: 'Regional', pts: 50,  color: 'text-indigo-700 bg-indigo-50 border-indigo-200', examples: 'Regional ordinances, provincial programmes, regional infrastructure projects' },
+              { scope: 'Local',    pts: 20,  color: 'text-slate-700 bg-slate-50 border-slate-200', examples: 'City or municipal ordinances, barangay-level programmes, local infrastructure' },
+            ].map(({ scope, pts, color, examples }) => (
+              <div key={scope} className={`p-3 rounded-xl border ${color}`}>
+                <div className="flex items-center gap-3 mb-1.5">
+                  <span className="text-sm font-bold w-20 shrink-0">{scope}</span>
+                  <span className="text-sm font-black">+{pts} pts per achievement</span>
+                </div>
+                <p className="text-xs opacity-75 leading-relaxed">{examples}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Achievements without a set impact scope contribute 0 pts. Admins must classify the scope before a record influences the score — leaving it blank is a prompt to research the correct classification, not a default.
+          </p>
+        </div>
+
+        <div className="card p-4 border-l-4 border-l-blue-300">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Source</p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Achievements are sourced from official government gazettes, COMELEC records, Senate and House journals, and COA reports. Each record requires a source URL pointing to the official document. The scope classification follows the jurisdictional level of the enacting or awarding body.
+          </p>
+        </div>
+      </section>
+
       {/* ── LEGAL PENALTY ── */}
       <section className="mb-10">
         <SectionHeader icon="⚖" label="Legal Penalty" color="bg-red-500" />
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Active legal cases reduce the Objective Score. This is a <strong>direct deduction</strong> from the composite score, not a weighted component. The total deduction is capped — the minimum Objective Score is always 0.
+            Active legal cases reduce the Objective Score. Penalties are <strong>cumulative per case</strong> and scaled to be meaningful against the cumulative scoring model. A single conviction wipes out the equivalent of three clean terms in office. The minimum Objective Score is always 0.
           </p>
           <div className="flex flex-col gap-3">
             {[
-              { status: 'Pending', deduction: '−10 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case that has been filed in court and is currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
-              { status: 'Convicted', deduction: '−20 per case', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty beyond reasonable doubt. This is the most serious status. Appeals may be ongoing, but a conviction is a final finding at that court level.' },
+              { status: 'Pending', deduction: '−100 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case filed in court and currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
+              { status: 'Convicted', deduction: '−300 per case', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty beyond reasonable doubt. This is the most serious status and carries the heaviest penalty. Appeals may be ongoing, but a conviction is a final finding at that court level.' },
+              { status: 'On Appeal', deduction: '−100 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
               { status: 'Acquitted', deduction: '0', color: 'bg-green-50 border-green-200 text-green-700', description: 'Court found the official not guilty. No deduction is applied. The record is still displayed for transparency — voters can see what cases were filed and how they resolved.' },
               { status: 'Dismissed', deduction: '0', color: 'bg-slate-50 border-slate-200 text-slate-600', description: 'Case was dismissed before reaching a verdict. No deduction. Displayed for transparency.' },
-              { status: 'On Appeal', deduction: '−10', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
             ].map(({ status, deduction, color, description }) => (
               <div key={status} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                 <div className="flex items-center gap-3 mb-1.5">
@@ -376,11 +433,11 @@ export default function MethodologyPage() {
           </p>
           <div className="flex flex-col gap-2">
             {[
-              { range: '80 – 100', label: 'Strong record', color: 'bg-green-50 border-green-200 text-green-800', bar: 'bg-green-500', pct: 90, description: 'High-quality education, clean COA audits, no active legal cases.' },
-              { range: '60 – 79', label: 'Decent record', color: 'bg-green-50/60 border-green-100 text-green-700', bar: 'bg-green-400', pct: 70, description: 'Mostly clean record with some qualified COA opinions or minor gaps.' },
-              { range: '40 – 59', label: 'Mixed record', color: 'bg-amber-50 border-amber-200 text-amber-800', bar: 'bg-amber-400', pct: 50, description: 'Combination of stronger and weaker elements; warrants closer inspection.' },
-              { range: '20 – 39', label: 'Concerning', color: 'bg-red-50 border-red-200 text-red-700', bar: 'bg-red-400', pct: 30, description: 'Adverse COA findings, legal cases, or significantly weak education record.' },
-              { range: '0 – 19', label: 'Serious red flags', color: 'bg-red-50 border-red-300 text-red-800', bar: 'bg-red-600', pct: 10, description: 'Multiple adverse findings and/or convictions. Requires careful scrutiny before voting.' },
+              { range: '500+', label: 'Exceptional record', color: 'bg-green-50 border-green-200 text-green-800', bar: 'bg-green-500', pct: 100, description: 'Multiple degrees from strong institutions, sustained clean COA audits across many terms, no active legal cases. A rare, thoroughly documented public record.' },
+              { range: '300 – 499', label: 'Strong record', color: 'bg-green-50/60 border-green-100 text-green-700', bar: 'bg-green-400', pct: 70, description: 'Good education credentials, clean or mostly clean track record across multiple terms, no serious legal issues.' },
+              { range: '100 – 299', label: 'Limited or mixed record', color: 'bg-amber-50 border-amber-200 text-amber-800', bar: 'bg-amber-400', pct: 35, description: 'Some verified records but a short career, unknown COA data, or qualified audit findings. Warrants closer inspection.' },
+              { range: '1 – 99', label: 'Thin or penalized record', color: 'bg-red-50 border-red-200 text-red-700', bar: 'bg-red-400', pct: 15, description: 'Very few verified achievements, adverse COA findings, and/or active legal penalties pulling the score down.' },
+              { range: '0', label: 'Penalized to floor', color: 'bg-red-50 border-red-300 text-red-800', bar: 'bg-red-600', pct: 2, description: 'Legal penalties exceed all positive points. Multiple convictions or pending cases against a limited positive record.' },
             ].map(({ range, label, color, bar, pct, description }) => (
               <div key={range} className={`flex items-start gap-3 p-3 rounded-xl border ${color}`}>
                 <div className="shrink-0 w-16 text-center">
