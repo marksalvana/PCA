@@ -17,7 +17,7 @@ export type PetitionStatus = 'pending' | 'accepted' | 'rejected' | 'already_exis
 export type AchievementCategory =
   | 'legislation' | 'infrastructure' | 'social_program'
   | 'award' | 'international' | 'economic' | 'other'
-export type ImpactScope = 'national' | 'regional' | 'local'
+export type ImpactScope = 'national_landmark' | 'national_standard' | 'national' | 'regional' | 'local'
 
 export interface UserProfile {
   id: string

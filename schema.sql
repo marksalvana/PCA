@@ -146,7 +146,7 @@ create table public.achievements (
   )),
   year integer,
   impact_scope text check (impact_scope in (
-    'national', 'regional', 'local'
+    'national_landmark', 'national_standard', 'national', 'regional', 'local'
   )),
   -- Source requirement (MANDATORY)
   source_url text not null,
@@ -569,11 +569,14 @@ begin
     and ched_accreditation is not null
     and ched_accreditation <> 'unknown';
 
-  -- Track record: SUM — COA/bills base score + attendance modifier per term.
+  -- Track record: SUM — +15 completion bonus + COA/bills base score + attendance modifier per term.
   -- Each record is floored at 0 before summing so a poor attendance
   -- on an already-zero record cannot go negative.
   select coalesce(sum(
     greatest(0,
+      -- +15 flat completion bonus for terms that have ended (not currently serving)
+      case when is_current = false then 15 else 0 end
+      +
       -- Base COA / bills score
       case
         when coa_finding = 'unqualified' then 100
@@ -582,17 +585,18 @@ begin
         when coa_finding = 'disclaimer'  then 10
         when coa_finding in ('not_applicable', 'unknown')
              and bills_authored is not null and bills_authored > 0
-          then least(85, 30 + round(
-                 (coalesce(bills_passed, 0)::numeric / bills_authored::numeric) * 55
-               ))
+          then round(
+                 (coalesce(bills_passed, 0)::numeric / bills_authored::numeric) * 85
+               )
         else 0
       end
       +
-      -- Attendance modifier (only when rate is recorded)
+      -- Attendance modifier (graduated tiers — only when rate is recorded)
       case
-        when attendance_rate >= 90 then  20
+        when attendance_rate >= 95 then  20
+        when attendance_rate >= 90 then  10
         when attendance_rate >= 75 then   0
-        when attendance_rate >= 50 then -20
+        when attendance_rate >= 50 then -10
         when attendance_rate is not null then -50
         else 0
       end
@@ -603,13 +607,16 @@ begin
   where politician_id = p_politician_id
     and is_verified = true;
 
-  -- Achievements: SUM — national 100, regional 50, local 20.
+  -- Achievements: SUM — national_landmark 100, national_standard 60, regional 40, local 20.
+  -- Legacy 'national' value treated as national_landmark (100).
   -- Only verified achievements with impact_scope set contribute.
   select coalesce(sum(
     case impact_scope
-      when 'national'  then 100
-      when 'regional'  then  50
-      when 'local'     then  20
+      when 'national_landmark' then 100
+      when 'national_standard' then  60
+      when 'national'          then 100  -- legacy
+      when 'regional'          then  40
+      when 'local'             then  20
       else 0
     end
   ), 0)
@@ -619,12 +626,12 @@ begin
     and is_verified = true
     and impact_scope is not null;
 
-  -- Legal penalty: -100 pending/appeal, -300 convicted (per verified case).
+  -- Legal penalty: -50 pending/appeal, -200 convicted (per verified case).
   select coalesce(sum(
     case
-      when status = 'pending'        then 100
-      when status = 'convicted'      then 300
-      when status = 'ongoing_appeal' then 100
+      when status = 'pending'        then  50
+      when status = 'convicted'      then 200
+      when status = 'ongoing_appeal' then  50
       else 0
     end
   ), 0)

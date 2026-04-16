@@ -185,8 +185,16 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Each verified term in public office contributes a fixed number of points based on the <strong>COA (Commission on Audit) opinion</strong> for that term. Points are cumulative — a politician with ten clean terms earns more than one with a single clean term. This rewards sustained, long-term clean governance rather than a one-term track record.
+            Each verified term in public office contributes points based on: a <strong>flat +15 term completion bonus</strong>, plus the <strong>COA (Commission on Audit) opinion</strong> for that term, plus an attendance modifier. Points are cumulative — a politician with ten clean terms earns more than one with a single clean term.
           </p>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600 mb-4">
+            term_score = 15 + max(0, coa_or_legislative_pts) + attendance_modifier<br />
+            <span className="text-slate-400">// the +15 applies only to completed (non-current) terms</span>
+          </div>
+          <div className="p-4 bg-blue-50 rounded-xl border border-blue-200 mb-4">
+            <p className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-1">Term completion bonus</p>
+            <p className="text-sm text-blue-800 leading-relaxed">Every verified <em>completed</em> term earns a flat <strong>+15 pts</strong> before any COA or attendance modifier is applied. This rewards finishing a term — not quitting and not being removed from office. Currently-serving positions do not yet receive this bonus.</p>
+          </div>
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">COA Audit Opinion → Points per term</p>
           <div className="flex flex-col gap-3">
             {COA_TABLE.map(({ finding, pts, color, description }) => (
@@ -210,11 +218,11 @@ export default function MethodologyPage() {
           </p>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600 mb-3">
             pass_rate = bills_passed / bills_authored<br />
-            legislative_score = 30 + (pass_rate × 55)<br />
-            <span className="text-slate-400">// range: 30 (0% passed) to 85 (100% passed)</span>
+            legislative_score = pass_rate × 85<br />
+            <span className="text-slate-400">// range: 0 (0% passed) to 85 (100% passed) — no floor gift</span>
           </div>
           <p className="text-sm text-slate-600 leading-relaxed">
-            When no COA finding <em>and</em> no bills data is present, that position contributes 0 pts rather than a fabricated score.
+            Zero bills passed earns zero points — there is no floor. When no COA finding <em>and</em> no bills data is present, that position contributes 0 pts rather than a fabricated score.
           </p>
         </div>
 
@@ -225,9 +233,10 @@ export default function MethodologyPage() {
           </p>
           <div className="flex flex-col gap-2 mb-3">
             {[
-              { range: '90 – 100%', modifier: '+20 pts', color: 'text-green-700 bg-green-50 border-green-200' },
+              { range: '95 – 100%', modifier: '+20 pts', color: 'text-green-700 bg-green-50 border-green-200' },
+              { range: '90 – 94%',  modifier: '+10 pts', color: 'text-green-600 bg-green-50/60 border-green-100' },
               { range: '75 – 89%',  modifier: 'no change', color: 'text-slate-600 bg-slate-50 border-slate-200' },
-              { range: '50 – 74%',  modifier: '−20 pts', color: 'text-amber-700 bg-amber-50 border-amber-200' },
+              { range: '50 – 74%',  modifier: '−10 pts', color: 'text-amber-700 bg-amber-50 border-amber-200' },
               { range: '< 50%',     modifier: '−50 pts', color: 'text-red-700 bg-red-50 border-red-200' },
             ].map(({ range, modifier, color }) => (
               <div key={range} className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${color}`}>
@@ -260,13 +269,14 @@ export default function MethodologyPage() {
           </p>
           <div className="flex flex-col gap-3 mb-4">
             {[
-              { scope: 'National', pts: 100, color: 'text-blue-700 bg-blue-50 border-blue-200', examples: 'Republic Acts signed into law, national awards, internationally recognised programmes' },
-              { scope: 'Regional', pts: 50,  color: 'text-indigo-700 bg-indigo-50 border-indigo-200', examples: 'Regional ordinances, provincial programmes, regional infrastructure projects' },
-              { scope: 'Local',    pts: 20,  color: 'text-slate-700 bg-slate-50 border-slate-200', examples: 'City or municipal ordinances, barangay-level programmes, local infrastructure' },
+              { scope: 'National — Landmark', pts: 100, color: 'text-blue-800 bg-blue-100 border-blue-300', examples: 'Landmark Republic Acts directly impacting millions — universal health care law, major reform legislation, acts affecting the entire population' },
+              { scope: 'National — Standard', pts: 60,  color: 'text-blue-700 bg-blue-50 border-blue-200', examples: 'National awards, recognition, national programmes with narrower scope, minor Republic Acts' },
+              { scope: 'Regional',             pts: 40,  color: 'text-indigo-700 bg-indigo-50 border-indigo-200', examples: 'Regional ordinances, provincial programmes, regional infrastructure projects' },
+              { scope: 'Local',                pts: 20,  color: 'text-slate-700 bg-slate-50 border-slate-200', examples: 'City or municipal ordinances, barangay-level programmes, local infrastructure' },
             ].map(({ scope, pts, color, examples }) => (
               <div key={scope} className={`p-3 rounded-xl border ${color}`}>
                 <div className="flex items-center gap-3 mb-1.5">
-                  <span className="text-sm font-bold w-20 shrink-0">{scope}</span>
+                  <span className="text-sm font-bold w-36 shrink-0">{scope}</span>
                   <span className="text-sm font-black">+{pts} pts per achievement</span>
                 </div>
                 <p className="text-xs opacity-75 leading-relaxed">{examples}</p>
@@ -292,13 +302,13 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Active legal cases reduce the Objective Score. Penalties are <strong>cumulative per case</strong> and scaled to be meaningful against the cumulative scoring model. A single conviction wipes out the equivalent of three clean terms in office. The minimum Objective Score is always 0.
+            Active legal cases reduce the Objective Score. Penalties are <strong>cumulative per case</strong> and scaled to be meaningful against the cumulative scoring model. The minimum Objective Score is always 0.
           </p>
           <div className="flex flex-col gap-3">
             {[
-              { status: 'Pending', deduction: '−100 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case filed in court and currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
-              { status: 'Convicted', deduction: '−300 per case', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty beyond reasonable doubt. This is the most serious status and carries the heaviest penalty. Appeals may be ongoing, but a conviction is a final finding at that court level.' },
-              { status: 'On Appeal', deduction: '−100 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
+              { status: 'Pending', deduction: '−50 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case filed in court and currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
+              { status: 'Convicted', deduction: '−200 per case', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty beyond reasonable doubt. This is the most serious status and carries the heaviest penalty. Appeals may be ongoing, but a conviction is a final finding at that court level.' },
+              { status: 'On Appeal', deduction: '−50 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
               { status: 'Acquitted', deduction: '0', color: 'bg-green-50 border-green-200 text-green-700', description: 'Court found the official not guilty. No deduction is applied. The record is still displayed for transparency — voters can see what cases were filed and how they resolved.' },
               { status: 'Dismissed', deduction: '0', color: 'bg-slate-50 border-slate-200 text-slate-600', description: 'Case was dismissed before reaching a verdict. No deduction. Displayed for transparency.' },
             ].map(({ status, deduction, color, description }) => (

@@ -499,8 +499,9 @@ export default function RecordsManager({ politician: p }: Props) {
               <label className={labelClass}>Impact Scope <span className="text-red-400">*</span></label>
               <select value={achImpactScope} onChange={(e) => setAchImpactScope(e.target.value as ImpactScope | '')} required className={inputClass}>
                 <option value="">— Select scope —</option>
-                <option value="national">National (+100 pts)</option>
-                <option value="regional">Regional (+50 pts)</option>
+                <option value="national_landmark">National — Landmark (+100 pts)</option>
+                <option value="national_standard">National — Standard (+60 pts)</option>
+                <option value="regional">Regional (+40 pts)</option>
                 <option value="local">Local (+20 pts)</option>
               </select>
               <p className="text-xs text-gray-500 mt-1">Scope determines how this achievement contributes to the objective score.</p>

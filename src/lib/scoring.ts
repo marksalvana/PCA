@@ -25,24 +25,27 @@ export const COA_SCORES: Record<CoaFinding, number> = {
 
 // Legal penalty per case
 export const LEGAL_PENALTIES = {
-  pending: 100,
-  convicted: 300,
-  ongoing_appeal: 100,
+  pending: 50,
+  convicted: 200,
+  ongoing_appeal: 50,
 } as const
 
 // Points per achievement based on impact scope
 export const ACHIEVEMENT_SCORES: Record<string, number> = {
-  national: 100,
-  regional: 50,
+  national_landmark: 100,
+  national_standard: 60,
+  national: 100,  // legacy — treat as national_landmark
+  regional: 40,
   local: 20,
 }
 
 // Attendance rate modifier per track record term
 export const ATTENDANCE_MODIFIERS = [
-  { label: '90–100%',  minPct: 90,  modifier: +20, description: 'Excellent attendance' },
-  { label: '75–89%',   minPct: 75,  modifier:   0, description: 'Decent attendance — no change' },
-  { label: '50–74%',   minPct: 50,  modifier: -20, description: 'Poor attendance' },
-  { label: '< 50%',    minPct:  0,  modifier: -50, description: 'Very poor attendance' },
+  { label: '95–100%',  minPct: 95,  modifier: +20, description: 'Exceptional attendance' },
+  { label: '90–94%',   minPct: 90,  modifier: +10, description: 'Good attendance' },
+  { label: '75–89%',   minPct: 75,  modifier:   0, description: 'Adequate — no change' },
+  { label: '50–74%',   minPct: 50,  modifier: -10, description: 'Poor but majority-present' },
+  { label: '< 50%',    minPct:  0,  modifier: -50, description: 'Majority-absent — serious failure' },
 ] as const
 
 // Bar display reference: a bar fills completely at this score.
@@ -88,7 +91,11 @@ export function computeTrackPts(rec: {
   bills_authored: number | null
   bills_passed: number | null
   attendance_rate: number | null
+  is_current?: boolean
 }): number {
+  // +15 flat bonus for completed terms (not still-serving positions)
+  const completionBonus = rec.is_current === true ? 0 : 15
+
   let base = 0
   if (rec.coa_finding === 'unqualified') base = 100
   else if (rec.coa_finding === 'qualified') base = 60
@@ -99,25 +106,27 @@ export function computeTrackPts(rec: {
     rec.bills_authored != null && rec.bills_authored > 0
   ) {
     const passRate = (rec.bills_passed ?? 0) / rec.bills_authored
-    base = Math.min(85, Math.round(30 + passRate * 55))
+    base = Math.round(passRate * 85)
   }
 
   let mod = 0
   if (rec.attendance_rate != null) {
-    if (rec.attendance_rate >= 90) mod = 20
+    if (rec.attendance_rate >= 95) mod = 20
+    else if (rec.attendance_rate >= 90) mod = 10
     else if (rec.attendance_rate >= 75) mod = 0
-    else if (rec.attendance_rate >= 50) mod = -20
+    else if (rec.attendance_rate >= 50) mod = -10
     else mod = -50
   }
 
-  return Math.max(0, base + mod)
+  return Math.max(0, completionBonus + base + mod)
 }
 
 export function attendanceModifier(rate: number | null): number {
   if (rate == null) return 0
-  if (rate >= 90) return 20
+  if (rate >= 95) return 20
+  if (rate >= 90) return 10
   if (rate >= 75) return 0
-  if (rate >= 50) return -20
+  if (rate >= 50) return -10
   return -50
 }
 

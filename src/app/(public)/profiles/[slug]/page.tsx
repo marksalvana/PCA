@@ -111,7 +111,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               {p.civic_trust_score != null ? (
                 <ScoreBadge score={p.civic_trust_score} size="lg" variant="trust" />
               ) : (
-                <div className="w-16 h-16 rounded-2xl bg-purple-50 border-2 border-purple-100 flex flex-col items-center justify-center gap-0.5">
+                <div className="w-full h-16 rounded-2xl bg-purple-50 border-2 border-purple-100 flex flex-col items-center justify-center gap-0.5">
                   <span className="text-xs font-bold text-purple-400 leading-tight text-center">Be first</span>
                   <span className="text-xs font-bold text-purple-400 leading-tight text-center">to rate</span>
                 </div>
@@ -119,7 +119,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             </div>
             <div className="text-center">
               <div className="text-xs text-red-500 font-semibold uppercase tracking-wide mb-1">Red Flags</div>
-              <div className={`w-16 h-16 rounded-2xl flex flex-col items-center justify-center gap-0.5 border-2 ${
+              <div className={`w-full h-16 rounded-2xl flex flex-col items-center justify-center gap-0.5 border-2 ${
                 redFlagCount > 0
                   ? 'bg-red-50 border-red-300'
                   : 'bg-slate-50 border-slate-200'
@@ -288,9 +288,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             {p.achievements.map((ach) => {
               const pts = computeAchievementPts(ach.impact_scope)
               const scopeColor =
-                ach.impact_scope === 'national'  ? 'text-blue-700 bg-blue-50 border-blue-200' :
-                ach.impact_scope === 'regional'  ? 'text-indigo-700 bg-indigo-50 border-indigo-200' :
-                ach.impact_scope === 'local'     ? 'text-slate-600 bg-slate-100 border-slate-200' :
+                ach.impact_scope === 'national_landmark' ? 'text-blue-800 bg-blue-100 border-blue-300' :
+                ach.impact_scope === 'national_standard' ? 'text-blue-700 bg-blue-50 border-blue-200' :
+                ach.impact_scope === 'national'          ? 'text-blue-700 bg-blue-50 border-blue-200' :
+                ach.impact_scope === 'regional'          ? 'text-indigo-700 bg-indigo-50 border-indigo-200' :
+                ach.impact_scope === 'local'             ? 'text-slate-600 bg-slate-100 border-slate-200' :
                 'text-amber-700 bg-amber-50 border-amber-200'
               return (
                 <div key={ach.id} className="card p-4 border-l-4 border-l-amber-400">
