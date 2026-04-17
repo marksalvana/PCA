@@ -1,17 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 export default function SignupForm() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [done, setDone] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -24,17 +23,35 @@ export default function SignupForm() {
       password,
       options: {
         data: { display_name: displayName },
+        emailRedirectTo: `${location.origin}/auth/callback`,
       },
     })
 
+    setLoading(false)
+
     if (error) {
       setError(error.message)
-      setLoading(false)
       return
     }
 
-    router.push('/dashboard')
-    router.refresh()
+    setDone(true)
+  }
+
+  if (done) {
+    return (
+      <div className="text-center space-y-4">
+        <div className="text-4xl">📬</div>
+        <h2 className="text-lg font-bold text-white">Check your inbox</h2>
+        <p className="text-sm text-gray-400">
+          We sent a confirmation link to <span className="text-white font-semibold">{email}</span>.
+          Click it to activate your account.
+        </p>
+        <p className="text-xs text-gray-600 mt-2">
+          Already confirmed?{' '}
+          <Link href="/login" className="text-[#60a5fa] hover:underline">Sign in</Link>
+        </p>
+      </div>
+    )
   }
 
   return (

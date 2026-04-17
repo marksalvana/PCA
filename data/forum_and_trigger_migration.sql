@@ -61,3 +61,32 @@ DROP TRIGGER IF EXISTS on_rating_change ON public.civic_trust_ratings;
 CREATE TRIGGER on_rating_change
   AFTER INSERT OR UPDATE ON public.civic_trust_ratings
   FOR EACH ROW EXECUTE FUNCTION public.update_civic_trust_score();
+
+
+-- 3. Auto-create user_profiles row when a new auth user signs up
+-- ============================================================
+-- Without this, the civic_trust_ratings FK (user_id → user_profiles.id)
+-- fails for newly-signed-up users who haven't been manually inserted.
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.user_profiles (id, display_name, role, bio, contribution_count, updated_at)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'display_name', split_part(NEW.email, '@', 1)),
+    'public',
+    NULL,
+    0,
+    NOW()
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();

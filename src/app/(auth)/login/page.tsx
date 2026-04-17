@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import LoginForm from '@/components/auth/LoginForm'
 
 export const metadata = { title: 'Sign In — PH Profile Compare' }
@@ -10,7 +11,9 @@ export default function LoginPage() {
           <h1 className="text-2xl font-black text-white">Sign In</h1>
           <p className="text-gray-400 text-sm mt-1">Admin and vetter access only</p>
         </div>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   )
