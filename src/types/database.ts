@@ -184,6 +184,18 @@ export interface Petition {
   resolved_at: string | null
 }
 
+export type ForumCategory = 'suggestion' | 'feedback' | 'question' | 'bug_report' | 'general'
+
+export interface ForumPost {
+  id: string
+  author_name: string
+  content: string
+  category: ForumCategory
+  user_id: string | null
+  is_pinned: boolean
+  created_at: string
+}
+
 export interface ScoringBenchmark {
   id: string
   category: string
@@ -225,6 +237,11 @@ export interface Database {
       petitions: { Row: Petition; Insert: Omit<Petition, 'id' | 'created_at'>; Update: Partial<Omit<Petition, 'id' | 'created_at'>> }
       scoring_benchmarks: { Row: ScoringBenchmark; Insert: Omit<ScoringBenchmark, 'id'>; Update: Partial<Omit<ScoringBenchmark, 'id'>> }
       dynasty_connections: { Row: DynastyConnection; Insert: Omit<DynastyConnection, 'id' | 'created_at'>; Update: Partial<Omit<DynastyConnection, 'id' | 'created_at'>> }
+      forum_posts: {
+        Row: ForumPost
+        Insert: { author_name: string; content: string; category?: ForumCategory; user_id?: string | null; is_pinned?: boolean }
+        Update: { author_name?: string; content?: string; category?: ForumCategory; user_id?: string | null; is_pinned?: boolean }
+      }
     }
   }
 }

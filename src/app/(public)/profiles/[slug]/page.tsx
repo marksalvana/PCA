@@ -16,6 +16,7 @@ import {
   CHED_SCORES,
   LEGAL_PENALTIES,
 } from '@/lib/scoring'
+import RatingWidget from '@/components/profiles/RatingWidget'
 import type { PoliticianWithDetails, VettingRecord, UserProfile } from '@/types/database'
 
 type VettingWithVetter = VettingRecord & {
@@ -75,11 +76,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
   const p = politician as unknown as PoliticianWithDetails
 
-  const { data: vettingData } = await supabase
-    .from('vetting_records')
-    .select('*, vetter:user_profiles!vetter_id(id, display_name, role)')
-    .eq('politician_id', p.id)
-    .order('vetted_at', { ascending: false })
+  // Auth session + vetting data in parallel
+  const [{ data: { user } }, { data: vettingData }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+      .from('vetting_records')
+      .select('*, vetter:user_profiles!vetter_id(id, display_name, role)')
+      .eq('politician_id', p.id)
+      .order('vetted_at', { ascending: false }),
+  ])
+
+  // Fetch user's existing rating only if they're logged in
+  let userRating: number | null = null
+  if (user) {
+    const { data: ratingRow } = await supabase
+      .from('civic_trust_ratings')
+      .select('rating')
+      .eq('politician_id', p.id)
+      .eq('user_id', user.id)
+      .maybeSingle<{ rating: number }>()
+    userRating = ratingRow?.rating ?? null
+  }
 
   const vettingHistory = (vettingData ?? []) as VettingWithVetter[]
 
@@ -148,13 +165,23 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 {p.region && <p className="text-slate-400 text-sm mt-0.5">{p.region}</p>}
               </div>
 
-              {/* Scores — Objective + Red Flags only */}
+              {/* Scores — Objective + Trust + Red Flags */}
               <div className="flex flex-row sm:flex-col gap-3 shrink-0">
                 <div className="text-center">
                   <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Objective</div>
                   <ScoreBadge score={p.objective_score} size="lg" />
                   {p.objective_score == null && (
                     <p className="text-xs text-slate-400 mt-1 w-20">No data</p>
+                  )}
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-purple-500 font-semibold uppercase tracking-wide mb-1">Trust</div>
+                  {p.civic_trust_score != null ? (
+                    <ScoreBadge score={p.civic_trust_score} size="lg" variant="trust" />
+                  ) : (
+                    <div className="w-20 h-16 rounded-2xl bg-slate-50 border-2 border-slate-200 flex items-center justify-center">
+                      <span className="text-xs text-slate-400 text-center px-1 leading-tight">No ratings</span>
+                    </div>
                   )}
                 </div>
                 <div className="text-center">
@@ -394,25 +421,18 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           )}
 
           {/* Community Trust */}
-          <section className="mb-5 card p-5">
+          <section className="mb-5 card p-5" id="rate">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-base font-black text-slate-900 flex items-center gap-2 mb-0.5">
                   <span className="text-purple-600">★</span> Community Trust
                 </h2>
                 <p className="text-xs text-slate-400">
-                  Citizen ratings (1–5). Shown separately from the objective score.
+                  Citizen ratings (1–5). Kept separate from the objective score.
                 </p>
               </div>
-              {p.civic_trust_score != null ? (
+              {p.civic_trust_score != null && (
                 <ScoreBadge score={p.civic_trust_score} size="lg" variant="trust" />
-              ) : (
-                <Link
-                  href={`/profiles/${p.slug}#rate`}
-                  className="text-sm font-semibold text-purple-600 hover:text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-4 py-2 rounded-lg transition-colors"
-                >
-                  Be first to rate →
-                </Link>
               )}
             </div>
             {p.civic_trust_score != null && (
@@ -420,6 +440,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 <div className="h-full rounded-full bg-purple-400" style={{ width: `${p.civic_trust_score}%` }} />
               </div>
             )}
+            <RatingWidget
+              politicianId={p.id}
+              slug={p.slug}
+              userRating={userRating}
+              isLoggedIn={!!user}
+            />
           </section>
 
           {/* Dynasty */}
