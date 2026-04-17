@@ -67,7 +67,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 alt={p.full_name}
                 width={96}
                 height={96}
-                className="rounded-2xl object-cover border border-slate-200 shadow-sm"
+                className="w-24 h-24 rounded-2xl object-cover border border-slate-200 shadow-sm"
               />
             ) : (
               <div className="w-24 h-24 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-3xl font-black text-slate-400">
@@ -111,7 +111,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               {p.civic_trust_score != null ? (
                 <ScoreBadge score={p.civic_trust_score} size="lg" variant="trust" />
               ) : (
-                <div className="w-full h-16 rounded-2xl bg-purple-50 border-2 border-purple-100 flex flex-col items-center justify-center gap-0.5">
+                <div className="w-20 h-16 rounded-2xl bg-purple-50 border-2 border-purple-100 flex flex-col items-center justify-center gap-0.5">
                   <span className="text-xs font-bold text-purple-400 leading-tight text-center">Be first</span>
                   <span className="text-xs font-bold text-purple-400 leading-tight text-center">to rate</span>
                 </div>
@@ -119,7 +119,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             </div>
             <div className="text-center">
               <div className="text-xs text-red-500 font-semibold uppercase tracking-wide mb-1">Red Flags</div>
-              <div className={`w-full h-16 rounded-2xl flex flex-col items-center justify-center gap-0.5 border-2 ${
+              <div className={`w-20 h-16 rounded-2xl flex flex-col items-center justify-center gap-0.5 border-2 ${
                 redFlagCount > 0
                   ? 'bg-red-50 border-red-300'
                   : 'bg-slate-50 border-slate-200'
@@ -129,7 +129,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                   {redFlagCount}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-1 w-16 leading-tight">
+              <p className="text-xs text-slate-400 mt-1 w-20 leading-tight text-center">
                 {convictionCount > 0 ? `${convictionCount} convicted` : 'no convictions'}
               </p>
             </div>
@@ -162,7 +162,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
       {p.education_records && p.education_records.length > 0 && (
         <section className="mb-5">
           <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-            <span className="w-6 h-6 bg-[#0038a8] rounded-md flex items-center justify-center text-white text-xs">🎓</span>
+            <span className="w-6 h-6 bg-[#0038a8] rounded-md flex items-center justify-center text-white text-sm leading-none">🎓</span>
             Education
           </h2>
           <div className="flex flex-col gap-2">
@@ -211,7 +211,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
       {p.track_records && p.track_records.length > 0 && (
         <section className="mb-5">
           <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-            <span className="w-6 h-6 bg-[#0038a8] rounded-md flex items-center justify-center text-white text-xs">📋</span>
+            <span className="w-6 h-6 bg-[#0038a8] rounded-md flex items-center justify-center text-white text-sm leading-none">📋</span>
             Track Record
           </h2>
           <div className="flex flex-col gap-2">
@@ -281,7 +281,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
       {p.achievements && p.achievements.length > 0 && (
         <section className="mb-5">
           <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-            <span className="w-6 h-6 bg-amber-500 rounded-md flex items-center justify-center text-white text-xs">★</span>
+            <span className="w-6 h-6 bg-amber-500 rounded-md flex items-center justify-center text-white text-sm leading-none">★</span>
             Achievements
           </h2>
           <div className="flex flex-col gap-2">
@@ -294,6 +294,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 ach.impact_scope === 'regional'          ? 'text-indigo-700 bg-indigo-50 border-indigo-200' :
                 ach.impact_scope === 'local'             ? 'text-slate-600 bg-slate-100 border-slate-200' :
                 'text-amber-700 bg-amber-50 border-amber-200'
+              const scopeLabel: Record<string, string> = {
+                national_landmark: 'National Landmark',
+                national_standard: 'National Standard',
+                national: 'National',
+                regional: 'Regional',
+                local: 'Local',
+              }
               return (
                 <div key={ach.id} className="card p-4 border-l-4 border-l-amber-400">
                   <div className="flex items-start justify-between gap-3">
@@ -310,8 +317,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                     </div>
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
                       {ach.impact_scope ? (
-                        <span className={`text-xs font-bold border px-2 py-0.5 rounded-md capitalize ${scopeColor}`}>
-                          {ach.impact_scope}
+                        <span className={`text-xs font-bold border px-2 py-0.5 rounded-md ${scopeColor}`}>
+                          {scopeLabel[ach.impact_scope] ?? ach.impact_scope}
                         </span>
                       ) : (
                         <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
@@ -334,7 +341,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
       {p.legal_records && p.legal_records.length > 0 && (
         <section className="mb-5">
           <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-            <span className="w-6 h-6 bg-red-500 rounded-md flex items-center justify-center text-white text-xs">⚖</span>
+            <span className="w-6 h-6 bg-red-500 rounded-md flex items-center justify-center text-white text-sm leading-none">⚖</span>
             Legal Records
           </h2>
           <div className="flex flex-col gap-2">
