@@ -25,7 +25,7 @@ export default async function ProfilesPage({
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
-  const sort = params.sort ?? 'name_asc'
+  const sort = params.sort ?? 'score_desc'
   const q = params.q ?? ''
   const region = params.region ?? ''
   const party = params.party ?? ''

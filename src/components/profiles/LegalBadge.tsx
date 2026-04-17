@@ -1,7 +1,7 @@
 import type { LegalRecord } from '@/types/database'
 import SourceLink from '@/components/ui/SourceLink'
 
-type Props = { record: LegalRecord; expanded?: boolean }
+type Props = { record: LegalRecord; expanded?: boolean; penalty?: number }
 
 const statusConfig: Record<string, { label: string; bg: string; text: string; border: string; dot: string }> = {
   pending:        { label: 'PENDING',       bg: 'bg-amber-50',  text: 'text-amber-800', border: 'border-amber-200', dot: 'bg-amber-500' },
@@ -11,19 +11,31 @@ const statusConfig: Record<string, { label: string; bg: string; text: string; bo
   ongoing_appeal: { label: 'On Appeal',     bg: 'bg-amber-50',  text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-400' },
 }
 
-export default function LegalBadge({ record: r, expanded = false }: Props) {
+export default function LegalBadge({ record: r, expanded = false, penalty }: Props) {
   const cfg = statusConfig[r.status] ?? statusConfig.dismissed
+  const showPenalty = typeof penalty === 'number' && penalty > 0
 
   return (
     <div className={`border rounded-xl p-3 ${cfg.bg} ${cfg.border}`}>
       <div className="flex items-start gap-2">
         <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${cfg.dot} ${r.status === 'pending' || r.status === 'convicted' ? 'dynasty-badge' : ''}`} />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-0.5">
-            <span className={`text-xs font-black uppercase tracking-wider ${cfg.text}`}>
-              {cfg.label}
-            </span>
-            <span className={`text-xs capitalize opacity-70 ${cfg.text}`}>{r.case_type}</span>
+          <div className="flex items-start justify-between gap-2 flex-wrap mb-0.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className={`text-xs font-black uppercase tracking-wider ${cfg.text}`}>
+                {cfg.label}
+              </span>
+              <span className={`text-xs capitalize opacity-70 ${cfg.text}`}>{r.case_type}</span>
+            </div>
+            {showPenalty && (
+              <span className={`text-xs font-black px-2 py-0.5 rounded-md tabular-nums border shrink-0 ${
+                r.is_verified
+                  ? 'text-red-600 bg-red-50 border-red-200'
+                  : 'text-slate-400 bg-slate-50 border-slate-200'
+              }`}>
+                −{penalty} pts
+              </span>
+            )}
           </div>
           <p className={`font-semibold text-sm ${cfg.text}`}>{r.case_title}</p>
           {expanded && (

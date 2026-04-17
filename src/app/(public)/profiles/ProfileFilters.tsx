@@ -11,8 +11,8 @@ type Props = {
 }
 
 const SORT_OPTIONS = [
-  { value: 'score_desc', label: 'Score: High → Low' },
-  { value: 'score_asc', label: 'Score: Low → High' },
+  { value: 'score_desc', label: 'Points: High → Low' },
+  { value: 'score_asc', label: 'Points: Low → High' },
   { value: 'name_asc', label: 'Name: A → Z' },
   { value: 'name_desc', label: 'Name: Z → A' },
 ]
@@ -21,7 +21,7 @@ export default function ProfileFilters({ regions, parties, totalCount, filteredC
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const sort = searchParams.get('sort') ?? 'name_asc'
+  const sort = searchParams.get('sort') ?? 'score_desc'
   const region = searchParams.get('region') ?? ''
   const party = searchParams.get('party') ?? ''
   const q = searchParams.get('q') ?? ''
