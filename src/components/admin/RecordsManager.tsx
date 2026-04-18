@@ -3,21 +3,467 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getMutationClient } from '@/lib/supabase/mutations'
-import type { PoliticianWithDetails, ChedAccreditation, CoaFinding, LegalCaseType, LegalCaseStatus, AchievementCategory, ImpactScope } from '@/types/database'
+import type {
+  PoliticianWithDetails,
+  EducationRecord,
+  TrackRecord,
+  LegalRecord,
+  Achievement,
+  ChedAccreditation,
+  CoaFinding,
+  LegalCaseType,
+  LegalCaseStatus,
+  AchievementCategory,
+  ImpactScope,
+} from '@/types/database'
 import SourceLink from '@/components/ui/SourceLink'
-import { computeEducationPts, computeTrackPts, computeAchievementPts, attendanceModifier, LEGAL_PENALTIES } from '@/lib/scoring'
+import {
+  computeEducationPts,
+  computeTrackPts,
+  computeAchievementPts,
+  attendanceModifier,
+  LEGAL_PENALTIES,
+} from '@/lib/scoring'
 
 type Tab = 'education' | 'track' | 'legal' | 'achievements'
-
 type Props = { politician: PoliticianWithDetails }
+
+const inputClass =
+  'w-full bg-[#0a0a0f] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2 text-sm outline-none transition-colors placeholder:text-gray-600'
+const labelClass = 'block text-xs text-gray-500 mb-1'
+
+// ─── Shared helpers ────────────────────────────────────────────────────────
+
+async function deleteRecord(
+  table: string,
+  id: string,
+  setSaving: (v: boolean) => void,
+  setError: (v: string | null) => void,
+  refresh: () => void,
+) {
+  if (!confirm('Delete this record? This cannot be undone.')) return
+  setSaving(true)
+  setError(null)
+  const supabase = getMutationClient()
+  const { error } = await supabase.from(table).delete().eq('id', id)
+  setSaving(false)
+  if (error) { setError(error.message); return }
+  refresh()
+}
+
+// ─── Education inline edit form ────────────────────────────────────────────
+
+function EduEditForm({
+  record: r,
+  onSave,
+  onCancel,
+}: {
+  record: EducationRecord
+  onSave: (payload: Partial<EducationRecord>) => void
+  onCancel: () => void
+}) {
+  const [institution, setInstitution] = useState(r.institution)
+  const [degree, setDegree] = useState(r.degree ?? '')
+  const [field, setField] = useState(r.field_of_study ?? '')
+  const [yearStart, setYearStart] = useState(r.year_started ? String(r.year_started) : '')
+  const [yearEnd, setYearEnd] = useState(r.year_ended ? String(r.year_ended) : '')
+  const [completed, setCompleted] = useState(r.is_completed)
+  const [accreditation, setAccreditation] = useState<ChedAccreditation>(r.ched_accreditation ?? 'unknown')
+  const [sourceUrl, setSourceUrl] = useState(r.source_url)
+  const [sourceLabel, setSourceLabel] = useState(r.source_label)
+
+  function handleSubmit(e: React.SyntheticEvent) {
+    e.preventDefault()
+    onSave({
+      institution,
+      degree: degree || null,
+      field_of_study: field || null,
+      year_started: yearStart ? parseInt(yearStart) : null,
+      year_ended: yearEnd ? parseInt(yearEnd) : null,
+      is_completed: completed,
+      ched_accreditation: accreditation,
+      source_url: sourceUrl,
+      source_label: sourceLabel,
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+      <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
+      <div>
+        <label className={labelClass}>Institution <span className="text-red-400">*</span></label>
+        <input type="text" value={institution} onChange={(e) => setInstitution(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Degree</label>
+          <input type="text" value={degree} onChange={(e) => setDegree(e.target.value)} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>CHED Accreditation</label>
+          <select value={accreditation} onChange={(e) => setAccreditation(e.target.value as ChedAccreditation)} className={inputClass}>
+            <option value="deregulated">Deregulated (+100 pts)</option>
+            <option value="autonomous">Autonomous (+95 pts)</option>
+            <option value="foreign">Foreign (+90 pts)</option>
+            <option value="level_4">Level IV (+85 pts)</option>
+            <option value="level_3">Level III (+70 pts)</option>
+            <option value="level_2">Level II (+55 pts)</option>
+            <option value="level_1">Level I (+40 pts)</option>
+            <option value="unaccredited">Unaccredited (+20 pts)</option>
+            <option value="unknown">Unknown (+0 pts)</option>
+          </select>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Field of Study</label>
+          <input type="text" value={field} onChange={(e) => setField(e.target.value)} className={inputClass} />
+        </div>
+        <div className="flex flex-col justify-end">
+          <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+            <input type="checkbox" checked={completed} onChange={(e) => setCompleted(e.target.checked)} className="accent-[#0038a8]" />
+            Completed
+          </label>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Year Started</label>
+          <input type="number" value={yearStart} onChange={(e) => setYearStart(e.target.value)} placeholder="1990" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Year Ended</label>
+          <input type="number" value={yearEnd} onChange={(e) => setYearEnd(e.target.value)} placeholder="1994" className={inputClass} />
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
+        <input type="url" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} required className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
+        <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="flex gap-2 pt-1">
+        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
+      </div>
+    </form>
+  )
+}
+
+// ─── Track record inline edit form ────────────────────────────────────────
+
+function TrackEditForm({
+  record: r,
+  onSave,
+  onCancel,
+}: {
+  record: TrackRecord
+  onSave: (payload: Partial<TrackRecord>) => void
+  onCancel: () => void
+}) {
+  const [position, setPosition] = useState(r.position)
+  const [start, setStart] = useState(r.start_date ?? '')
+  const [end, setEnd] = useState(r.end_date ?? '')
+  const [isCurrent, setIsCurrent] = useState(r.is_current)
+  const [coa, setCoa] = useState<CoaFinding>(r.coa_finding ?? 'unknown')
+  const [billsAuthored, setBillsAuthored] = useState(r.bills_authored != null ? String(r.bills_authored) : '')
+  const [billsPassed, setBillsPassed] = useState(r.bills_passed != null ? String(r.bills_passed) : '')
+  const [attendance, setAttendance] = useState(r.attendance_rate != null ? String(r.attendance_rate) : '')
+  const [notes, setNotes] = useState(r.notes ?? '')
+  const [sourceUrl, setSourceUrl] = useState(r.source_url)
+  const [sourceLabel, setSourceLabel] = useState(r.source_label)
+
+  function handleSubmit(e: React.SyntheticEvent) {
+    e.preventDefault()
+    onSave({
+      position,
+      start_date: start || null,
+      end_date: end || null,
+      is_current: isCurrent,
+      coa_finding: coa,
+      bills_authored: billsAuthored ? parseInt(billsAuthored) : null,
+      bills_passed: billsPassed ? parseInt(billsPassed) : null,
+      attendance_rate: attendance ? parseFloat(attendance) : null,
+      notes: notes || null,
+      source_url: sourceUrl,
+      source_label: sourceLabel,
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+      <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
+      <div>
+        <label className={labelClass}>Position <span className="text-red-400">*</span></label>
+        <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Start Date</label>
+          <input type="date" value={start} onChange={(e) => setStart(e.target.value)} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>End Date</label>
+          <input type="date" value={end} onChange={(e) => setEnd(e.target.value)} disabled={isCurrent} className={inputClass} />
+        </div>
+      </div>
+      <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+        <input type="checkbox" checked={isCurrent} onChange={(e) => setIsCurrent(e.target.checked)} className="accent-[#0038a8]" />
+        Currently in this position
+      </label>
+      <div>
+        <label className={labelClass}>COA Audit Finding</label>
+        <select value={coa} onChange={(e) => setCoa(e.target.value as CoaFinding)} className={inputClass}>
+          <option value="unqualified">Unqualified / Clean (+100 pts)</option>
+          <option value="qualified">Qualified (+60 pts)</option>
+          <option value="adverse">Adverse (+20 pts)</option>
+          <option value="disclaimer">Disclaimer (+10 pts)</option>
+          <option value="not_applicable">Not Applicable (bills-based)</option>
+          <option value="unknown">Unknown (+0 pts)</option>
+        </select>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        <div>
+          <label className={labelClass}>Bills Authored</label>
+          <input type="number" value={billsAuthored} onChange={(e) => setBillsAuthored(e.target.value)} placeholder="0" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Bills Passed</label>
+          <input type="number" value={billsPassed} onChange={(e) => setBillsPassed(e.target.value)} placeholder="0" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Attendance %</label>
+          <input type="number" min="0" max="100" step="0.1" value={attendance} onChange={(e) => setAttendance(e.target.value)} placeholder="95" className={inputClass} />
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Notes</label>
+        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className={`${inputClass} resize-none`} />
+      </div>
+      <div>
+        <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
+        <input type="url" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} required className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
+        <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="flex gap-2 pt-1">
+        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
+      </div>
+    </form>
+  )
+}
+
+// ─── Legal inline edit form ─────────────────────────────────────────────────
+
+function LegalEditForm({
+  record: r,
+  onSave,
+  onCancel,
+}: {
+  record: LegalRecord
+  onSave: (payload: Partial<LegalRecord>) => void
+  onCancel: () => void
+}) {
+  const [title, setTitle] = useState(r.case_title)
+  const [type, setType] = useState<LegalCaseType>(r.case_type)
+  const [status, setStatus] = useState<LegalCaseStatus>(r.status)
+  const [court, setCourt] = useState(r.court ?? '')
+  const [charge, setCharge] = useState(r.charge ?? '')
+  const [filing, setFiling] = useState(r.filing_date ?? '')
+  const [resolution, setResolution] = useState(r.resolution_date ?? '')
+  const [resolutionSummary, setResolutionSummary] = useState(r.resolution_summary ?? '')
+  const [sourceUrl, setSourceUrl] = useState(r.source_url)
+  const [sourceLabel, setSourceLabel] = useState(r.source_label)
+
+  function handleSubmit(e: React.SyntheticEvent) {
+    e.preventDefault()
+    onSave({
+      case_title: title,
+      case_type: type,
+      status,
+      court: court || null,
+      charge: charge || null,
+      filing_date: filing || null,
+      resolution_date: resolution || null,
+      resolution_summary: resolutionSummary || null,
+      source_url: sourceUrl,
+      source_label: sourceLabel,
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+      <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
+      <div>
+        <label className={labelClass}>Case Title <span className="text-red-400">*</span></label>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Case Type</label>
+          <select value={type} onChange={(e) => setType(e.target.value as LegalCaseType)} className={inputClass}>
+            <option value="criminal">Criminal</option>
+            <option value="civil">Civil</option>
+            <option value="administrative">Administrative</option>
+            <option value="electoral">Electoral</option>
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value as LegalCaseStatus)} className={inputClass}>
+            <option value="pending">Pending</option>
+            <option value="convicted">Convicted</option>
+            <option value="acquitted">Acquitted</option>
+            <option value="dismissed">Dismissed</option>
+            <option value="ongoing_appeal">Ongoing Appeal</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Charge</label>
+        <input type="text" value={charge} onChange={(e) => setCharge(e.target.value)} placeholder="Plunder, Graft and Corruption…" className={inputClass} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Court</label>
+          <input type="text" value={court} onChange={(e) => setCourt(e.target.value)} placeholder="Sandiganbayan" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Filing Date</label>
+          <input type="date" value={filing} onChange={(e) => setFiling(e.target.value)} className={inputClass} />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Resolution Date</label>
+          <input type="date" value={resolution} onChange={(e) => setResolution(e.target.value)} className={inputClass} />
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Resolution Summary</label>
+        <textarea value={resolutionSummary} onChange={(e) => setResolutionSummary(e.target.value)} rows={2} className={`${inputClass} resize-none`} />
+      </div>
+      <div>
+        <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
+        <input type="url" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} required className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
+        <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="flex gap-2 pt-1">
+        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
+      </div>
+    </form>
+  )
+}
+
+// ─── Achievement inline edit form ──────────────────────────────────────────
+
+function AchEditForm({
+  record: a,
+  onSave,
+  onCancel,
+}: {
+  record: Achievement
+  onSave: (payload: Partial<Achievement>) => void
+  onCancel: () => void
+}) {
+  const [title, setTitle] = useState(a.title)
+  const [desc, setDesc] = useState(a.description ?? '')
+  const [category, setCategory] = useState<AchievementCategory>(a.category ?? 'other')
+  const [scope, setScope] = useState<ImpactScope | ''>(a.impact_scope ?? '')
+  const [year, setYear] = useState(a.year ? String(a.year) : '')
+  const [sourceUrl, setSourceUrl] = useState(a.source_url)
+  const [sourceLabel, setSourceLabel] = useState(a.source_label)
+
+  function handleSubmit(e: React.SyntheticEvent) {
+    e.preventDefault()
+    onSave({
+      title,
+      description: desc || null,
+      category,
+      impact_scope: scope || null,
+      year: year ? parseInt(year) : null,
+      source_url: sourceUrl,
+      source_label: sourceLabel,
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+      <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
+      <div>
+        <label className={labelClass}>Title <span className="text-red-400">*</span></label>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Description</label>
+        <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows={2} className={`${inputClass} resize-none`} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Category</label>
+          <select value={category} onChange={(e) => setCategory(e.target.value as AchievementCategory)} className={inputClass}>
+            <option value="legislation">Legislation</option>
+            <option value="infrastructure">Infrastructure</option>
+            <option value="social_program">Social Program</option>
+            <option value="award">Award</option>
+            <option value="international">International</option>
+            <option value="economic">Economic</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>Year</label>
+          <input type="number" value={year} onChange={(e) => setYear(e.target.value)} placeholder="2022" className={inputClass} />
+        </div>
+      </div>
+      <div>
+        <label className={labelClass}>Impact Scope <span className="text-red-400">*</span></label>
+        <select value={scope} onChange={(e) => setScope(e.target.value as ImpactScope | '')} required className={inputClass}>
+          <option value="">— Select scope —</option>
+          <option value="national_landmark">National — Landmark (+100 pts)</option>
+          <option value="national_standard">National — Standard (+60 pts)</option>
+          <option value="regional">Regional (+40 pts)</option>
+          <option value="local">Local (+20 pts)</option>
+        </select>
+      </div>
+      <div>
+        <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
+        <input type="url" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} required className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
+        <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
+      </div>
+      <div className="flex gap-2 pt-1">
+        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
+      </div>
+    </form>
+  )
+}
+
+// ─── Main component ─────────────────────────────────────────────────────────
 
 export default function RecordsManager({ politician: p }: Props) {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('education')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
 
-  // Education form state
+  const refresh = () => { setEditingId(null); router.refresh() }
+
+  // ── Add form state ───────────────────────────────────────────────────────
+
   const [eduInstitution, setEduInstitution] = useState('')
   const [eduDegree, setEduDegree] = useState('')
   const [eduField, setEduField] = useState('')
@@ -28,7 +474,6 @@ export default function RecordsManager({ politician: p }: Props) {
   const [eduSourceUrl, setEduSourceUrl] = useState('')
   const [eduSourceLabel, setEduSourceLabel] = useState('')
 
-  // Track record form state
   const [trackPosition, setTrackPosition] = useState('')
   const [trackStart, setTrackStart] = useState('')
   const [trackEnd, setTrackEnd] = useState('')
@@ -40,7 +485,6 @@ export default function RecordsManager({ politician: p }: Props) {
   const [trackSourceUrl, setTrackSourceUrl] = useState('')
   const [trackSourceLabel, setTrackSourceLabel] = useState('')
 
-  // Legal form state
   const [legalTitle, setLegalTitle] = useState('')
   const [legalType, setLegalType] = useState<LegalCaseType>('criminal')
   const [legalStatus, setLegalStatus] = useState<LegalCaseStatus>('pending')
@@ -50,7 +494,6 @@ export default function RecordsManager({ politician: p }: Props) {
   const [legalSourceUrl, setLegalSourceUrl] = useState('')
   const [legalSourceLabel, setLegalSourceLabel] = useState('')
 
-  // Achievement form state
   const [achTitle, setAchTitle] = useState('')
   const [achDesc, setAchDesc] = useState('')
   const [achCategory, setAchCategory] = useState<AchievementCategory>('other')
@@ -59,10 +502,10 @@ export default function RecordsManager({ politician: p }: Props) {
   const [achSourceUrl, setAchSourceUrl] = useState('')
   const [achSourceLabel, setAchSourceLabel] = useState('')
 
-  async function saveEducation(e: React.FormEvent) {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
+  // ── Save / update helpers ────────────────────────────────────────────────
+
+  async function saveEducation(e: React.SyntheticEvent) {
+    e.preventDefault(); setSaving(true); setError(null)
     const supabase = getMutationClient()
     const { error } = await supabase.from('education_records').insert({
       politician_id: p.id,
@@ -80,13 +523,20 @@ export default function RecordsManager({ politician: p }: Props) {
     if (error) { setError(error.message); return }
     setEduInstitution(''); setEduDegree(''); setEduField('')
     setEduYearStart(''); setEduYearEnd(''); setEduSourceUrl(''); setEduSourceLabel('')
-    router.refresh()
+    refresh()
   }
 
-  async function saveTrack(e: React.FormEvent) {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
+  async function updateEducation(id: string, payload: Partial<EducationRecord>) {
+    setSaving(true); setError(null)
+    const supabase = getMutationClient()
+    const { error } = await supabase.from('education_records').update(payload).eq('id', id)
+    setSaving(false)
+    if (error) { setError(error.message); return }
+    refresh()
+  }
+
+  async function saveTrack(e: React.SyntheticEvent) {
+    e.preventDefault(); setSaving(true); setError(null)
     const supabase = getMutationClient()
     const { error } = await supabase.from('track_records').insert({
       politician_id: p.id,
@@ -106,13 +556,20 @@ export default function RecordsManager({ politician: p }: Props) {
     setTrackPosition(''); setTrackStart(''); setTrackEnd('')
     setTrackBillsAuthored(''); setTrackBillsPassed(''); setTrackAttendance('')
     setTrackSourceUrl(''); setTrackSourceLabel('')
-    router.refresh()
+    refresh()
   }
 
-  async function saveLegal(e: React.FormEvent) {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
+  async function updateTrack(id: string, payload: Partial<TrackRecord>) {
+    setSaving(true); setError(null)
+    const supabase = getMutationClient()
+    const { error } = await supabase.from('track_records').update(payload).eq('id', id)
+    setSaving(false)
+    if (error) { setError(error.message); return }
+    refresh()
+  }
+
+  async function saveLegal(e: React.SyntheticEvent) {
+    e.preventDefault(); setSaving(true); setError(null)
     const supabase = getMutationClient()
     const { error } = await supabase.from('legal_records').insert({
       politician_id: p.id,
@@ -129,13 +586,20 @@ export default function RecordsManager({ politician: p }: Props) {
     if (error) { setError(error.message); return }
     setLegalTitle(''); setLegalCourt(''); setLegalCharge(''); setLegalFiling('')
     setLegalSourceUrl(''); setLegalSourceLabel('')
-    router.refresh()
+    refresh()
   }
 
-  async function saveAchievement(e: React.FormEvent) {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
+  async function updateLegal(id: string, payload: Partial<LegalRecord>) {
+    setSaving(true); setError(null)
+    const supabase = getMutationClient()
+    const { error } = await supabase.from('legal_records').update(payload).eq('id', id)
+    setSaving(false)
+    if (error) { setError(error.message); return }
+    refresh()
+  }
+
+  async function saveAchievement(e: React.SyntheticEvent) {
+    e.preventDefault(); setSaving(true); setError(null)
     const supabase = getMutationClient()
     const { error } = await supabase.from('achievements').insert({
       politician_id: p.id,
@@ -149,28 +613,57 @@ export default function RecordsManager({ politician: p }: Props) {
     })
     setSaving(false)
     if (error) { setError(error.message); return }
-    setAchTitle(''); setAchDesc(''); setAchImpactScope(''); setAchYear(''); setAchSourceUrl(''); setAchSourceLabel('')
-    router.refresh()
+    setAchTitle(''); setAchDesc(''); setAchImpactScope(''); setAchYear('')
+    setAchSourceUrl(''); setAchSourceLabel('')
+    refresh()
   }
 
-  const inputClass = "w-full bg-[#0a0a0f] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2 text-sm outline-none transition-colors placeholder:text-gray-600"
-  const labelClass = "block text-xs text-gray-500 mb-1"
+  async function updateAchievement(id: string, payload: Partial<Achievement>) {
+    setSaving(true); setError(null)
+    const supabase = getMutationClient()
+    const { error } = await supabase.from('achievements').update(payload).eq('id', id)
+    setSaving(false)
+    if (error) { setError(error.message); return }
+    refresh()
+  }
+
+  // ── Record action buttons ────────────────────────────────────────────────
+
+  function RecordActions({ id, table }: { id: string; table: string }) {
+    return (
+      <div className="flex gap-1.5 mt-2">
+        <button
+          onClick={() => setEditingId(editingId === id ? null : id)}
+          className="text-xs text-[#60a5fa] hover:text-white border border-[#0038a8]/40 hover:border-[#0038a8] px-2.5 py-1 rounded-md transition-colors"
+        >
+          {editingId === id ? 'Cancel' : 'Edit'}
+        </button>
+        <button
+          onClick={() => deleteRecord(table, id, setSaving, setError, refresh)}
+          disabled={saving}
+          className="text-xs text-red-400 hover:text-white border border-red-500/20 hover:border-red-500/60 px-2.5 py-1 rounded-md transition-colors disabled:opacity-50"
+        >
+          Delete
+        </button>
+      </div>
+    )
+  }
 
   const tabs: { key: Tab; label: string; count: number }[] = [
-    { key: 'education', label: 'Education', count: p.education_records?.length ?? 0 },
-    { key: 'track', label: 'Track Record', count: p.track_records?.length ?? 0 },
-    { key: 'legal', label: 'Legal', count: p.legal_records?.length ?? 0 },
+    { key: 'education',    label: 'Education',    count: p.education_records?.length ?? 0 },
+    { key: 'track',        label: 'Track Record', count: p.track_records?.length ?? 0 },
+    { key: 'legal',        label: 'Legal',        count: p.legal_records?.length ?? 0 },
     { key: 'achievements', label: 'Achievements', count: p.achievements?.length ?? 0 },
   ]
 
   return (
     <div>
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 border-b border-white/10 pb-0">
+      <div className="flex gap-1 mb-6 border-b border-white/10">
         {tabs.map((t) => (
           <button
             key={t.key}
-            onClick={() => setTab(t.key)}
+            onClick={() => { setTab(t.key); setEditingId(null) }}
             className={`px-4 py-2 text-sm font-semibold rounded-t-lg border-b-2 transition-colors ${
               tab === t.key
                 ? 'border-[#0038a8] text-white'
@@ -191,7 +684,7 @@ export default function RecordsManager({ politician: p }: Props) {
         </div>
       )}
 
-      {/* Education tab */}
+      {/* ── Education ── */}
       {tab === 'education' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <form onSubmit={saveEducation} className="bg-[#111827] border border-white/10 rounded-xl p-4 flex flex-col gap-3">
@@ -230,6 +723,10 @@ export default function RecordsManager({ politician: p }: Props) {
                 <input type="number" value={eduYearEnd} onChange={(e) => setEduYearEnd(e.target.value)} placeholder="1994" className={inputClass} />
               </div>
             </div>
+            <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+              <input type="checkbox" checked={eduCompleted} onChange={(e) => setEduCompleted(e.target.checked)} className="accent-[#0038a8]" />
+              Degree completed
+            </label>
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
               <input type="url" value={eduSourceUrl} onChange={(e) => setEduSourceUrl(e.target.value)} required placeholder="https://..." className={inputClass} />
@@ -246,34 +743,43 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing Records ({p.education_records?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.education_records?.map((r) => {
-                const pts = computeEducationPts(r)
-                return (
-                  <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-white">{r.institution}</p>
-                        {r.degree && <p className="text-gray-400 text-xs">{r.degree}</p>}
-                        {!r.is_completed && <p className="text-amber-500 text-xs">Incomplete (×0.75)</p>}
-                        {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
-                        <SourceLink url={r.source_url} label={r.source_label} />
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <span className={`text-xs font-black tabular-nums ${r.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
-                          +{pts} pts
+              {p.education_records?.map((r) => (
+                <div key={r.id}>
+                  {editingId === r.id ? (
+                    <EduEditForm
+                      record={r}
+                      onSave={(payload) => updateEducation(r.id, payload)}
+                      onCancel={() => setEditingId(null)}
+                    />
+                  ) : (
+                    <div className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-white">{r.institution}</p>
+                          {r.degree && <p className="text-gray-400 text-xs">{r.degree}{r.field_of_study ? ` — ${r.field_of_study}` : ''}</p>}
+                          {r.ched_accreditation && r.ched_accreditation !== 'unknown' && (
+                            <p className="text-xs text-gray-500">{r.ched_accreditation}</p>
+                          )}
+                          {!r.is_completed && <p className="text-amber-500 text-xs">Incomplete (×0.75)</p>}
+                          {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                          <SourceLink url={r.source_url} label={r.source_label} />
+                        </div>
+                        <span className={`text-xs font-black tabular-nums shrink-0 ${r.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
+                          +{computeEducationPts(r)} pts
                         </span>
                       </div>
+                      <RecordActions id={r.id} table="education_records" />
                     </div>
-                  </div>
-                )
-              })}
+                  )}
+                </div>
+              ))}
               {!p.education_records?.length && <p className="text-gray-600 text-sm">No records yet.</p>}
             </div>
           </div>
         </div>
       )}
 
-      {/* Track record tab */}
+      {/* ── Track Record ── */}
       {tab === 'track' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <form onSubmit={saveTrack} className="bg-[#111827] border border-white/10 rounded-xl p-4 flex flex-col gap-3">
@@ -321,9 +827,6 @@ export default function RecordsManager({ politician: p }: Props) {
                 <input type="number" min="0" max="100" step="0.1" value={trackAttendance} onChange={(e) => setTrackAttendance(e.target.value)} placeholder="95" className={inputClass} />
               </div>
             </div>
-            <p className="text-xs text-gray-500">
-              Attendance affects score: ≥90% +20 pts · 75–89% no change · 50–74% −20 pts · &lt;50% −50 pts. Leave blank if unknown.
-            </p>
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
               <input type="url" value={trackSourceUrl} onChange={(e) => setTrackSourceUrl(e.target.value)} required placeholder="https://..." className={inputClass} />
@@ -340,45 +843,53 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing Records ({p.track_records?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.track_records?.map((r) => {
-                const pts = computeTrackPts(r)
-                const attMod = attendanceModifier(r.attendance_rate)
-                return (
-                  <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-white">{r.position}</p>
-                        <p className="text-gray-500 text-xs">COA: {r.coa_finding ?? '—'}</p>
-                        {r.bills_authored != null && (
-                          <p className="text-gray-500 text-xs">{r.bills_authored} authored · {r.bills_passed ?? 0} passed</p>
-                        )}
-                        {r.attendance_rate != null && (
-                          <p className="text-xs">
-                            <span className="text-gray-500">Attendance: {r.attendance_rate}% </span>
-                            <span className={attMod > 0 ? 'text-green-400' : attMod < 0 ? 'text-red-400' : 'text-gray-600'}>
-                              ({attMod > 0 ? '+' : ''}{attMod} pts)
-                            </span>
-                          </p>
-                        )}
-                        {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
-                        <SourceLink url={r.source_url} label={r.source_label} />
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <span className={`text-xs font-black tabular-nums ${r.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
-                          +{pts} pts
+              {p.track_records?.map((r) => (
+                <div key={r.id}>
+                  {editingId === r.id ? (
+                    <TrackEditForm
+                      record={r}
+                      onSave={(payload) => updateTrack(r.id, payload)}
+                      onCancel={() => setEditingId(null)}
+                    />
+                  ) : (
+                    <div className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-white">{r.position}</p>
+                          <p className="text-gray-500 text-xs">COA: {r.coa_finding ?? '—'}</p>
+                          {r.bills_authored != null && (
+                            <p className="text-gray-500 text-xs">{r.bills_authored} authored · {r.bills_passed ?? 0} passed</p>
+                          )}
+                          {r.attendance_rate != null && (() => {
+                            const mod = attendanceModifier(r.attendance_rate)
+                            return (
+                              <p className="text-xs">
+                                <span className="text-gray-500">Attendance: {r.attendance_rate}% </span>
+                                <span className={mod > 0 ? 'text-green-400' : mod < 0 ? 'text-red-400' : 'text-gray-600'}>
+                                  ({mod > 0 ? '+' : ''}{mod} pts)
+                                </span>
+                              </p>
+                            )
+                          })()}
+                          {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                          <SourceLink url={r.source_url} label={r.source_label} />
+                        </div>
+                        <span className={`text-xs font-black tabular-nums shrink-0 ${r.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
+                          +{computeTrackPts(r)} pts
                         </span>
                       </div>
+                      <RecordActions id={r.id} table="track_records" />
                     </div>
-                  </div>
-                )
-              })}
+                  )}
+                </div>
+              ))}
               {!p.track_records?.length && <p className="text-gray-600 text-sm">No records yet.</p>}
             </div>
           </div>
         </div>
       )}
 
-      {/* Legal tab */}
+      {/* ── Legal ── */}
       {tab === 'legal' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <form onSubmit={saveLegal} className="bg-[#111827] border border-white/10 rounded-xl p-4 flex flex-col gap-3">
@@ -410,7 +921,7 @@ export default function RecordsManager({ politician: p }: Props) {
             </div>
             <div>
               <label className={labelClass}>Charge</label>
-              <input type="text" value={legalCharge} onChange={(e) => setLegalCharge(e.target.value)} placeholder="Plunder, Graft and Corruption, etc." className={inputClass} />
+              <input type="text" value={legalCharge} onChange={(e) => setLegalCharge(e.target.value)} placeholder="Plunder, Graft and Corruption…" className={inputClass} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -441,20 +952,30 @@ export default function RecordsManager({ politician: p }: Props) {
               {p.legal_records?.map((r) => {
                 const penalty = LEGAL_PENALTIES[r.status as keyof typeof LEGAL_PENALTIES] ?? 0
                 return (
-                  <div key={r.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-white">{r.case_title}</p>
-                        <p className="text-gray-500 text-xs capitalize">{r.status} · {r.case_type}</p>
-                        {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
-                        <SourceLink url={r.source_url} label={r.source_label} />
+                  <div key={r.id}>
+                    {editingId === r.id ? (
+                      <LegalEditForm
+                        record={r}
+                        onSave={(payload) => updateLegal(r.id, payload)}
+                        onCancel={() => setEditingId(null)}
+                      />
+                    ) : (
+                      <div className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-white">{r.case_title}</p>
+                            <p className="text-gray-500 text-xs capitalize">{r.status} · {r.case_type}</p>
+                            {r.charge && <p className="text-gray-500 text-xs">{r.charge}</p>}
+                            {!r.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                            <SourceLink url={r.source_url} label={r.source_label} />
+                          </div>
+                          <span className={`text-xs font-black tabular-nums shrink-0 ${penalty > 0 ? (r.is_verified ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
+                            {penalty > 0 ? `−${penalty} pts` : '0 pts'}
+                          </span>
+                        </div>
+                        <RecordActions id={r.id} table="legal_records" />
                       </div>
-                      <div className="shrink-0 text-right">
-                        <span className={`text-xs font-black tabular-nums ${penalty > 0 ? (r.is_verified ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
-                          {penalty > 0 ? `−${penalty} pts` : '0 pts'}
-                        </span>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )
               })}
@@ -464,7 +985,7 @@ export default function RecordsManager({ politician: p }: Props) {
         </div>
       )}
 
-      {/* Achievements tab */}
+      {/* ── Achievements ── */}
       {tab === 'achievements' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <form onSubmit={saveAchievement} className="bg-[#111827] border border-white/10 rounded-xl p-4 flex flex-col gap-3">
@@ -475,7 +996,7 @@ export default function RecordsManager({ politician: p }: Props) {
             </div>
             <div>
               <label className={labelClass}>Description</label>
-              <textarea value={achDesc} onChange={(e) => setAchDesc(e.target.value)} rows={2} className={`${inputClass} resize-none`} placeholder="Brief description of the achievement" />
+              <textarea value={achDesc} onChange={(e) => setAchDesc(e.target.value)} rows={2} className={`${inputClass} resize-none`} placeholder="Brief description" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -504,7 +1025,6 @@ export default function RecordsManager({ politician: p }: Props) {
                 <option value="regional">Regional (+40 pts)</option>
                 <option value="local">Local (+20 pts)</option>
               </select>
-              <p className="text-xs text-gray-500 mt-1">Scope determines how this achievement contributes to the objective score.</p>
             </div>
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
@@ -522,31 +1042,37 @@ export default function RecordsManager({ politician: p }: Props) {
           <div>
             <h3 className="font-bold text-white text-sm mb-3">Existing ({p.achievements?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
-              {p.achievements?.map((a) => {
-                const pts = computeAchievementPts(a.impact_scope)
-                return (
-                  <div key={a.id} className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-white">{a.title}</p>
-                        {a.year && <p className="text-gray-500 text-xs">{a.year}</p>}
-                        {a.impact_scope ? (
-                          <p className="text-xs text-indigo-400 capitalize mt-0.5">{a.impact_scope}</p>
-                        ) : (
-                          <p className="text-xs text-amber-500 mt-0.5">⚠ Set impact scope</p>
-                        )}
-                        {!a.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
-                        <SourceLink url={a.source_url} label={a.source_label} />
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <span className={`text-xs font-black tabular-nums ${a.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
-                          +{pts} pts
+              {p.achievements?.map((a) => (
+                <div key={a.id}>
+                  {editingId === a.id ? (
+                    <AchEditForm
+                      record={a}
+                      onSave={(payload) => updateAchievement(a.id, payload)}
+                      onCancel={() => setEditingId(null)}
+                    />
+                  ) : (
+                    <div className="bg-[#111827] border border-white/10 rounded-xl p-3 text-sm">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-white">{a.title}</p>
+                          {a.year && <p className="text-gray-500 text-xs">{a.year}</p>}
+                          {a.impact_scope ? (
+                            <p className="text-xs text-indigo-400 capitalize mt-0.5">{a.impact_scope}</p>
+                          ) : (
+                            <p className="text-xs text-amber-500 mt-0.5">⚠ Set impact scope</p>
+                          )}
+                          {!a.is_verified && <p className="text-gray-600 text-xs">⏳ pending review</p>}
+                          <SourceLink url={a.source_url} label={a.source_label} />
+                        </div>
+                        <span className={`text-xs font-black tabular-nums shrink-0 ${a.is_verified ? 'text-[#60a5fa]' : 'text-gray-500'}`}>
+                          +{computeAchievementPts(a.impact_scope)} pts
                         </span>
                       </div>
+                      <RecordActions id={a.id} table="achievements" />
                     </div>
-                  </div>
-                )
-              })}
+                  )}
+                </div>
+              ))}
               {!p.achievements?.length && <p className="text-gray-600 text-sm">No achievements yet.</p>}
             </div>
           </div>
