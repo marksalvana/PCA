@@ -23,7 +23,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#0a0f1c] text-white">
       <AdminNav role={profile.role as import('@/types/database').UserRole} />
       <main className="flex-1 p-6 md:p-8 overflow-auto">{children}</main>
     </div>
