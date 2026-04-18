@@ -73,8 +73,12 @@ export default function PoliticianForm({ politician }: Props) {
       return
     }
 
-    router.push(`/admin/profiles/${(data as Politician).id}/records`)
-    router.refresh()
+    // New profiles go to edit (which now includes records). Edits stay on the same page.
+    if (isEdit) {
+      router.refresh()
+    } else {
+      router.push(`/admin/profiles/${(data as Politician).id}/edit`)
+    }
   }
 
   const inputClass = 'w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600'
