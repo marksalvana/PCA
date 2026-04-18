@@ -46,6 +46,10 @@ export default function PoliticianForm({ politician }: Props) {
     const supabase = getMutationClient()
     const slug = politician?.slug ?? slugify(fullName)
 
+    // When editing a non-draft profile, automatically queue it for vetting
+    const effectiveStatus =
+      isEdit && status !== 'draft' ? 'under_review' : status
+
     const payload = {
       full_name: fullName,
       preferred_name: preferredName || null,
@@ -60,7 +64,7 @@ export default function PoliticianForm({ politician }: Props) {
       is_candidate: isCandidate,
       dynasty_name: dynastyName || null,
       dynasty_generation: dynastyGeneration ? Number(dynastyGeneration) : null,
-      status,
+      status: effectiveStatus,
     }
 
     const { data, error } = isEdit

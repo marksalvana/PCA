@@ -48,7 +48,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4">
+      <div className="max-w-5xl mx-auto px-4 mt-10">
 
         {/* Stats bar */}
         <div className="grid grid-cols-3 gap-4 -mt-6 mb-12">

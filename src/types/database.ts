@@ -1,7 +1,7 @@
 // Auto-generated types matching our schema.sql
 // Re-generate with: npx supabase gen types typescript --project-id YOUR_PROJECT_ID
 
-export type UserRole = 'admin' | 'vetter' | 'public'
+export type UserRole = 'admin' | 'vetter' | 'superadmin' | 'public'
 export type PoliticianStatus = 'draft' | 'under_review' | 'published' | 'flagged'
 export type ChedAccreditation =
   | 'level_1' | 'level_2' | 'level_3' | 'level_4'

@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import VettingQueue from '@/components/vetting/VettingQueue'
 import type { Politician } from '@/types/database'
@@ -6,6 +7,19 @@ export const metadata = { title: 'Vetting Queue — Admin' }
 
 export default async function VettingPage() {
   const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single<{ role: string }>()
+
+  if (!profile || !['vetter', 'superadmin'].includes(profile.role)) {
+    redirect('/dashboard')
+  }
 
   const { data: queue } = await supabase
     .from('politicians')

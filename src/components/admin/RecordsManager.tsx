@@ -34,9 +34,19 @@ const labelClass = 'block text-xs text-gray-500 mb-1'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────
 
+async function setUnderReview(politicianId: string) {
+  const supabase = getMutationClient()
+  await supabase
+    .from('politicians')
+    .update({ status: 'under_review' })
+    .eq('id', politicianId)
+    .neq('status', 'draft') // don't queue drafts that haven't been published yet
+}
+
 async function deleteRecord(
   table: string,
   id: string,
+  politicianId: string,
   setSaving: (v: boolean) => void,
   setError: (v: string | null) => void,
   refresh: () => void,
@@ -48,6 +58,7 @@ async function deleteRecord(
   const { error } = await supabase.from(table).delete().eq('id', id)
   setSaving(false)
   if (error) { setError(error.message); return }
+  await setUnderReview(politicianId)
   refresh()
 }
 
@@ -523,6 +534,7 @@ export default function RecordsManager({ politician: p }: Props) {
     if (error) { setError(error.message); return }
     setEduInstitution(''); setEduDegree(''); setEduField('')
     setEduYearStart(''); setEduYearEnd(''); setEduSourceUrl(''); setEduSourceLabel('')
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -532,6 +544,7 @@ export default function RecordsManager({ politician: p }: Props) {
     const { error } = await supabase.from('education_records').update(payload).eq('id', id)
     setSaving(false)
     if (error) { setError(error.message); return }
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -556,6 +569,7 @@ export default function RecordsManager({ politician: p }: Props) {
     setTrackPosition(''); setTrackStart(''); setTrackEnd('')
     setTrackBillsAuthored(''); setTrackBillsPassed(''); setTrackAttendance('')
     setTrackSourceUrl(''); setTrackSourceLabel('')
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -565,6 +579,7 @@ export default function RecordsManager({ politician: p }: Props) {
     const { error } = await supabase.from('track_records').update(payload).eq('id', id)
     setSaving(false)
     if (error) { setError(error.message); return }
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -586,6 +601,7 @@ export default function RecordsManager({ politician: p }: Props) {
     if (error) { setError(error.message); return }
     setLegalTitle(''); setLegalCourt(''); setLegalCharge(''); setLegalFiling('')
     setLegalSourceUrl(''); setLegalSourceLabel('')
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -595,6 +611,7 @@ export default function RecordsManager({ politician: p }: Props) {
     const { error } = await supabase.from('legal_records').update(payload).eq('id', id)
     setSaving(false)
     if (error) { setError(error.message); return }
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -615,6 +632,7 @@ export default function RecordsManager({ politician: p }: Props) {
     if (error) { setError(error.message); return }
     setAchTitle(''); setAchDesc(''); setAchImpactScope(''); setAchYear('')
     setAchSourceUrl(''); setAchSourceLabel('')
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -624,6 +642,7 @@ export default function RecordsManager({ politician: p }: Props) {
     const { error } = await supabase.from('achievements').update(payload).eq('id', id)
     setSaving(false)
     if (error) { setError(error.message); return }
+    await setUnderReview(p.id)
     refresh()
   }
 
@@ -639,7 +658,7 @@ export default function RecordsManager({ politician: p }: Props) {
           {editingId === id ? 'Cancel' : 'Edit'}
         </button>
         <button
-          onClick={() => deleteRecord(table, id, setSaving, setError, refresh)}
+          onClick={() => deleteRecord(table, id, p.id, setSaving, setError, refresh)}
           disabled={saving}
           className="text-xs text-red-400 hover:text-white border border-red-500/20 hover:border-red-500/60 px-2.5 py-1 rounded-md transition-colors disabled:opacity-50"
         >

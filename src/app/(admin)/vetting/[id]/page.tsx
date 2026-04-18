@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import RecordReviewCard from '@/components/vetting/RecordReviewCard'
 import type { PoliticianWithDetails } from '@/types/database'
@@ -8,6 +8,19 @@ export const metadata = { title: 'Review Profile — Admin' }
 export default async function VettingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single<{ role: string }>()
+
+  if (!profile || !['vetter', 'superadmin'].includes(profile.role)) {
+    redirect('/dashboard')
+  }
 
   const { data: politician } = await supabase
     .from('politicians')
