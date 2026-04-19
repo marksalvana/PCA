@@ -40,11 +40,11 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto px-6 py-20 md:py-28">
           <p className="label-mono text-[#C8304B] mb-4">Our Mission</p>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6" style={{ fontFamily: "'Public Sans', system-ui, sans-serif", letterSpacing: '-0.03em' }}>
-            We are tired.<br />
-            <span className="text-[#C8304B]">And we are doing something about it.</span>
+            Filipinos deserve better.<br />
+            <span className="text-[#C8304B]">We are here to help make it happen.</span>
           </h1>
           <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl">
-            Politiko was built by a small, growing group of ordinary Filipinos — developers, teachers, analysts, and everyday citizens — who have had enough of watching the same cycles of poverty, misinformation, and political dynasties repeat themselves every election season.
+            Politiko was built by a small, growing group of ordinary Filipinos — developers, teachers, analysts, and everyday citizens — who believe that informed voters lead to better leaders, and that better leaders lead to a better country.
           </p>
         </div>
       </section>
