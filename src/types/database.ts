@@ -58,6 +58,7 @@ export interface DynastyConnection {
   related_name: string
   relationship: string
   position_held: string | null
+  is_current: boolean
   in_dataset: boolean
   related_slug: string | null
   source_url: string

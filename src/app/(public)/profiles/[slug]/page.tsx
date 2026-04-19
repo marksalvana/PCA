@@ -114,7 +114,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
   ) ?? []
 
   const convictionCount = p.legal_records?.filter((r) => r.status === 'convicted' && r.is_verified).length ?? 0
-  const hasDynasty = !!p.dynasty_name
+  const hasActiveDynastyMember = p.dynasty_connections?.some((c) => c.is_current) ?? false
+  const hasDynasty = !!p.dynasty_name && hasActiveDynastyMember
   const redFlagCount = convictionCount + (hasDynasty ? 1 : 0)
 
   return (
