@@ -4,7 +4,7 @@ import ProfileCard from '@/components/profiles/ProfileCard'
 import ProfileFilters from './ProfileFilters'
 import type { Politician } from '@/types/database'
 
-export const metadata = { title: 'All Profiles — PH Profile Compare' }
+export const metadata = { title: 'All Profiles — Politiko' }
 
 type PoliticianWithLegal = Politician & {
   legal_records: { id: string; status: string }[]

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'How Scores Work — PH Profile Compare',
-  description: 'A transparent explanation of how every score on PH Profile Compare is calculated — education, track record, legal penalties, and civic trust.',
+  title: 'How Scores Work — Politiko',
+  description: 'A transparent explanation of how every score on Politiko is calculated — education, track record, legal penalties, and civic trust.',
 }
 
 const CHED_TABLE = [

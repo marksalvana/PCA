@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import ForumForm from './ForumForm'
 
-export const metadata = { title: 'Community Forum — PH Profile Compare' }
+export const metadata = { title: 'Community Forum — Politiko' }
 
 type ForumPost = {
   id: string

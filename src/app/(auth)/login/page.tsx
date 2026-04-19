@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import LoginForm from '@/components/auth/LoginForm'
 
-export const metadata = { title: 'Sign In — PH Profile Compare' }
+export const metadata = { title: 'Sign In — Politiko' }
 
 export default function LoginPage() {
   return (

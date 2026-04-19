@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PH Profile Compare — Know Your Candidates',
+  title: 'Politiko — Know Your Candidates',
   description: 'Compare Philippine politicians side-by-side using verified, sourced data. Every score derived from official benchmarks, not opinions.',
   openGraph: {
-    title: 'PH Profile Compare',
+    title: 'Politiko',
     description: 'Verified politician profiles for Philippine voters.',
     type: 'website',
   },

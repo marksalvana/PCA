@@ -1,6 +1,6 @@
 import SignupForm from '@/components/auth/SignupForm'
 
-export const metadata = { title: 'Create Account — PH Profile Compare' }
+export const metadata = { title: 'Create Account — Politiko' }
 
 export default function SignupPage() {
   return (

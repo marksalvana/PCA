@@ -4,7 +4,7 @@ import CompareGrid from '@/components/comparison/CompareGrid'
 import type { Politician, PoliticianWithDetails } from '@/types/database'
 
 export const metadata = {
-  title: 'Compare Candidates — PH Profile Compare',
+  title: 'Compare Candidates — Politiko',
 }
 
 export default async function ComparePage({

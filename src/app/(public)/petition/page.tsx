@@ -1,7 +1,7 @@
 import PetitionForm from '@/components/PetitionForm'
 
 export const metadata = {
-  title: 'Request a Profile — PH Profile Compare',
+  title: 'Request a Profile — Politiko',
 }
 
 export default function PetitionPage() {

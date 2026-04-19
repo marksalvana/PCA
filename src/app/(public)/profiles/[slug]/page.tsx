@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .eq('slug', slug)
     .single<{ full_name: string; current_position: string | null }>()
   if (!data) return { title: 'Profile Not Found' }
-  return { title: `${data.full_name} — PH Profile Compare` }
+  return { title: `${data.full_name} — Politiko` }
 }
 
 export default async function ProfilePage({ params }: { params: Promise<{ slug: string }> }) {
