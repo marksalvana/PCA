@@ -50,54 +50,58 @@ export default function DynastySection({ politician: p, connections }: Props) {
         {/* Family members */}
         {connections.length > 0 && (
           <div className="divide-y divide-slate-100">
-            {connections.map((c) => (
-              <div
-                key={c.id}
-                className={`p-4 flex items-start justify-between gap-3 transition-colors ${
-                  c.is_current ? 'hover:bg-slate-50/50' : 'bg-slate-50/40 hover:bg-slate-50/60'
-                }`}
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-md border ${
-                      c.is_current
-                        ? 'text-rose-700 bg-rose-50 border-rose-100'
-                        : 'text-slate-400 bg-slate-100 border-slate-200'
-                    }`}>
-                      {c.relationship}
-                    </span>
-                    {!c.is_current && (
-                      <span className="text-xs font-semibold text-slate-400 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                        Former
+            {connections.map((c) => {
+              // is_current defaults to true when the column is absent (migration not yet run)
+              const isCurrent = c.is_current !== false
+              return (
+                <div
+                  key={c.id}
+                  className={`p-4 flex items-start justify-between gap-3 transition-colors ${
+                    isCurrent ? 'hover:bg-slate-50/50' : 'bg-slate-50/40 hover:bg-slate-50/60'
+                  }`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-md border ${
+                        isCurrent
+                          ? 'text-rose-700 bg-rose-50 border-rose-100'
+                          : 'text-slate-400 bg-slate-100 border-slate-200'
+                      }`}>
+                        {c.relationship}
                       </span>
-                    )}
-                    {c.in_dataset && (
-                      <span className="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md">
-                        In this platform
-                      </span>
+                      {!isCurrent && (
+                        <span className="text-xs font-semibold text-slate-400 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                          Former
+                        </span>
+                      )}
+                      {c.in_dataset && (
+                        <span className="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md">
+                          In this platform
+                        </span>
+                      )}
+                    </div>
+                    <p className={`font-semibold mt-1 ${isCurrent ? 'text-slate-900' : 'text-slate-400'}`}>
+                      {c.related_name}
+                    </p>
+                    {c.position_held && (
+                      <p className={`text-sm ${isCurrent ? 'text-slate-500' : 'text-slate-400'}`}>
+                        {c.position_held}
+                      </p>
                     )}
                   </div>
-                  <p className={`font-semibold mt-1 ${c.is_current ? 'text-slate-900' : 'text-slate-400'}`}>
-                    {c.related_name}
-                  </p>
-                  {c.position_held && (
-                    <p className={`text-sm ${c.is_current ? 'text-slate-500' : 'text-slate-400'}`}>
-                      {c.position_held}
-                    </p>
+                  {c.in_dataset && c.related_slug && (
+                    <Link
+                      href={`/profiles/${c.related_slug}`}
+                      className={`shrink-0 text-xs font-semibold hover:underline ${
+                        isCurrent ? 'text-[#1B2A4A]' : 'text-slate-400'
+                      }`}
+                    >
+                      View profile →
+                    </Link>
                   )}
                 </div>
-                {c.in_dataset && c.related_slug && (
-                  <Link
-                    href={`/profiles/${c.related_slug}`}
-                    className={`shrink-0 text-xs font-semibold hover:underline ${
-                      c.is_current ? 'text-[#1B2A4A]' : 'text-slate-400'
-                    }`}
-                  >
-                    View profile →
-                  </Link>
-                )}
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
