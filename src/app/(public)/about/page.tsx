@@ -209,11 +209,11 @@ export default function AboutPage() {
         <section>
           <p className="label-mono text-[#C8304B] mb-3">Who We Are</p>
           <h2 className="text-2xl font-black text-[#1B2A4A] mb-6" style={{ fontFamily: "'Public Sans', system-ui, sans-serif" }}>
-            No funding. No agenda. Just Filipinos who give a damn.
+            No political money. No agenda. Just Filipinos who give a damn.
           </h2>
           <div className="space-y-4 text-[#4A4540] leading-relaxed">
             <p>
-              Politiko is not funded by any political party, campaign, NGO, or foreign organization. There is no advertising. There are no paid endorsements. No candidate or party has been promised favorable treatment in exchange for anything.
+              Politiko accepts no funding from any political party, campaign, NGO, or foreign organization. There is no advertising. There are no paid endorsements. No candidate or party has been promised favorable treatment in exchange for anything. The site is kept running through the voluntary support of ordinary citizens who believe in what it stands for — and that independence is something we will never compromise.
             </p>
             <p>
               We are a growing group of concerned citizens — some of us work in tech, some in education, some in journalism, some are just voters with time and a deep frustration with the way things have always been. We are united by one belief: that the Filipino people deserve better, and that they can make better choices when they have better information.
@@ -229,14 +229,22 @@ export default function AboutPage() {
           <div className="card p-6 mt-8 border-l-4 border-[#C8304B]">
             <p className="label-mono text-[#857F75] mb-3">Want to help?</p>
             <p className="text-[#4A4540] text-sm leading-relaxed mb-4">
-              Politiko is built on volunteer effort. If you are a researcher, developer, journalist, fact-checker, or just someone who wants to help compile and verify records — we want to hear from you. The more contributors we have, the more profiles we can build before the next election.
+              Politiko is built on volunteer effort. If you are a researcher, developer, journalist, fact-checker, or just someone who wants to help compile and verify records — we want to hear from you. The more contributors we have, the more profiles we can build before the next election. You can also support the project to keep the lights on.
             </p>
-            <Link
-              href="/petition"
-              className="inline-flex items-center gap-2 text-sm font-semibold bg-[#1B2A4A] text-[#FBF5EB] px-5 py-2.5 rounded-lg hover:bg-[#243761] transition-colors"
-            >
-              Request a Profile →
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/petition"
+                className="inline-flex items-center gap-2 text-sm font-semibold bg-[#1B2A4A] text-[#FBF5EB] px-5 py-2.5 rounded-lg hover:bg-[#243761] transition-colors"
+              >
+                Request a Profile →
+              </Link>
+              <Link
+                href="/support"
+                className="inline-flex items-center gap-2 text-sm font-semibold border-2 border-[#1B2A4A] text-[#1B2A4A] px-5 py-2.5 rounded-lg hover:bg-[#1B2A4A] hover:text-[#FBF5EB] transition-colors"
+              >
+                Support the Project →
+              </Link>
+            </div>
           </div>
         </section>
 
