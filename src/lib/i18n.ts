@@ -11,16 +11,20 @@ export const translations = {
 
     // Hero
     hero_badge: '🇵🇭 For Filipino Voters',
-    hero_title_line1: "Who are you",
-    hero_title_line2: "really voting for?",
-    hero_subtitle: "Compare politicians using real data from official records — not rumors, not propaganda.",
-    hero_cta_profiles: 'Browse Profiles →',
-    hero_cta_compare: 'Compare Two',
+    hero_title_line1: 'Know Your Politiko.',
+    hero_title_line2: 'Vote Smarter.',
+    hero_subtitle: 'Compare candidates side by side using verified public records — education, performance, legal history, and public trust. No rumors. No propaganda.',
+    hero_cta_profiles: 'Browse Profiles',
+    hero_cta_compare: 'Compare Candidates',
 
-    // Stats
-    stats_profiled: 'Politicians Profiled',
-    stats_sourced: 'Sourced Data',
-    stats_opinions: 'Opinions',
+    // Stats / trust strip
+    stats_profiled: 'Candidate Profiles',
+    stats_sourced: 'Official Sources',
+    stats_scoring: 'Transparent Scoring',
+
+    // Why section
+    why_title: 'Why Politiko Exists',
+    why_desc: 'Too many voters choose based on popularity, family name, or online noise. Politiko helps Filipinos evaluate candidates using records they can actually verify.',
 
     // Featured section
     featured_title: 'Featured Profiles',
@@ -32,28 +36,30 @@ export const translations = {
     flagged_subtitle: 'Based on verified records, legal penalties applied',
 
     // How it works
-    how_title: 'How does it work?',
-    how_sources_title: 'Official Sources Only',
-    how_sources_desc: 'COMELEC, COA, Senate, Congress, Sandiganbayan. Every data point links back to the source.',
-    how_scoring_title: 'Objective Scoring',
-    how_scoring_desc: "Scores are computed from CHED accreditation levels and COA audit findings — not our opinion.",
-    how_vetters_title: 'Named Vetters',
-    how_vetters_desc: 'Every profile is reviewed by named contributors. The audit trail is public and permanent.',
+    how_title: 'How Politiko Works',
+    how_sources_title: 'Official public records only',
+    how_sources_desc: 'Every profile is built from official and verifiable sources.',
+    how_scoring_title: 'Transparent scoring',
+    how_scoring_desc: 'Scores are based on measurable records, not personality or propaganda.',
+    how_vetters_title: 'Public review trail',
+    how_vetters_desc: 'Profiles are reviewed by named contributors, and sources are always visible.',
+
+    // Compare section
+    compare_title: 'Compare Candidates With Context',
+    compare_desc: 'See how politicians stack up across education, public record, legal issues, and community trust — side by side, in one place.',
+    compare_cta: 'Start Comparing →',
 
     // Score explainer
-    score_title: 'What do the scores mean?',
-    score_subtitle: 'Two scores are shown — never mix them up.',
-    score_os_label: 'Objective Score (0–∞)',
-    score_os_desc: 'Computed from CHED accreditation (education) + COA audit findings (performance). Legal cases deduct points.',
-    score_os_tag: 'This is fact-based.',
-    score_ct_label: 'Community Trust (0–100)',
-    score_ct_desc: 'Average of verified citizen ratings (1–5 stars). Reflects public sentiment.',
-    score_ct_tag: 'This is opinion — shown separately.',
+    score_title: 'What the Scores Mean',
+    score_os_label: 'Objective Score',
+    score_os_desc: 'Built from verified public data.',
+    score_ct_label: 'Community Trust',
+    score_ct_desc: 'Citizen sentiment shown separately from record-based scoring.',
 
     // CTA
-    cta_title: "Don't know who you're voting for?",
-    cta_subtitle: "Don't vote for the name. Vote for the record.",
-    cta_compare: 'Compare now →',
+    cta_title: 'Before you vote, know the record.',
+    cta_subtitle: "Don't vote for the name alone. Compare candidates using facts.",
+    cta_compare: 'Compare Now',
     cta_request: 'Request a Profile',
 
     // Footer
@@ -86,16 +92,20 @@ export const translations = {
 
     // Hero
     hero_badge: '🇵🇭 Para sa mga Pilipinong Botante',
-    hero_title_line1: "Sino talaga ang",
-    hero_title_line2: "iboboto mo?",
-    hero_subtitle: "Ihambing ang mga pulitiko gamit ang totoong datos mula sa opisyal na rekord — hindi tsismis, hindi propaganda.",
-    hero_cta_profiles: 'Tingnan ang mga Profile →',
-    hero_cta_compare: 'Ikumpara ang Dalawa',
+    hero_title_line1: 'Kilalanin ang Iyong Politiko.',
+    hero_title_line2: 'Bumoto nang Matalino.',
+    hero_subtitle: 'Ihambing ang mga kandidato nang magkatabi gamit ang mga verified na pampublikong rekord — edukasyon, pagganap, legal na kasaysayan, at tiwala ng publiko. Walang tsismis. Walang propaganda.',
+    hero_cta_profiles: 'Tingnan ang mga Profile',
+    hero_cta_compare: 'Ikumpara ang mga Kandidato',
 
-    // Stats
-    stats_profiled: 'Pulitikong Naka-profile',
-    stats_sourced: 'Datos mula sa Rekord',
-    stats_opinions: 'Opinyon',
+    // Stats / trust strip
+    stats_profiled: 'Mga Profile ng Kandidato',
+    stats_sourced: 'Opisyal na Pinagkukunan',
+    stats_scoring: 'Transparent na Pagmamarka',
+
+    // Why section
+    why_title: 'Bakit Mahalaga ang Politiko',
+    why_desc: 'Maraming botante ang pumipili batay sa katanyagan, pangalan ng pamilya, o online na ingay. Tinutulungan ng Politiko ang mga Pilipino na suriin ang mga kandidato gamit ang mga rekord na maaari nilang i-verify.',
 
     // Featured section
     featured_title: 'Mga Tampok na Profile',
@@ -107,28 +117,30 @@ export const translations = {
     flagged_subtitle: 'Batay sa mga verified na rekord, kasama ang legal na parusa',
 
     // How it works
-    how_title: 'Paano gumagana ito?',
-    how_sources_title: 'Opisyal na Pinagkukunan Lamang',
-    how_sources_desc: 'COMELEC, COA, Senado, Kongreso, Sandiganbayan. Bawat datos ay may link sa pinagmulan.',
-    how_scoring_title: 'Layuning Pagmamarka',
-    how_scoring_desc: "Ang mga marka ay kinukuha mula sa CHED accreditation at COA audit — hindi opinyon.",
-    how_vetters_title: 'Mga Pinangalanang Tagasuri',
-    how_vetters_desc: 'Bawat profile ay sinuri ng mga pinangalanang kontribyutor. Ang audit trail ay pampubliko at permanente.',
+    how_title: 'Paano Gumagana ang Politiko',
+    how_sources_title: 'Opisyal na rekord lamang',
+    how_sources_desc: 'Bawat profile ay ginawa mula sa opisyal at napapatunayan na mga pinagkukunan.',
+    how_scoring_title: 'Transparent na pagmamarka',
+    how_scoring_desc: 'Ang mga marka ay batay sa nasusukat na rekord, hindi sa personalidad o propaganda.',
+    how_vetters_title: 'Pampublikong trail ng pagsusuri',
+    how_vetters_desc: 'Ang mga profile ay sinuri ng mga pinangalanang kontribyutor, at laging nakikita ang mga pinagkukunan.',
+
+    // Compare section
+    compare_title: 'Ihambing ang mga Kandidato nang May Konteksto',
+    compare_desc: 'Tingnan kung paano nagkakaiba ang mga pulitiko sa edukasyon, pampublikong rekord, legal na isyu, at tiwala ng komunidad — magkatabing, sa isang lugar.',
+    compare_cta: 'Magsimulang Ikumpara →',
 
     // Score explainer
-    score_title: 'Ano ang ibig sabihin ng Score?',
-    score_subtitle: 'Dalawang score ang ipinapakita — huwag pagsamahin ang dalawa.',
-    score_os_label: 'Objective Score (0–∞)',
-    score_os_desc: 'Kinukuha mula sa CHED accreditation (edukasyon) + COA audit (performance). Ang mga legal na kaso ay nagbabawas ng puntos.',
-    score_os_tag: 'Ito ay batay sa katotohanan.',
-    score_ct_label: 'Tiwala ng Komunidad (0–100)',
-    score_ct_desc: 'Average ng mga verified na rating ng mamamayan (1–5 bituin). Sumasalamin sa pananaw ng publiko.',
-    score_ct_tag: 'Ito ay opinyon — ipinapakita nang hiwalay.',
+    score_title: 'Ano ang Ibig Sabihin ng mga Score',
+    score_os_label: 'Objective Score',
+    score_os_desc: 'Gawa mula sa mga verified na pampublikong datos.',
+    score_ct_label: 'Tiwala ng Komunidad',
+    score_ct_desc: 'Sentimento ng mamamayan na ipinapakita nang hiwalay mula sa pagmamarka batay sa rekord.',
 
     // CTA
-    cta_title: "Hindi mo kilala ang iboboto mo?",
-    cta_subtitle: "Huwag botuhin ang pangalan. Botuhin ang rekord.",
-    cta_compare: 'Ikumpara ngayon →',
+    cta_title: 'Bago ka bumoto, alamin ang rekord.',
+    cta_subtitle: 'Huwag bumoto para sa pangalan lamang. Ikumpara ang mga kandidato gamit ang mga katotohanan.',
+    cta_compare: 'Ikumpara Ngayon',
     cta_request: 'Humiling ng Profile',
 
     // Footer

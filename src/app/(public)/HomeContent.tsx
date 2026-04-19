@@ -15,7 +15,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
 
   return (
     <div>
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-[#0038a8] text-white">
         <div className="absolute top-0 left-0 right-0 h-1 bg-[#fcd116]" />
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#ce1126]" />
@@ -50,12 +50,12 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
 
       <div className="max-w-5xl mx-auto px-4 mt-10">
 
-        {/* Stats bar */}
-        <div className="grid grid-cols-3 gap-4 -mt-6 mb-12">
+        {/* ── Trust strip ── */}
+        <div className="grid grid-cols-3 gap-4 -mt-6 mb-14">
           {[
             { num: String(profileCount), label: t('stats_profiled') },
             { num: '100%', label: t('stats_sourced') },
-            { num: '0', label: t('stats_opinions') },
+            { num: '✓', label: t('stats_scoring') },
           ].map((s) => (
             <div key={s.label} className="card text-center py-4 px-2 shadow-md">
               <div className="text-2xl md:text-3xl font-black text-[#0038a8]">{s.num}</div>
@@ -64,7 +64,17 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
           ))}
         </div>
 
-        {/* Top profiles */}
+        {/* ── Why Politiko Exists ── */}
+        <section className="mb-14">
+          <div className="card p-6 md:p-8 border-l-4 border-[#0038a8]">
+            <h2 className="text-xl font-black text-slate-900 mb-3">{t('why_title')}</h2>
+            <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl">
+              {t('why_desc')}
+            </p>
+          </div>
+        </section>
+
+        {/* ── Featured profiles ── */}
         <section className="mb-14">
           <div className="flex items-center justify-between mb-5">
             <div>
@@ -80,21 +90,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
           </div>
         </section>
 
-        {/* Red flags section */}
-        <section className="mb-14">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-3 h-3 rounded-full bg-red-500 dynasty-badge" />
-            <div>
-              <h2 className="text-xl font-black text-slate-900">{t('flagged_title')}</h2>
-              <p className="text-sm text-slate-500">{t('flagged_subtitle')}</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {flaggedSlot}
-          </div>
-        </section>
-
-        {/* How it works */}
+        {/* ── How Politiko Works ── */}
         <section className="mb-14">
           <h2 className="text-xl font-black text-slate-900 mb-5 text-center">{t('how_title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -112,34 +108,61 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
           </div>
         </section>
 
-        {/* Score explanation */}
+        {/* ── Compare CTA section ── */}
+        <section className="mb-14">
+          <div className="card p-6 md:p-8 bg-gradient-to-br from-slate-50 to-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="max-w-xl">
+              <h2 className="text-xl font-black text-slate-900 mb-2">{t('compare_title')}</h2>
+              <p className="text-slate-600 text-sm leading-relaxed">{t('compare_desc')}</p>
+            </div>
+            <Link
+              href="/compare"
+              className="shrink-0 bg-[#0038a8] hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+            >
+              {t('compare_cta')}
+            </Link>
+          </div>
+        </section>
+
+        {/* ── Red flags section ── */}
+        <section className="mb-14">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-3 h-3 rounded-full bg-red-500 dynasty-badge" />
+            <div>
+              <h2 className="text-xl font-black text-slate-900">{t('flagged_title')}</h2>
+              <p className="text-sm text-slate-500">{t('flagged_subtitle')}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {flaggedSlot}
+          </div>
+        </section>
+
+        {/* ── What the Scores Mean ── */}
         <section className="mb-14 card p-6 md:p-8 bg-gradient-to-br from-blue-50 to-white border-blue-100">
-          <div className="max-w-2xl">
-            <h2 className="text-xl font-black text-slate-900 mb-2">{t('score_title')}</h2>
-            <p className="text-slate-600 text-sm mb-5">{t('score_subtitle')}</p>
-            <div className="flex flex-col gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#0038a8] flex items-center justify-center text-white font-black text-lg shrink-0">OS</div>
-                <div>
-                  <p className="font-bold text-slate-900">{t('score_os_label')}</p>
-                  <p className="text-sm text-slate-500">{t('score_os_desc')} <strong className="text-slate-700">{t('score_os_tag')}</strong></p>
-                </div>
+          <h2 className="text-xl font-black text-slate-900 mb-6">{t('score_title')}</h2>
+          <div className="flex flex-col gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[#0038a8] flex items-center justify-center text-white font-black text-sm shrink-0">OS</div>
+              <div>
+                <p className="font-bold text-slate-900 mb-0.5">{t('score_os_label')}</p>
+                <p className="text-sm text-slate-500">{t('score_os_desc')}</p>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center text-white font-black text-lg shrink-0">CT</div>
-                <div>
-                  <p className="font-bold text-slate-900">{t('score_ct_label')}</p>
-                  <p className="text-sm text-slate-500">{t('score_ct_desc')} <strong className="text-slate-700">{t('score_ct_tag')}</strong></p>
-                </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center text-white font-black text-sm shrink-0">CT</div>
+              <div>
+                <p className="font-bold text-slate-900 mb-0.5">{t('score_ct_label')}</p>
+                <p className="text-sm text-slate-500">{t('score_ct_desc')}</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA */}
+        {/* ── Closing CTA ── */}
         <section className="mb-14 text-center bg-[#0038a8] text-white rounded-2xl p-8 md:p-12">
           <h2 className="text-2xl md:text-3xl font-black mb-3">{t('cta_title')}</h2>
-          <p className="text-white/70 mb-6">{t('cta_subtitle')}</p>
+          <p className="text-white/70 mb-8 max-w-lg mx-auto">{t('cta_subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/compare"
