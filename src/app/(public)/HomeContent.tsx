@@ -25,8 +25,8 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
             {t('hero_badge')}
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4">
-            {t('hero_title_line1')}<br />
-            <span className="text-[#C8304B]">{t('hero_title_line2')}</span>
+            {t('hero_title_line1')} 
+            <span className="text-[#C8304B]"> {t('hero_title_line2')}</span>
           </h1>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-10">
             {t('hero_subtitle')}
@@ -63,16 +63,6 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
             </div>
           ))}
         </div>
-
-        {/* ── Why Politiko Exists ── */}
-        <section className="mb-14">
-          <div className="card p-6 md:p-8 border-l-4 border-[#1B2A4A]">
-            <h2 className="text-xl font-black text-slate-900 mb-3">{t('why_title')}</h2>
-            <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl">
-              {t('why_desc')}
-            </p>
-          </div>
-        </section>
 
         {/* ── Featured profiles ── */}
         <section className="mb-14">
@@ -156,6 +146,25 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
                 <p className="text-sm text-slate-500">{t('score_ct_desc')}</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ── About teaser ── */}
+        <section className="mb-14">
+          <div className="card p-6 md:p-8 border-l-4 border-[#C8304B] flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div>
+              <p className="label-mono text-[#C8304B] mb-2">Our Mission</p>
+              <h2 className="text-xl font-black text-[#1B2A4A] mb-2">Built by Filipinos who are tired of the cycle.</h2>
+              <p className="text-[#4A4540] text-sm leading-relaxed max-w-xl">
+                Politiko is maintained by a growing group of concerned citizens — tired of poverty, misinformation, and politicians who thrive on uninformed voters. No funding. No agenda. Just facts.
+              </p>
+            </div>
+            <Link
+              href="/about"
+              className="shrink-0 border-2 border-[#1B2A4A] text-[#1B2A4A] hover:bg-[#1B2A4A] hover:text-[#FBF5EB] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+            >
+              Read Our Story →
+            </Link>
           </div>
         </section>
 

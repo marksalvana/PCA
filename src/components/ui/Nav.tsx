@@ -28,6 +28,9 @@ export default function Nav() {
           <Link href="/forum" className="text-sm text-[#4A4540] hover:text-[#1B2A4A] px-3 py-1.5 rounded hover:bg-[#F4F2EE] transition-colors font-medium hidden sm:block">
             Forum
           </Link>
+          <Link href="/about" className="text-sm text-[#4A4540] hover:text-[#1B2A4A] px-3 py-1.5 rounded hover:bg-[#F4F2EE] transition-colors font-medium hidden sm:block">
+            About
+          </Link>
           <LanguageToggle />
           <Link href="/login" className="ml-2 text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-1.5 rounded transition-colors">
             Admin

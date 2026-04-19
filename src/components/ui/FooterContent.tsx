@@ -36,6 +36,7 @@ export default function FooterContent() {
             <Link href="/compare" className="hover:text-[#FBF5EB] transition-colors">Compare</Link>
             <Link href="/petition" className="hover:text-[#FBF5EB] transition-colors">Request Profile</Link>
             <Link href="/forum" className="hover:text-[#FBF5EB] transition-colors">Forum</Link>
+            <Link href="/about" className="hover:text-[#FBF5EB] transition-colors">About</Link>
           </div>
 
         </div>
