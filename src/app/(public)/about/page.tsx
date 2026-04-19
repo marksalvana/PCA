@@ -233,6 +233,12 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
+                href="/vetter-apply"
+                className="inline-flex items-center gap-2 text-sm font-semibold bg-[#C8304B] text-white px-5 py-2.5 rounded-lg hover:bg-[#b52840] transition-colors"
+              >
+                Apply as a Vetter →
+              </Link>
+              <Link
                 href="/petition"
                 className="inline-flex items-center gap-2 text-sm font-semibold bg-[#1B2A4A] text-[#FBF5EB] px-5 py-2.5 rounded-lg hover:bg-[#243761] transition-colors"
               >

@@ -31,10 +31,11 @@ export default function FooterContent() {
           </div>
 
           {/* Links */}
-          <div className="flex gap-5 text-xs text-[#FBF5EB]/50">
+          <div className="flex flex-wrap gap-5 text-xs text-[#FBF5EB]/50">
             <Link href="/profiles" className="hover:text-[#FBF5EB] transition-colors">Profiles</Link>
             <Link href="/compare" className="hover:text-[#FBF5EB] transition-colors">Compare</Link>
             <Link href="/petition" className="hover:text-[#FBF5EB] transition-colors">Request Profile</Link>
+            <Link href="/vetter-apply" className="hover:text-[#FBF5EB] transition-colors">Become a Vetter</Link>
             <Link href="/forum" className="hover:text-[#FBF5EB] transition-colors">Forum</Link>
             <Link href="/about" className="hover:text-[#FBF5EB] transition-colors">About</Link>
             <Link href="/support" className="hover:text-[#FBF5EB] transition-colors">Support</Link>

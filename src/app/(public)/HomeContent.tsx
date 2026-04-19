@@ -159,12 +159,20 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
                 Politiko is maintained by a growing group of concerned citizens — tired of poverty, misinformation, and politicians who thrive on uninformed voters. No funding. No agenda. Just facts.
               </p>
             </div>
-            <Link
-              href="/about"
-              className="shrink-0 border-2 border-[#1B2A4A] text-[#1B2A4A] hover:bg-[#1B2A4A] hover:text-[#FBF5EB] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
-            >
-              Read Our Story →
-            </Link>
+            <div className="flex flex-col gap-2 shrink-0">
+              <Link
+                href="/about"
+                className="border-2 border-[#1B2A4A] text-[#1B2A4A] hover:bg-[#1B2A4A] hover:text-[#FBF5EB] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap text-center"
+              >
+                Read Our Story →
+              </Link>
+              <Link
+                href="/vetter-apply"
+                className="bg-[#C8304B] hover:bg-[#b52840] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap text-center"
+              >
+                Apply as a Vetter →
+              </Link>
+            </div>
           </div>
         </section>
 

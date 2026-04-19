@@ -483,6 +483,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             ) : (
               <p className="text-xs text-slate-400 italic">No vetters recorded yet</p>
             )}
+            <div className="mt-4 pt-3 border-t border-slate-100">
+              <Link
+                href="/vetter-apply"
+                className="text-xs text-slate-400 hover:text-[#1B2A4A] transition-colors"
+              >
+                Want to help verify profiles? Apply as a vetter →
+              </Link>
+            </div>
           </div>
 
           {/* Revision History */}
