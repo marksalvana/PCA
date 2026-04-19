@@ -218,7 +218,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           {/* Compare CTA */}
           <Link
             href={`/compare?a=${p.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#0038a8] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors mb-6"
           >
             Compare {p.preferred_name ?? p.full_name} with another candidate →
           </Link>
@@ -227,7 +227,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           {p.education_records && p.education_records.length > 0 && (
             <section className="mb-5">
               <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-[#0038a8] rounded-md flex items-center justify-center text-white text-sm leading-none">🎓</span>
+                <span className="w-6 h-6 bg-[#1B2A4A] rounded-md flex items-center justify-center text-white text-sm leading-none">🎓</span>
                 Education
               </h2>
               <div className="flex flex-col gap-2">
@@ -276,7 +276,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           {p.track_records && p.track_records.length > 0 && (
             <section className="mb-5">
               <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-[#0038a8] rounded-md flex items-center justify-center text-white text-sm leading-none">📋</span>
+                <span className="w-6 h-6 bg-[#1B2A4A] rounded-md flex items-center justify-center text-white text-sm leading-none">📋</span>
                 Track Record
               </h2>
               <div className="flex flex-col gap-2">

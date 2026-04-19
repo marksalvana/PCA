@@ -5,7 +5,7 @@ import FooterContent from '@/components/ui/FooterContent'
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <LanguageProvider>
-      <div className="flex flex-col min-h-screen bg-slate-50">
+      <div className="flex flex-col min-h-screen bg-[#FBF5EB]">
         <Nav />
         <main className="flex-1">{children}</main>
         <FooterContent />

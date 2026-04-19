@@ -19,7 +19,7 @@ function Avatar({ p }: { p: PoliticianWithDetails }) {
         </div>
       )}
       <div>
-        <Link href={`/profiles/${p.slug}`} className="font-bold text-slate-900 hover:text-[#0038a8] transition-colors text-sm">
+        <Link href={`/profiles/${p.slug}`} className="font-bold text-slate-900 hover:text-[#1B2A4A] transition-colors text-sm">
           {p.preferred_name ?? p.full_name}
         </Link>
         {p.current_position && <p className="text-slate-400 text-xs">{p.current_position}</p>}

@@ -29,7 +29,7 @@ type Tab = 'education' | 'track' | 'legal' | 'achievements'
 type Props = { politician: PoliticianWithDetails }
 
 const inputClass =
-  'w-full bg-[#0a0a0f] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2 text-sm outline-none transition-colors placeholder:text-gray-600'
+  'w-full bg-[#0a0a0f] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2 text-sm outline-none transition-colors placeholder:text-gray-600'
 const labelClass = 'block text-xs text-gray-500 mb-1'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────
@@ -99,7 +99,7 @@ function EduEditForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#1B2A4A]/40 rounded-xl p-4 flex flex-col gap-3">
       <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
       <div>
         <label className={labelClass}>Institution <span className="text-red-400">*</span></label>
@@ -132,7 +132,7 @@ function EduEditForm({
         </div>
         <div className="flex flex-col justify-end">
           <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-            <input type="checkbox" checked={completed} onChange={(e) => setCompleted(e.target.checked)} className="accent-[#0038a8]" />
+            <input type="checkbox" checked={completed} onChange={(e) => setCompleted(e.target.checked)} className="accent-[#1B2A4A]" />
             Completed
           </label>
         </div>
@@ -156,7 +156,7 @@ function EduEditForm({
         <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
       </div>
       <div className="flex gap-2 pt-1">
-        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="submit" className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
         <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
       </div>
     </form>
@@ -204,7 +204,7 @@ function TrackEditForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#1B2A4A]/40 rounded-xl p-4 flex flex-col gap-3">
       <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
       <div>
         <label className={labelClass}>Position <span className="text-red-400">*</span></label>
@@ -221,7 +221,7 @@ function TrackEditForm({
         </div>
       </div>
       <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-        <input type="checkbox" checked={isCurrent} onChange={(e) => setIsCurrent(e.target.checked)} className="accent-[#0038a8]" />
+        <input type="checkbox" checked={isCurrent} onChange={(e) => setIsCurrent(e.target.checked)} className="accent-[#1B2A4A]" />
         Currently in this position
       </label>
       <div>
@@ -262,7 +262,7 @@ function TrackEditForm({
         <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
       </div>
       <div className="flex gap-2 pt-1">
-        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="submit" className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
         <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
       </div>
     </form>
@@ -308,7 +308,7 @@ function LegalEditForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#1B2A4A]/40 rounded-xl p-4 flex flex-col gap-3">
       <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
       <div>
         <label className={labelClass}>Case Title <span className="text-red-400">*</span></label>
@@ -368,7 +368,7 @@ function LegalEditForm({
         <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
       </div>
       <div className="flex gap-2 pt-1">
-        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="submit" className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
         <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
       </div>
     </form>
@@ -408,7 +408,7 @@ function AchEditForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#0038a8]/40 rounded-xl p-4 flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="bg-[#1a2035] border border-[#1B2A4A]/40 rounded-xl p-4 flex flex-col gap-3">
       <p className="text-xs font-bold text-[#60a5fa] uppercase tracking-wider">Editing record</p>
       <div>
         <label className={labelClass}>Title <span className="text-red-400">*</span></label>
@@ -455,7 +455,7 @@ function AchEditForm({
         <input type="text" value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} required className={inputClass} />
       </div>
       <div className="flex gap-2 pt-1">
-        <button type="submit" className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
+        <button type="submit" className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 text-white font-bold px-4 py-1.5 rounded-lg text-sm transition-colors">Save</button>
         <button type="button" onClick={onCancel} className="border border-white/10 text-gray-400 hover:text-white px-4 py-1.5 rounded-lg text-sm transition-colors">Cancel</button>
       </div>
     </form>
@@ -653,7 +653,7 @@ export default function RecordsManager({ politician: p }: Props) {
       <div className="flex gap-1.5 mt-2">
         <button
           onClick={() => setEditingId(editingId === id ? null : id)}
-          className="text-xs text-[#60a5fa] hover:text-white border border-[#0038a8]/40 hover:border-[#0038a8] px-2.5 py-1 rounded-md transition-colors"
+          className="text-xs text-[#60a5fa] hover:text-white border border-[#1B2A4A]/40 hover:border-[#1B2A4A] px-2.5 py-1 rounded-md transition-colors"
         >
           {editingId === id ? 'Cancel' : 'Edit'}
         </button>
@@ -685,7 +685,7 @@ export default function RecordsManager({ politician: p }: Props) {
             onClick={() => { setTab(t.key); setEditingId(null) }}
             className={`px-4 py-2 text-sm font-semibold rounded-t-lg border-b-2 transition-colors ${
               tab === t.key
-                ? 'border-[#0038a8] text-white'
+                ? 'border-[#1B2A4A] text-white'
                 : 'border-transparent text-gray-500 hover:text-gray-300'
             }`}
           >
@@ -743,7 +743,7 @@ export default function RecordsManager({ politician: p }: Props) {
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-              <input type="checkbox" checked={eduCompleted} onChange={(e) => setEduCompleted(e.target.checked)} className="accent-[#0038a8]" />
+              <input type="checkbox" checked={eduCompleted} onChange={(e) => setEduCompleted(e.target.checked)} className="accent-[#1B2A4A]" />
               Degree completed
             </label>
             <div>
@@ -754,7 +754,7 @@ export default function RecordsManager({ politician: p }: Props) {
               <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
               <input type="text" value={eduSourceLabel} onChange={(e) => setEduSourceLabel(e.target.value)} required placeholder="UP Official Records" className={inputClass} />
             </div>
-            <button type="submit" disabled={saving} className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
+            <button type="submit" disabled={saving} className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
               {saving ? 'Saving…' : 'Add Record'}
             </button>
           </form>
@@ -818,7 +818,7 @@ export default function RecordsManager({ politician: p }: Props) {
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-              <input type="checkbox" checked={trackCurrent} onChange={(e) => setTrackCurrent(e.target.checked)} className="accent-[#0038a8]" />
+              <input type="checkbox" checked={trackCurrent} onChange={(e) => setTrackCurrent(e.target.checked)} className="accent-[#1B2A4A]" />
               Currently in this position
             </label>
             <div>
@@ -854,7 +854,7 @@ export default function RecordsManager({ politician: p }: Props) {
               <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
               <input type="text" value={trackSourceLabel} onChange={(e) => setTrackSourceLabel(e.target.value)} required placeholder="COA Annual Audit Report 2023" className={inputClass} />
             </div>
-            <button type="submit" disabled={saving} className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
+            <button type="submit" disabled={saving} className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
               {saving ? 'Saving…' : 'Add Record'}
             </button>
           </form>
@@ -960,7 +960,7 @@ export default function RecordsManager({ politician: p }: Props) {
               <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
               <input type="text" value={legalSourceLabel} onChange={(e) => setLegalSourceLabel(e.target.value)} required placeholder="Sandiganbayan Decision" className={inputClass} />
             </div>
-            <button type="submit" disabled={saving} className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
+            <button type="submit" disabled={saving} className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
               {saving ? 'Saving…' : 'Add Record'}
             </button>
           </form>
@@ -1053,7 +1053,7 @@ export default function RecordsManager({ politician: p }: Props) {
               <label className={labelClass}>Source Label <span className="text-red-400">*</span></label>
               <input type="text" value={achSourceLabel} onChange={(e) => setAchSourceLabel(e.target.value)} required placeholder="Senate Official Gazette" className={inputClass} />
             </div>
-            <button type="submit" disabled={saving} className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
+            <button type="submit" disabled={saving} className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors mt-1">
               {saving ? 'Saving…' : 'Add Achievement'}
             </button>
           </form>

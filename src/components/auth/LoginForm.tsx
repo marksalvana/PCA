@@ -49,7 +49,7 @@ export default function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+          className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
         />
       </div>
       <div>
@@ -59,13 +59,13 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+          className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors mt-1"
+        className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors mt-1"
       >
         {loading ? 'Signing in…' : 'Sign In'}
       </button>

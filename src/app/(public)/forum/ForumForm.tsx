@@ -53,12 +53,12 @@ export default function ForumForm() {
             required
             minLength={2}
             maxLength={60}
-            className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 focus:border-[#0038a8] transition-colors"
+            className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 focus:border-[#1B2A4A] transition-colors"
           />
           <select
             name="category"
             defaultValue="general"
-            className="text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 focus:border-[#0038a8] transition-colors cursor-pointer text-slate-700"
+            className="text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 focus:border-[#1B2A4A] transition-colors cursor-pointer text-slate-700"
           >
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
@@ -72,14 +72,14 @@ export default function ForumForm() {
           minLength={10}
           maxLength={2000}
           rows={4}
-          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 focus:border-[#0038a8] transition-colors resize-none"
+          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 focus:border-[#1B2A4A] transition-colors resize-none"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div className="flex justify-end">
           <button
             type="submit"
             disabled={isPending}
-            className="text-sm font-semibold bg-[#0038a8] hover:bg-blue-800 disabled:opacity-50 text-white px-5 py-2 rounded-lg transition-colors"
+            className="text-sm font-semibold bg-[#1B2A4A] hover:bg-[#243761] disabled:opacity-50 text-white px-5 py-2 rounded-lg transition-colors"
           >
             {isPending ? 'Posting…' : 'Post message'}
           </button>

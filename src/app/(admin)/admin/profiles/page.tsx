@@ -25,7 +25,7 @@ export default async function AdminProfilesPage() {
         <h1 className="text-2xl font-black text-white">All Profiles</h1>
         <Link
           href="/admin/profiles/new"
-          className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors"
+          className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors"
         >
           + New Profile
         </Link>

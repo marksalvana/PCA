@@ -53,7 +53,7 @@ export default function MethodologyPage() {
 
       {/* Page header */}
       <div className="mb-10">
-        <div className="inline-flex items-center gap-2 text-xs font-bold text-[#0038a8] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full mb-4">
+        <div className="inline-flex items-center gap-2 text-xs font-bold text-[#1B2A4A] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full mb-4">
           Transparency
         </div>
         <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 leading-tight">
@@ -65,7 +65,7 @@ export default function MethodologyPage() {
       </div>
 
       {/* Quick overview card */}
-      <div className="card p-6 mb-8 bg-[#0038a8]/[0.03] border-[#0038a8]/20">
+      <div className="card p-6 mb-8 bg-[#1B2A4A]/[0.03] border-[#1B2A4A]/20">
         <h2 className="font-black text-slate-900 mb-4">Score at a glance</h2>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-slate-100">
@@ -90,7 +90,7 @@ export default function MethodologyPage() {
 
       {/* ── OBJECTIVE SCORE ── */}
       <section className="mb-10">
-        <SectionHeader icon="📊" label="Objective Score" color="bg-[#0038a8]" />
+        <SectionHeader icon="📊" label="Objective Score" color="bg-[#1B2A4A]" />
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
@@ -99,7 +99,7 @@ export default function MethodologyPage() {
           <div className="flex flex-col gap-2 mb-4">
             {[
               { label: 'Education', detail: 'sum of pts per verified degree (CHED accreditation)', color: 'bg-blue-500' },
-              { label: 'Track Record', detail: 'sum of (COA/bills base + attendance modifier) per verified term', color: 'bg-[#0038a8]' },
+              { label: 'Track Record', detail: 'sum of (COA/bills base + attendance modifier) per verified term', color: 'bg-[#1B2A4A]' },
               { label: 'Achievements', detail: 'sum of pts per verified achievement (impact scope)', color: 'bg-indigo-400' },
               { label: 'Legal Penalty', detail: 'deducted per verified active case', color: 'bg-red-500' },
             ].map(({ label, detail, color }) => (
@@ -142,7 +142,7 @@ export default function MethodologyPage() {
 
       {/* ── EDUCATION ── */}
       <section className="mb-10">
-        <SectionHeader icon="🎓" label="Education Score" color="bg-[#0038a8]" />
+        <SectionHeader icon="🎓" label="Education Score" color="bg-[#1B2A4A]" />
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
@@ -175,13 +175,13 @@ export default function MethodologyPage() {
           <p className="text-sm text-slate-600 leading-relaxed">
             CHED accreditation levels come from the Commission on Higher Education's official list of accredited institutions. AACCUP (Accrediting Agency of Chartered Colleges and Universities in the Philippines) and FAAP (Federation of Accrediting Agencies of the Philippines) are CHED-recognized accrediting bodies.
           </p>
-          <a href="https://ched.gov.ph" target="_blank" rel="noopener noreferrer" className="text-xs text-[#0038a8] hover:underline mt-1 inline-block">ched.gov.ph ↗</a>
+          <a href="https://ched.gov.ph" target="_blank" rel="noopener noreferrer" className="text-xs text-[#1B2A4A] hover:underline mt-1 inline-block">ched.gov.ph ↗</a>
         </div>
       </section>
 
       {/* ── TRACK RECORD ── */}
       <section className="mb-10">
-        <SectionHeader icon="📋" label="Track Record Score" color="bg-[#0038a8]" />
+        <SectionHeader icon="📋" label="Track Record Score" color="bg-[#1B2A4A]" />
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
@@ -255,13 +255,13 @@ export default function MethodologyPage() {
           <p className="text-sm text-slate-600 leading-relaxed">
             COA audit opinions are published in annual audit reports for each government agency and local government unit. Reports are publicly available through the COA website.
           </p>
-          <a href="https://www.coa.gov.ph" target="_blank" rel="noopener noreferrer" className="text-xs text-[#0038a8] hover:underline mt-1 inline-block">coa.gov.ph ↗</a>
+          <a href="https://www.coa.gov.ph" target="_blank" rel="noopener noreferrer" className="text-xs text-[#1B2A4A] hover:underline mt-1 inline-block">coa.gov.ph ↗</a>
         </div>
       </section>
 
       {/* ── ACHIEVEMENTS ── */}
       <section className="mb-10">
-        <SectionHeader icon="🏅" label="Achievements Score" color="bg-[#0038a8]" />
+        <SectionHeader icon="🏅" label="Achievements Score" color="bg-[#1B2A4A]" />
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
@@ -467,11 +467,11 @@ export default function MethodologyPage() {
       </section>
 
       {/* CTA */}
-      <div className="card p-6 bg-[#0038a8] text-white text-center">
+      <div className="card p-6 bg-[#1B2A4A] text-white text-center">
         <p className="font-black text-xl mb-1">See it in action</p>
         <p className="text-blue-200 text-sm mb-5">Browse profiles and watch the scores come to life</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/profiles" className="inline-flex items-center justify-center gap-2 bg-white text-[#0038a8] font-bold px-6 py-2.5 rounded-xl hover:bg-blue-50 transition-colors text-sm">
+          <Link href="/profiles" className="inline-flex items-center justify-center gap-2 bg-white text-[#1B2A4A] font-bold px-6 py-2.5 rounded-xl hover:bg-blue-50 transition-colors text-sm">
             Browse profiles →
           </Link>
           <Link href="/compare" className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-2.5 rounded-xl transition-colors text-sm border border-white/20">

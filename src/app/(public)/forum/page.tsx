@@ -107,11 +107,11 @@ export default async function ForumPage({
       {posts.length > 0 ? (
         <div className="space-y-3">
           {posts.map((post) => (
-            <div key={post.id} className={`card p-4 ${post.is_pinned ? 'border-l-4 border-l-[#0038a8]' : ''}`}>
+            <div key={post.id} className={`card p-4 ${post.is_pinned ? 'border-l-4 border-l-[#1B2A4A]' : ''}`}>
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex items-center gap-2 flex-wrap">
                   {post.is_pinned && (
-                    <span className="text-xs font-black text-[#0038a8]">📌 Pinned</span>
+                    <span className="text-xs font-black text-[#1B2A4A]">📌 Pinned</span>
                   )}
                   <span className="text-sm font-bold text-slate-900">{post.author_name}</span>
                   <span className={`text-xs font-bold border px-2 py-0.5 rounded-md ${CATEGORY_COLORS[post.category] ?? CATEGORY_COLORS.general}`}>

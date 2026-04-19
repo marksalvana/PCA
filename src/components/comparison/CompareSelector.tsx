@@ -33,7 +33,7 @@ export default function CompareSelector({ politicians, selectedA, selectedB }: P
               <select
                 value={selectedSlug ?? ''}
                 onChange={(e) => update(side, e.target.value)}
-                className="w-full bg-white border border-slate-200 focus:border-[#0038a8] focus:ring-2 focus:ring-blue-100 text-slate-900 rounded-xl px-3 py-2.5 text-sm outline-none transition-all"
+                className="w-full bg-white border border-slate-200 focus:border-[#1B2A4A] focus:ring-2 focus:ring-blue-100 text-slate-900 rounded-xl px-3 py-2.5 text-sm outline-none transition-all"
               >
                 <option value="">Select a candidate…</option>
                 {politicians.map((p) => (

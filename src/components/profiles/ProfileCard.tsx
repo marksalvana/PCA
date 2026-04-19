@@ -70,7 +70,7 @@ export default function ProfileCard({ politician: p, legalFlags = [] }: Props) {
                 <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded-md">⚑ Legal Case</span>
               )}
             </div>
-            <p className="font-black text-slate-900 text-base leading-tight group-hover:text-[#0038a8] transition-colors">
+            <p className="font-black text-slate-900 text-base leading-tight group-hover:text-[#1B2A4A] transition-colors">
               {p.preferred_name ?? p.full_name}
             </p>
             {p.current_position && (
@@ -120,7 +120,7 @@ export default function ProfileCard({ politician: p, legalFlags = [] }: Props) {
           ) : (
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Community Trust</span>
-              <span className="text-xs text-[#0038a8] font-semibold">Rate this politician →</span>
+              <span className="text-xs text-[#1B2A4A] font-semibold">Rate this politician →</span>
             </div>
           )}
         </div>

@@ -63,7 +63,7 @@ export default function PetitionForm() {
           onChange={(e) => setName(e.target.value)}
           required
           placeholder="e.g. Juan dela Cruz"
-          className="w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
+          className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
         />
       </div>
       <div>
@@ -73,7 +73,7 @@ export default function PetitionForm() {
           value={position}
           onChange={(e) => setPosition(e.target.value)}
           placeholder="e.g. Senator, Representative for Quezon City 2nd District"
-          className="w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
+          className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
         />
       </div>
       <div>
@@ -83,7 +83,7 @@ export default function PetitionForm() {
           onChange={(e) => setReason(e.target.value)}
           rows={3}
           placeholder="Running for a major position, high public interest, etc."
-          className="w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600 resize-none"
+          className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600 resize-none"
         />
       </div>
       <div>
@@ -93,13 +93,13 @@ export default function PetitionForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
+          className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors"
+        className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors"
       >
         {loading ? 'Submitting…' : 'Submit Request'}
       </button>

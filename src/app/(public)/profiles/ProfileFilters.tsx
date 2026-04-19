@@ -69,7 +69,7 @@ export default function ProfileFilters({ regions, parties, totalCount, filteredC
             placeholder="Search politicians..."
             value={q}
             onChange={(e) => update('q', e.target.value || null)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 focus:border-[#0038a8] transition-colors"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 focus:border-[#1B2A4A] transition-colors"
           />
         </div>
 
@@ -77,7 +77,7 @@ export default function ProfileFilters({ regions, parties, totalCount, filteredC
         <select
           value={sort}
           onChange={(e) => update('sort', e.target.value)}
-          className="text-sm border border-slate-200 rounded-lg bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 focus:border-[#0038a8] transition-colors cursor-pointer text-slate-700 font-medium"
+          className="text-sm border border-slate-200 rounded-lg bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 focus:border-[#1B2A4A] transition-colors cursor-pointer text-slate-700 font-medium"
         >
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
@@ -115,9 +115,9 @@ export default function ProfileFilters({ regions, parties, totalCount, filteredC
           <select
             value={region}
             onChange={(e) => update('region', e.target.value || null)}
-            className={`text-xs font-medium border rounded-full px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 transition-colors cursor-pointer ${
+            className={`text-xs font-medium border rounded-full px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 transition-colors cursor-pointer ${
               region
-                ? 'bg-[#0038a8] text-white border-[#0038a8]'
+                ? 'bg-[#1B2A4A] text-white border-[#1B2A4A]'
                 : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
             }`}
           >
@@ -133,9 +133,9 @@ export default function ProfileFilters({ regions, parties, totalCount, filteredC
           <select
             value={party}
             onChange={(e) => update('party', e.target.value || null)}
-            className={`text-xs font-medium border rounded-full px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#0038a8]/20 transition-colors cursor-pointer ${
+            className={`text-xs font-medium border rounded-full px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#1B2A4A]/20 transition-colors cursor-pointer ${
               party
-                ? 'bg-[#0038a8] text-white border-[#0038a8]'
+                ? 'bg-[#1B2A4A] text-white border-[#1B2A4A]'
                 : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
             }`}
           >

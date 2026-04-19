@@ -71,7 +71,7 @@ export default function DynastySection({ politician: p, connections }: Props) {
                 {c.in_dataset && c.related_slug && (
                   <Link
                     href={`/profiles/${c.related_slug}`}
-                    className="shrink-0 text-xs font-semibold text-[#0038a8] hover:underline"
+                    className="shrink-0 text-xs font-semibold text-[#1B2A4A] hover:underline"
                   >
                     View profile →
                   </Link>
@@ -86,7 +86,7 @@ export default function DynastySection({ politician: p, connections }: Props) {
             href="https://www.officialgazette.gov.ph/constitutions/the-1987-constitution-of-the-republic-of-the-philippines/the-1987-constitution-of-the-republic-of-the-philippines-article-ii/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-slate-400 hover:text-[#0038a8] transition-colors"
+            className="text-xs text-slate-400 hover:text-[#1B2A4A] transition-colors"
           >
             Source: 1987 Philippine Constitution, Article II Section 26 — Official Gazette ↗
           </a>

@@ -85,7 +85,7 @@ export default function PoliticianForm({ politician }: Props) {
     }
   }
 
-  const inputClass = 'w-full bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600'
+  const inputClass = 'w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600'
   const labelClass = 'block text-sm text-gray-400 mb-1.5'
 
   return (
@@ -212,7 +212,7 @@ export default function PoliticianForm({ politician }: Props) {
               type="checkbox"
               checked={isIncumbent}
               onChange={(e) => setIsIncumbent(e.target.checked)}
-              className="accent-[#0038a8]"
+              className="accent-[#1B2A4A]"
             />
             Currently incumbent
           </label>
@@ -221,7 +221,7 @@ export default function PoliticianForm({ politician }: Props) {
               type="checkbox"
               checked={isCandidate}
               onChange={(e) => setIsCandidate(e.target.checked)}
-              className="accent-[#0038a8]"
+              className="accent-[#1B2A4A]"
             />
             Active candidate
           </label>
@@ -268,7 +268,7 @@ export default function PoliticianForm({ politician }: Props) {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as Politician['status'])}
-            className="bg-[#111827] border border-white/10 focus:border-[#0038a8] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
+            className="bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
           >
             <option value="draft">Draft</option>
             <option value="under_review">Under Review</option>
@@ -282,7 +282,7 @@ export default function PoliticianForm({ politician }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="bg-[#0038a8] hover:bg-[#0038a8]/80 disabled:opacity-50 text-white font-bold px-6 py-2.5 rounded-lg transition-colors"
+          className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-6 py-2.5 rounded-lg transition-colors"
         >
           {loading ? 'Saving…' : isEdit ? 'Save Changes' : 'Create & Add Records →'}
         </button>

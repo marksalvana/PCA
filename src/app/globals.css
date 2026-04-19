@@ -1,44 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Brand */
-  --color-ph-blue: #0038a8;
-  --color-ph-blue-light: #1d4ed8;
-  --color-ph-red: #ce1126;
-  --color-ph-gold: #fcd116;
+  /* Brand primaries */
+  --color-navy:   #1B2A4A;
+  --color-cream:  #FBF5EB;
+  --color-red:    #C8304B;
 
-  /* Light surfaces */
-  --color-surface-0: #f8fafc;
+  /* Warm neutrals */
+  --color-gray-50:  #F4F2EE;
+  --color-gray-100: #E8E4DC;
+  --color-gray-300: #BDB8AE;
+  --color-gray-500: #857F75;
+  --color-gray-700: #4A4540;
+
+  /* Semantic aliases for existing code */
+  --color-ph-blue:  #1B2A4A;
+  --color-ph-red:   #C8304B;
+  --color-ph-gold:  #fcd116; /* keep for PH flag decorative use only */
+
+  /* Surfaces */
+  --color-surface-0: #FBF5EB;
   --color-surface-1: #ffffff;
-  --color-surface-2: #f1f5f9;
-  --color-surface-3: #e2e8f0;
+  --color-surface-2: #F4F2EE;
+  --color-surface-3: #E8E4DC;
 
   /* Text */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
+  --color-text-primary:   #1B2A4A;
+  --color-text-secondary: #4A4540;
+  --color-text-muted:     #857F75;
 
   /* Score colors */
   --color-score-high: #16a34a;
-  --color-score-mid: #d97706;
-  --color-score-low: #dc2626;
+  --color-score-mid:  #d97706;
+  --color-score-low:  #C8304B;
 
-  /* Border */
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
+  /* Borders */
+  --color-border:        #E8E4DC;
+  --color-border-strong: #BDB8AE;
 }
 
-* {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-}
-
+/* ── Base typography ── */
 body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
   background-color: var(--color-surface-0);
   color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth score bar animation */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Public Sans', system-ui, sans-serif;
+}
+
+/* DM Mono label utility */
+.label-mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ── Score bar animation ── */
 @keyframes fill-bar {
   from { width: 0% }
 }
@@ -47,22 +69,22 @@ body {
   animation: fill-bar 0.8s ease-out forwards;
 }
 
-/* Card shadow */
+/* ── Cards ── */
 .card {
   background: var(--color-surface-1);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  border: 1px solid rgba(27, 42, 74, 0.14);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgb(27 42 74 / 0.06);
 }
 
 .card-hover:hover {
-  box-shadow: 0 4px 16px 0 rgb(0 56 168 / 0.10);
-  border-color: #bfdbfe;
+  box-shadow: 0 4px 16px 0 rgb(27 42 74 / 0.12);
+  border-color: rgba(27, 42, 74, 0.28);
   transform: translateY(-1px);
   transition: all 0.15s ease;
 }
 
-/* Dynasty badge pulse */
+/* ── Dynasty badge pulse ── */
 @keyframes dynasty-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }

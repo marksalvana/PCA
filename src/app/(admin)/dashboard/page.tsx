@@ -45,7 +45,7 @@ export default async function DashboardPage() {
       <div className="flex flex-wrap gap-3">
         <Link
           href="/admin/profiles/new"
-          className="bg-[#0038a8] hover:bg-[#0038a8]/80 text-white font-bold px-5 py-2.5 rounded-lg transition-colors text-sm"
+          className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 text-white font-bold px-5 py-2.5 rounded-lg transition-colors text-sm"
         >
           + New Profile
         </Link>

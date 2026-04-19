@@ -16,7 +16,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
   return (
     <div>
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#0038a8] text-white">
+      <section className="relative overflow-hidden bg-[#1B2A4A] text-white">
         <div className="absolute top-0 left-0 right-0 h-1 bg-[#fcd116]" />
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#ce1126]" />
 
@@ -26,7 +26,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4">
             {t('hero_title_line1')}<br />
-            <span className="text-[#fcd116]">{t('hero_title_line2')}</span>
+            <span className="text-[#C8304B]">{t('hero_title_line2')}</span>
           </h1>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-10">
             {t('hero_subtitle')}
@@ -34,7 +34,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/profiles"
-              className="bg-[#fcd116] hover:bg-yellow-300 text-[#0038a8] font-black px-8 py-3.5 rounded-xl transition-colors text-lg shadow-lg"
+              className="bg-[#C8304B] hover:bg-[#b52840] text-white font-black px-8 py-3.5 rounded-xl transition-colors text-lg shadow-lg"
             >
               {t('hero_cta_profiles')}
             </Link>
@@ -58,7 +58,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
             { num: '✓', label: t('stats_scoring') },
           ].map((s) => (
             <div key={s.label} className="card text-center py-4 px-2 shadow-md">
-              <div className="text-2xl md:text-3xl font-black text-[#0038a8]">{s.num}</div>
+              <div className="text-2xl md:text-3xl font-black text-[#1B2A4A]">{s.num}</div>
               <div className="text-xs text-slate-500 font-medium mt-0.5">{s.label}</div>
             </div>
           ))}
@@ -66,7 +66,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
 
         {/* ── Why Politiko Exists ── */}
         <section className="mb-14">
-          <div className="card p-6 md:p-8 border-l-4 border-[#0038a8]">
+          <div className="card p-6 md:p-8 border-l-4 border-[#1B2A4A]">
             <h2 className="text-xl font-black text-slate-900 mb-3">{t('why_title')}</h2>
             <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl">
               {t('why_desc')}
@@ -81,7 +81,7 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
               <h2 className="text-xl font-black text-slate-900">{t('featured_title')}</h2>
               <p className="text-sm text-slate-500">{t('featured_subtitle')}</p>
             </div>
-            <Link href="/profiles" className="text-sm text-[#0038a8] font-semibold hover:underline">
+            <Link href="/profiles" className="text-sm text-[#1B2A4A] font-semibold hover:underline">
               {t('featured_view_all')}
             </Link>
           </div>
@@ -110,14 +110,14 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
 
         {/* ── Compare CTA section ── */}
         <section className="mb-14">
-          <div className="card p-6 md:p-8 bg-gradient-to-br from-slate-50 to-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="card p-6 md:p-8 bg-[#F4F2EE] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="max-w-xl">
               <h2 className="text-xl font-black text-slate-900 mb-2">{t('compare_title')}</h2>
               <p className="text-slate-600 text-sm leading-relaxed">{t('compare_desc')}</p>
             </div>
             <Link
               href="/compare"
-              className="shrink-0 bg-[#0038a8] hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+              className="shrink-0 bg-[#1B2A4A] hover:bg-[#243761] text-[#FBF5EB] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
             >
               {t('compare_cta')}
             </Link>
@@ -139,11 +139,11 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
         </section>
 
         {/* ── What the Scores Mean ── */}
-        <section className="mb-14 card p-6 md:p-8 bg-gradient-to-br from-blue-50 to-white border-blue-100">
+        <section className="mb-14 card p-6 md:p-8 bg-[#F4F2EE]">
           <h2 className="text-xl font-black text-slate-900 mb-6">{t('score_title')}</h2>
           <div className="flex flex-col gap-5">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#0038a8] flex items-center justify-center text-white font-black text-sm shrink-0">OS</div>
+              <div className="w-12 h-12 rounded-xl bg-[#1B2A4A] flex items-center justify-center text-white font-black text-sm shrink-0">OS</div>
               <div>
                 <p className="font-bold text-slate-900 mb-0.5">{t('score_os_label')}</p>
                 <p className="text-sm text-slate-500">{t('score_os_desc')}</p>
@@ -160,13 +160,13 @@ export default function HomeContent({ featuredSlot, flaggedSlot, profileCount }:
         </section>
 
         {/* ── Closing CTA ── */}
-        <section className="mb-14 text-center bg-[#0038a8] text-white rounded-2xl p-8 md:p-12">
+        <section className="mb-14 text-center bg-[#1B2A4A] text-white rounded-2xl p-8 md:p-12">
           <h2 className="text-2xl md:text-3xl font-black mb-3">{t('cta_title')}</h2>
           <p className="text-white/70 mb-8 max-w-lg mx-auto">{t('cta_subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/compare"
-              className="bg-[#fcd116] hover:bg-yellow-300 text-[#0038a8] font-black px-8 py-3 rounded-xl transition-colors"
+              className="bg-[#C8304B] hover:bg-[#b52840] text-white font-black px-8 py-3 rounded-xl transition-colors"
             >
               {t('cta_compare')}
             </Link>

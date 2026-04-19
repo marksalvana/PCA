@@ -8,7 +8,7 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={toggle}
-      className="text-xs font-bold text-slate-500 hover:text-[#0038a8] border border-slate-200 hover:border-[#0038a8] px-2.5 py-1 rounded-lg transition-colors"
+      className="text-xs font-bold text-slate-500 hover:text-[#1B2A4A] border border-slate-200 hover:border-[#1B2A4A] px-2.5 py-1 rounded-lg transition-colors"
       aria-label="Switch language"
     >
       {t('nav_lang_toggle')}
