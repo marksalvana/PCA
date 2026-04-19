@@ -71,8 +71,8 @@ export default function MethodologyPage() {
           <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-slate-100">
             <div className="w-10 h-10 rounded-lg bg-green-50 border-2 border-green-200 flex items-center justify-center font-black text-green-700 text-sm shrink-0">OBJ</div>
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-slate-900 text-sm">Objective Score <span className="text-slate-400 font-normal">(no upper limit)</span></p>
-              <p className="text-xs text-slate-500 mt-0.5">Cumulative sum of Education + Track Record points, minus Legal Penalties · floor at 0 · null when no verified data exists</p>
+              <p className="font-bold text-slate-900 text-sm">Objective Score <span className="text-slate-400 font-normal">(no upper limit · edu capped at 200, achievements at 300)</span></p>
+              <p className="text-xs text-slate-500 mt-0.5">Cumulative sum of Education + Track Record + Achievements, minus Legal Penalties · floor at 0 · null when no verified data exists</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-slate-100">
@@ -111,9 +111,9 @@ export default function MethodologyPage() {
             ))}
           </div>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600">
-            score = SUM(edu_pts) + SUM(track_pts) + SUM(achievement_pts) − SUM(legal_penalties)<br />
+            score = LEAST(SUM(edu_pts), 200) + SUM(track_pts) + LEAST(SUM(achievement_pts), 300) − SUM(legal_penalties)<br />
             score = max(0, score) <span className="text-slate-400">// floor at 0</span><br /><br />
-            <span className="text-slate-400">// No upper cap — more verified records = higher score</span><br />
+            <span className="text-slate-400">// Education capped at 200 · Achievements capped at 300</span><br />
             <span className="text-slate-400">// No verified data → score = null, displayed as "—"</span>
           </div>
         </div>
@@ -146,8 +146,14 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Each verified degree a politician earned contributes a fixed number of points based on the school's <strong>CHED (Commission on Higher Education) accreditation status</strong>. Points are cumulative — a politician with three degrees earns points for all three. A single degree from a top school does not beat a politician who has three strong degrees.
+            Each verified degree a politician earned contributes a fixed number of points based on the school's <strong>CHED (Commission on Higher Education) accreditation status</strong>. Points are cumulative — a politician with three degrees earns points for all three — but total education points are <strong>capped at 200</strong> to prevent degree-stacking from dominating a governance record.
           </p>
+          <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 mb-4">
+            <p className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-1">Education Cap: 200 pts</p>
+            <p className="text-sm text-blue-800 leading-relaxed">
+              No matter how many degrees are on record, education can contribute at most <strong>200 points</strong> to the Objective Score. A strong governance record should outweigh academic credentials — not the other way around.
+            </p>
+          </div>
           <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 mb-4">
             <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Incomplete Degree Penalty</p>
             <p className="text-sm text-amber-800 leading-relaxed">
@@ -185,15 +191,15 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Each verified term in public office contributes points based on: a <strong>flat +15 term completion bonus</strong>, plus the <strong>COA (Commission on Audit) opinion</strong> for that term, plus an attendance modifier. Points are cumulative — a politician with ten clean terms earns more than one with a single clean term.
+            Each verified term in public office contributes points based on: a <strong>flat +40 term completion bonus</strong>, plus the <strong>COA (Commission on Audit) opinion</strong> for that term, plus an attendance modifier. Points are cumulative — a politician with ten clean terms earns more than one with a single clean term.
           </p>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 font-mono text-xs text-slate-600 mb-4">
-            term_score = 15 + max(0, coa_or_legislative_pts) + attendance_modifier<br />
-            <span className="text-slate-400">// the +15 applies only to completed (non-current) terms</span>
+            term_score = 40 + max(0, coa_or_legislative_pts) + attendance_modifier<br />
+            <span className="text-slate-400">// the +40 applies only to completed (non-current) terms</span>
           </div>
           <div className="p-4 bg-blue-50 rounded-xl border border-blue-200 mb-4">
             <p className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-1">Term completion bonus</p>
-            <p className="text-sm text-blue-800 leading-relaxed">Every verified <em>completed</em> term earns a flat <strong>+15 pts</strong> before any COA or attendance modifier is applied. This rewards finishing a term — not quitting and not being removed from office. Currently-serving positions do not yet receive this bonus.</p>
+            <p className="text-sm text-blue-800 leading-relaxed">Every verified <em>completed</em> term earns a flat <strong>+40 pts</strong> before any COA or attendance modifier is applied. This rewards finishing a term — not quitting and not being removed from office. Governance time deserves real weight relative to academic credentials. Currently-serving positions do not yet receive this bonus.</p>
           </div>
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">COA Audit Opinion → Points per term</p>
           <div className="flex flex-col gap-3">
@@ -265,8 +271,14 @@ export default function MethodologyPage() {
 
         <div className="card p-5 mb-4">
           <p className="text-slate-700 leading-relaxed mb-4">
-            Verified achievements contribute points based on their <strong>impact scope</strong> — the geographic scale of the accomplishment. This is the most defensible objective classifier available: a Republic Act that applies to all 110 million Filipinos is categorically different from a municipal ordinance.
+            Verified achievements contribute points based on their <strong>impact scope</strong> — the geographic scale of the accomplishment. This is the most defensible objective classifier available: a Republic Act that applies to all 110 million Filipinos is categorically different from a municipal ordinance. Total achievement points are <strong>capped at 300</strong> to prevent landmark legislation from inflating scores the same way degree-stacking did before the education cap.
           </p>
+          <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 mb-4">
+            <p className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-1">Achievements Cap: 300 pts</p>
+            <p className="text-sm text-blue-800 leading-relaxed">
+              Achievement points are capped at <strong>300</strong> across all records. A politician with dozens of verified acts cannot accumulate unlimited points from this category alone.
+            </p>
+          </div>
           <div className="flex flex-col gap-3 mb-4">
             {[
               { scope: 'National — Landmark', pts: 100, color: 'text-blue-800 bg-blue-100 border-blue-300', examples: 'Landmark Republic Acts directly impacting millions — universal health care law, major reform legislation, acts affecting the entire population' },
@@ -306,9 +318,9 @@ export default function MethodologyPage() {
           </p>
           <div className="flex flex-col gap-3">
             {[
-              { status: 'Pending', deduction: '−50 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case filed in court and currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
-              { status: 'Convicted', deduction: '−200 per case', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty beyond reasonable doubt. This is the most serious status and carries the heaviest penalty. Appeals may be ongoing, but a conviction is a final finding at that court level.' },
-              { status: 'On Appeal', deduction: '−50 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
+              { status: 'Pending', deduction: '−75 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case filed in court and currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
+              { status: 'Convicted', deduction: '−350 per case', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty beyond reasonable doubt. This is the most serious status and carries the heaviest penalty — more than 2 full clean terms to offset. Appeals may be ongoing, but a conviction is a final finding at that court level.' },
+              { status: 'On Appeal', deduction: '−75 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
               { status: 'Acquitted', deduction: '0', color: 'bg-green-50 border-green-200 text-green-700', description: 'Court found the official not guilty. No deduction is applied. The record is still displayed for transparency — voters can see what cases were filed and how they resolved.' },
               { status: 'Dismissed', deduction: '0', color: 'bg-slate-50 border-slate-200 text-slate-600', description: 'Case was dismissed before reaching a verdict. No deduction. Displayed for transparency.' },
             ].map(({ status, deduction, color, description }) => (

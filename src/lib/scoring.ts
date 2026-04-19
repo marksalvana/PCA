@@ -25,10 +25,14 @@ export const COA_SCORES: Record<CoaFinding, number> = {
 
 // Legal penalty per case
 export const LEGAL_PENALTIES = {
-  pending: 50,
-  convicted: 200,
-  ongoing_appeal: 50,
+  pending: 75,
+  convicted: 350,
+  ongoing_appeal: 75,
 } as const
+
+// Caps on total points per category
+export const EDUCATION_CAP = 200
+export const ACHIEVEMENT_CAP = 300
 
 // Points per achievement based on impact scope
 export const ACHIEVEMENT_SCORES: Record<string, number> = {
@@ -93,8 +97,8 @@ export function computeTrackPts(rec: {
   attendance_rate: number | null
   is_current?: boolean
 }): number {
-  // +15 flat bonus for completed terms (not still-serving positions)
-  const completionBonus = rec.is_current === true ? 0 : 15
+  // +40 flat bonus for completed terms (not still-serving positions)
+  const completionBonus = rec.is_current === true ? 0 : 40
 
   let base = 0
   if (rec.coa_finding === 'unqualified') base = 100
