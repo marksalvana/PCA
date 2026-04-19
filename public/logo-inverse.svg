@@ -1,0 +1,48 @@
+<svg width="220" height="56" viewBox="0 0 220 56" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BantayBoto logo (light)">
+  <!-- Icon mark on transparent background for use on blue/dark surfaces -->
+
+  <!-- Background: white rounded square -->
+  <rect x="0" y="0" width="56" height="56" rx="14" fill="white" opacity="0.15"/>
+
+  <!-- Eye shape -->
+  <path d="M10 28 Q28 12 46 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M10 28 Q28 44 46 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Iris -->
+  <circle cx="28" cy="28" r="9" fill="transparent" stroke="white" stroke-width="2"/>
+
+  <!-- Checkmark pupil -->
+  <path d="M22.5 28 L26.5 32 L34 22.5"
+        stroke="#FCD116" stroke-width="2.8"
+        stroke-linecap="round" stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- Gold dot -->
+  <circle cx="44" cy="44" r="5" fill="#FCD116"/>
+
+  <!-- BANTAY — white -->
+  <text
+    x="68" y="24"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+    font-weight="800"
+    font-size="18"
+    letter-spacing="-0.6"
+    fill="white">BANTAY</text>
+
+  <!-- BOTO — gold -->
+  <text
+    x="68" y="46"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+    font-weight="900"
+    font-size="18"
+    letter-spacing="-0.6"
+    fill="#FCD116">BOTO</text>
+
+  <!-- .ph -->
+  <text
+    x="136" y="46"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+    font-weight="600"
+    font-size="13"
+    fill="rgba(255,255,255,0.5)">.ph</text>
+</svg>

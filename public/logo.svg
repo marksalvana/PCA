@@ -1,0 +1,63 @@
+<svg width="220" height="56" viewBox="0 0 220 56" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BantayBoto logo">
+  <!-- ─── Icon mark (56×56) ─── -->
+
+  <!-- Background: rounded square, Philippine blue -->
+  <rect x="0" y="0" width="56" height="56" rx="14" fill="#0038A8"/>
+
+  <!-- Subtle sun-ray pattern (8 rays, gold at low opacity) -->
+  <g opacity="0.12" transform="translate(28,28)">
+    <line x1="0" y1="-22" x2="0" y2="22" stroke="#FCD116" stroke-width="1.5"/>
+    <line x1="-22" y1="0" x2="22" y2="0" stroke="#FCD116" stroke-width="1.5"/>
+    <line x1="-15.6" y1="-15.6" x2="15.6" y2="15.6" stroke="#FCD116" stroke-width="1.5"/>
+    <line x1="15.6" y1="-15.6" x2="-15.6" y2="15.6" stroke="#FCD116" stroke-width="1.5"/>
+  </g>
+
+  <!-- Eye shape: two arcs meeting at left/right vanishing points -->
+  <path d="M10 28 Q28 12 46 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M10 28 Q28 44 46 28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Iris / outer ring -->
+  <circle cx="28" cy="28" r="9" fill="#0038A8" stroke="white" stroke-width="2"/>
+
+  <!-- Checkmark pupil (gold) -->
+  <path d="M22.5 28 L26.5 32 L34 22.5"
+        stroke="#FCD116" stroke-width="2.8"
+        stroke-linecap="round" stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- Gold community dot — bottom-right accent -->
+  <circle cx="44" cy="44" r="5" fill="#FCD116"/>
+  <!-- Tiny Philippine sun triangle inside dot -->
+  <path d="M44 41 L46.2 46.5 L41.8 46.5 Z" fill="#0038A8" opacity="0.6"/>
+
+  <!-- ─── Wordmark ─── -->
+
+  <!-- BANTAY — Philippine blue, heavy -->
+  <text
+    x="68" y="24"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+    font-weight="800"
+    font-size="18"
+    letter-spacing="-0.6"
+    fill="#0038A8">BANTAY</text>
+
+  <!-- BOTO — gold, black, heavy -->
+  <text
+    x="68" y="46"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+    font-weight="900"
+    font-size="18"
+    letter-spacing="-0.6"
+    fill="#FCD116"
+    paint-order="stroke"
+    stroke="#D97706"
+    stroke-width="0.4">BOTO</text>
+
+  <!-- .ph suffix — muted -->
+  <text
+    x="136" y="46"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif"
+    font-weight="600"
+    font-size="13"
+    fill="#94A3B8">.ph</text>
+</svg>

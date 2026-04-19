@@ -1,0 +1,29 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BantayBoto icon">
+  <!-- Background -->
+  <rect width="64" height="64" rx="16" fill="#0038A8"/>
+
+  <!-- Sun rays (subtle) -->
+  <g opacity="0.12" transform="translate(32,32)">
+    <line x1="0" y1="-26" x2="0" y2="26" stroke="#FCD116" stroke-width="1.5"/>
+    <line x1="-26" y1="0" x2="26" y2="0" stroke="#FCD116" stroke-width="1.5"/>
+    <line x1="-18.4" y1="-18.4" x2="18.4" y2="18.4" stroke="#FCD116" stroke-width="1.5"/>
+    <line x1="18.4" y1="-18.4" x2="-18.4" y2="18.4" stroke="#FCD116" stroke-width="1.5"/>
+  </g>
+
+  <!-- Eye arcs -->
+  <path d="M12 32 Q32 14 52 32" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M12 32 Q32 50 52 32" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- Iris -->
+  <circle cx="32" cy="32" r="11" fill="#0038A8" stroke="white" stroke-width="2.5"/>
+
+  <!-- Checkmark -->
+  <path d="M25.5 32 L30 36.5 L39.5 25.5"
+        stroke="#FCD116" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- Gold dot -->
+  <circle cx="51" cy="51" r="6" fill="#FCD116"/>
+  <path d="M51 47.5 L53.5 53.5 L48.5 53.5 Z" fill="#0038A8" opacity="0.5"/>
+</svg>
