@@ -10,9 +10,9 @@ export const translations = {
     nav_lang_toggle: 'Filipino',
 
     // Hero
-    hero_badge: '🇵🇭 For Filipino Voters',
-    hero_title_line1: 'Know Your Politiko.',
-    hero_title_line2: 'Vote Smarter.',
+    hero_badge: '🇵🇭 Mata ng Bayan',
+    hero_title_line1: 'Know Your',
+    hero_title_line2: 'Politiko',
     hero_subtitle: 'Compare candidates side by side using verified public records — education, performance, legal history, and public trust. No rumors. No propaganda.',
     hero_cta_profiles: 'Browse Profiles',
     hero_cta_compare: 'Compare Candidates',
@@ -91,9 +91,9 @@ export const translations = {
     nav_lang_toggle: 'English',
 
     // Hero
-    hero_badge: '🇵🇭 Para sa mga Pilipinong Botante',
-    hero_title_line1: 'Kilalanin ang Iyong Politiko.',
-    hero_title_line2: 'Bumoto nang Matalino.',
+    hero_badge: '🇵🇭 Mata ng Bayan',
+    hero_title_line1: 'Kilalanin ang Iyong',
+    hero_title_line2: 'Politiko.',
     hero_subtitle: 'Ihambing ang mga kandidato nang magkatabi gamit ang mga verified na pampublikong rekord — edukasyon, pagganap, legal na kasaysayan, at tiwala ng publiko. Walang tsismis. Walang propaganda.',
     hero_cta_profiles: 'Tingnan ang mga Profile',
     hero_cta_compare: 'Ikumpara ang mga Kandidato',
