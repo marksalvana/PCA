@@ -25,6 +25,65 @@ const COA_TABLE = [
   { finding: 'Disclaimer', pts: 10, color: 'text-red-800 bg-red-100 border-red-300', description: 'COA was unable to form an opinion due to insufficient, unavailable, or unreliable records. Inability to audit is itself a serious governance red flag.' },
 ]
 
+const SOURCES_INDEX = [
+  {
+    component: 'Education — accreditation tier',
+    authority: 'Commission on Higher Education (CHED)',
+    measures: 'Institutional autonomy and accreditation level (Deregulated, Autonomous, Level I–IV)',
+    href: 'https://ched.gov.ph',
+    label: 'ched.gov.ph',
+  },
+  {
+    component: 'Track record — financial audit',
+    authority: 'Commission on Audit (COA)',
+    measures: 'Annual audit opinion per agency / LGU (Unqualified, Qualified, Adverse, Disclaimer)',
+    href: 'https://www.coa.gov.ph',
+    label: 'coa.gov.ph',
+  },
+  {
+    component: 'Track record — legislative output',
+    authority: 'Senate of the Philippines · House of Representatives',
+    measures: 'Bills authored, bills passed, and per-term attendance records',
+    href: 'https://senate.gov.ph',
+    label: 'senate.gov.ph · congress.gov.ph',
+  },
+  {
+    component: 'Achievements — bills enacted into law',
+    authority: 'Official Gazette of the Republic of the Philippines',
+    measures: 'Republic Act numbers — bills that became law and were signed into effect',
+    href: 'https://www.officialgazette.gov.ph',
+    label: 'officialgazette.gov.ph',
+  },
+  {
+    component: 'Legal — criminal cases',
+    authority: 'Sandiganbayan · Supreme Court of the Philippines',
+    measures: 'Case status: pending, convicted, on appeal, acquitted, dismissed',
+    href: 'https://sb.judiciary.gov.ph',
+    label: 'sb.judiciary.gov.ph',
+  },
+  {
+    component: 'Legal — election cases',
+    authority: 'Commission on Elections (COMELEC)',
+    measures: 'Disqualification rulings and election-related cases',
+    href: 'https://comelec.gov.ph',
+    label: 'comelec.gov.ph',
+  },
+  {
+    component: 'Net worth — declarations',
+    authority: 'Civil Service Commission · SALN (per RA 6713)',
+    measures: 'Statement of Assets, Liabilities, and Net Worth filed annually under oath',
+    href: 'https://csc.gov.ph',
+    label: 'csc.gov.ph',
+  },
+  {
+    component: 'Political dynasty — informational',
+    authority: '1987 Constitution, Article II, Section 26',
+    measures: 'Family relationships in elective office — informational, not scored',
+    href: 'https://www.officialgazette.gov.ph/constitutions/1987-constitution/',
+    label: 'officialgazette.gov.ph',
+  },
+]
+
 function PtsBar({ pts, max = 100 }: { pts: number; max?: number }) {
   const pct = Math.min(100, (pts / max) * 100)
   const color = pts >= 80 ? 'bg-green-500' : pts >= 50 ? 'bg-amber-400' : pts > 0 ? 'bg-red-500' : 'bg-slate-300'
@@ -60,7 +119,7 @@ export default function MethodologyPage() {
           How scores are calculated
         </h1>
         <p className="text-slate-600 text-lg leading-relaxed">
-          Every number on this platform traces back to a verifiable public record. Here is exactly how each score is derived — no black boxes, no opinions.
+          Every input traces back to an independent Philippine institution — CHED, COA, the Sandiganbayan, the Senate, the Official Gazette. The classifications come from them; the numerical weights are our editorial calibration, fully documented below.
         </p>
       </div>
 
@@ -87,6 +146,64 @@ export default function MethodologyPage() {
           The two scores are always displayed separately. Objective Score measures verifiable credentials and performance. Civic Trust Score measures public sentiment. Mixing them would let popularity mask poor governance records — so we never blend them.
         </p>
       </div>
+
+      {/* ── INSTITUTIONAL SOURCES INDEX ── */}
+      <section className="mb-10">
+        <SectionHeader icon="🏛" label="Where the data comes from" color="bg-slate-700" />
+
+        <div className="card p-5 mb-4">
+          <p className="text-slate-700 leading-relaxed mb-5">
+            Every input in the Objective Score is sourced from an independent Philippine institution that publishes its own methodology. We don&apos;t invent the underlying classifications — we translate the issuing authority&apos;s public determination into a number on the profile.
+          </p>
+          <div className="flex flex-col gap-2.5">
+            {SOURCES_INDEX.map(({ component, authority, measures, href, label }) => (
+              <div key={component} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
+                  <p className="text-sm font-bold text-slate-900">{component}</p>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[#1B2A4A] hover:underline shrink-0"
+                  >
+                    {label} ↗
+                  </a>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  <span className="font-semibold text-slate-700">{authority}</span> — {measures}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="card p-5 border-l-4 border-l-amber-300 mb-3">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">What is sourced vs. what is editorial</p>
+          <p className="text-sm text-slate-600 leading-relaxed mb-3">
+            We&apos;re honest about the line between institutional measurement and our own calibration. The list above is the institutional half; the items below are decisions we make.
+          </p>
+          <div className="flex flex-col gap-2 text-sm text-slate-600">
+            <div className="flex gap-3 items-start">
+              <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-200 rounded-md px-2 py-0.5 shrink-0 mt-0.5">SOURCED</span>
+              <span className="leading-relaxed">Which CHED tier a school holds · which COA opinion a term received · whether a court has convicted, dismissed, or is still hearing a case · the bills filed and attendance recorded in the Senate / House Journals.</span>
+            </div>
+            <div className="flex gap-3 items-start">
+              <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-2 py-0.5 shrink-0 mt-0.5">EDITORIAL</span>
+              <span className="leading-relaxed">The point values assigned to each tier (e.g. CHED Level III = 70 points, not 65 or 75) · the size of legal penalties (−350 for conviction, calibrated to require ~2 clean terms to offset) · the caps on Education (200) and Achievements (300) · the +40 term completion bonus · the attendance modifier brackets.</span>
+            </div>
+          </div>
+          <p className="text-sm text-slate-600 leading-relaxed mt-3">
+            We document the editorial calibration in the sections below so you can see exactly what we chose and why. We welcome civil society input on these calibrations through the <Link href="/petition" className="text-[#1B2A4A] underline hover:no-underline">petition form</Link>.
+          </p>
+        </div>
+
+        <div className="card p-4 border-l-4 border-l-slate-300">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Coming soon — additional institutional inputs</p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            We&apos;re expanding the model to incorporate more sourced signals: <strong>DILG Seal of Good Local Governance</strong> (annual award for executive officials), <strong>Office of the Ombudsman dispositions</strong> (administrative graft findings distinct from criminal court cases), <strong>SALN year-over-year integrity checks</strong> (under the RA 1379 lifestyle-check framework), and <strong>PSA socioeconomic indicators</strong> (pre/post tenure outcome data). These will appear here as they ship.
+          </p>
+        </div>
+      </section>
 
       {/* ── OBJECTIVE SCORE ── */}
       <section className="mb-10">
