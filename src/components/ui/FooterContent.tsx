@@ -9,7 +9,7 @@ export default function FooterContent() {
   return (
     <footer className="bg-[#1B2A4A] text-[#FBF5EB] py-12 mt-8">
       <div className="max-w-5xl mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
 
           {/* Brand */}
           <div>
@@ -25,13 +25,13 @@ export default function FooterContent() {
           </div>
 
           {/* Meta */}
-          <div className="text-center text-xs text-[#FBF5EB]/45 label-mono leading-loose">
+          <div className="text-xs text-[#FBF5EB]/45 label-mono leading-loose md:text-center">
             <p>{t('footer_sourced')}</p>
             <p>{t('footer_vetted')}</p>
           </div>
 
           {/* Links */}
-          <div className="flex flex-wrap gap-5 text-xs text-[#FBF5EB]/50">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-2 text-xs text-[#FBF5EB]/50 sm:flex sm:flex-wrap">
             <Link href="/profiles" className="hover:text-[#FBF5EB] transition-colors">Profiles</Link>
             <Link href="/compare" className="hover:text-[#FBF5EB] transition-colors">Compare</Link>
             <Link href="/petition" className="hover:text-[#FBF5EB] transition-colors">Request Profile</Link>
@@ -41,10 +41,6 @@ export default function FooterContent() {
             <Link href="/support" className="hover:text-[#FBF5EB] transition-colors">Support</Link>
           </div>
 
-        </div>
-
-        <div className="mt-8 pt-6 border-t border-white/10 text-[#FBF5EB]/30 text-xs label-mono">
-          Public Sans · Space Grotesk · DM Mono · #1B2A4A · #FBF5EB · #C8304B
         </div>
       </div>
     </footer>
