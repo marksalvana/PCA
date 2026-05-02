@@ -8,6 +8,8 @@ import AttributionFooter from '@/components/profiles/AttributionFooter'
 import DynastySection from '@/components/profiles/DynastySection'
 import ScoreBadge from '@/components/ui/ScoreBadge'
 import SourceLink from '@/components/ui/SourceLink'
+import LensAwareScoreBadge from '@/components/lens/LensAwareScoreBadge'
+import LensPanel from '@/components/lens/LensPanel'
 import {
   computeTrackPts,
   computeAchievementPts,
@@ -170,7 +172,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               <div className="flex flex-row sm:flex-col gap-3 shrink-0">
                 <div className="text-center">
                   <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1">Objective</div>
-                  <ScoreBadge score={p.objective_score} size="lg" />
+                  <LensAwareScoreBadge
+                    score={p.objective_score}
+                    breakdown={p.score_breakdown}
+                    size="lg"
+                  />
                   {p.objective_score == null && (
                     <p className="text-xs text-slate-400 mt-1 w-20">No data</p>
                   )}
@@ -219,10 +225,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           {/* Compare CTA */}
           <Link
             href={`/compare?a=${p.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors mb-3"
           >
             Compare {p.preferred_name ?? p.full_name} with another candidate →
           </Link>
+
+          {/* Personal Lens — collapsible, optional */}
+          <LensPanel />
 
           {/* Education */}
           {p.education_records && p.education_records.length > 0 && (

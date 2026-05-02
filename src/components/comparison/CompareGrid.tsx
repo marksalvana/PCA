@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { PoliticianWithDetails } from '@/types/database'
 import StatDuel from './StatDuel'
 import ScoreBadge from '@/components/ui/ScoreBadge'
+import LensAwareScoreBadge from '@/components/lens/LensAwareScoreBadge'
 import LegalBadge from '@/components/profiles/LegalBadge'
 
 type Props = { a: PoliticianWithDetails; b: PoliticianWithDetails }
@@ -59,7 +60,11 @@ export default function CompareGrid({ a, b }: Props) {
             <div key={p.id} className="flex flex-col items-center gap-3">
               <div className="text-center">
                 <div className="text-xs text-slate-500 font-semibold uppercase tracking-wide mb-1.5">Objective</div>
-                <ScoreBadge score={p.objective_score} size="lg" />
+                <LensAwareScoreBadge
+                  score={p.objective_score}
+                  breakdown={p.score_breakdown}
+                  size="lg"
+                />
               </div>
               <div className="text-center">
                 <div className="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1.5">Trust</div>
