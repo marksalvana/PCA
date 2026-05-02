@@ -31,6 +31,22 @@ export interface UserProfile {
   updated_at: string
 }
 
+export interface ScoreBreakdown {
+  edu: number
+  edu_max: number
+  track: number
+  track_max: number
+  achievement: number
+  achievement_max: number
+  awards: number
+  awards_max: number
+  legal_pending: number
+  legal_conviction: number
+  legal_other: number
+  saln_penalty: number
+  computed_at: string
+}
+
 export interface Politician {
   id: string
   slug: string
@@ -46,6 +62,7 @@ export interface Politician {
   is_candidate: boolean
   status: PoliticianStatus
   objective_score: number | null
+  score_breakdown: ScoreBreakdown | null
   civic_trust_score: number | null
   dynasty_name: string | null
   dynasty_generation: number | null

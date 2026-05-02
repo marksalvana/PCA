@@ -1,4 +1,4 @@
-import type { ChedAccreditation, CoaFinding, OmbudsmanDisposition } from '@/types/database'
+import type { ChedAccreditation, CoaFinding, OmbudsmanDisposition, ScoreBreakdown } from '@/types/database'
 
 // Points contributed per education record (base score; multiply by 0.75 for incomplete)
 export const CHED_SCORES: Record<ChedAccreditation, number> = {
@@ -200,4 +200,69 @@ export function computeEducationPts(rec: {
   if (!rec.ched_accreditation || rec.ched_accreditation === 'unknown') return 0
   const base = CHED_SCORES[rec.ched_accreditation]
   return Math.round(base * (rec.is_completed ? 1.0 : 0.75))
+}
+
+// ── Personal Lens ────────────────────────────────────────────────
+// Reduce-only sliders: each component's max contribution can be
+// scaled down from canonical (100%) but never above. Penalties are
+// not exposed to the lens — institutional facts stay fixed.
+//
+// Range is expressed as a 0.0–1.0 multiplier on the canonical max.
+// Default lens (all 1.0) returns the canonical objective_score.
+export interface Lens {
+  edu: number          // 0.0–1.0
+  track: number        // 0.0–1.0
+  achievement: number  // 0.0–1.0
+  awards: number       // 0.0–1.0
+}
+
+export const DEFAULT_LENS: Lens = {
+  edu: 1.0,
+  track: 1.0,
+  achievement: 1.0,
+  awards: 1.0,
+}
+
+export function isCanonicalLens(lens: Lens): boolean {
+  return (
+    lens.edu === 1.0 &&
+    lens.track === 1.0 &&
+    lens.achievement === 1.0 &&
+    lens.awards === 1.0
+  )
+}
+
+export function clampLens(lens: Partial<Lens>): Lens {
+  const clamp = (n: number | undefined, fallback: number) => {
+    if (n == null || isNaN(n)) return fallback
+    return Math.max(0, Math.min(1, n))
+  }
+  return {
+    edu: clamp(lens.edu, 1),
+    track: clamp(lens.track, 1),
+    achievement: clamp(lens.achievement, 1),
+    awards: clamp(lens.awards, 1),
+  }
+}
+
+// Compute the personal-lens score from a politician's score_breakdown.
+// Each positive component is scaled by its lens factor; penalties are
+// applied unchanged (institutional facts are not user-tunable).
+// If no breakdown is available, falls back to canonical objective_score.
+export function computePersonalScore(
+  breakdown: ScoreBreakdown | null,
+  fallback: number | null,
+  lens: Lens,
+): number | null {
+  if (!breakdown) return fallback
+  const score =
+    breakdown.edu * lens.edu +
+    breakdown.track * lens.track +
+    breakdown.achievement * lens.achievement +
+    breakdown.awards * lens.awards
+    - breakdown.legal_pending
+    - breakdown.legal_conviction
+    - breakdown.legal_other
+    - breakdown.saln_penalty
+  return Math.max(0, Math.round(score))
 }
