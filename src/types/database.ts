@@ -18,6 +18,8 @@ export type AchievementCategory =
   | 'legislation' | 'infrastructure' | 'social_program'
   | 'award' | 'international' | 'economic' | 'other'
 export type ImpactScope = 'national_landmark' | 'national_standard' | 'national' | 'regional' | 'local'
+export type OmbudsmanDisposition =
+  | 'dismissed' | 'admin_penalty' | 'criminal_filed' | 'pending_at_ombudsman' | 'none'
 
 export interface UserProfile {
   id: string
@@ -95,6 +97,8 @@ export interface TrackRecord {
   attendance_rate: number | null
   bills_authored: number | null
   bills_passed: number | null
+  bills_enacted_count: number | null
+  sglg_awarded: boolean | null
   performance_score: number | null
   notes: string | null
   source_url: string
@@ -115,6 +119,8 @@ export interface LegalRecord {
   filing_date: string | null
   resolution_date: string | null
   resolution_summary: string | null
+  ombudsman_disposition: OmbudsmanDisposition | null
+  comelec_disqualification: boolean | null
   source_url: string
   source_label: string
   created_by: string | null
@@ -144,6 +150,38 @@ export interface NetWorthRecord {
   declared_net_worth: number | null
   assets: number | null
   liabilities: number | null
+  declared_income: number | null
+  saln_filed_on_time: boolean | null
+  source_url: string
+  source_label: string
+  created_by: string | null
+  is_verified: boolean
+  created_at: string
+}
+
+export interface Award {
+  id: string
+  politician_id: string
+  name: string
+  issuing_body: string
+  year: number | null
+  citation_text: string | null
+  source_url: string
+  source_label: string
+  created_by: string | null
+  is_verified: boolean
+  created_at: string
+}
+
+export interface OutcomeMetric {
+  id: string
+  politician_id: string
+  jurisdiction: string
+  metric: string
+  baseline_value: number | null
+  baseline_year: number | null
+  end_value: number | null
+  end_year: number | null
   source_url: string
   source_label: string
   created_by: string | null
@@ -213,6 +251,8 @@ export interface PoliticianWithDetails extends Politician {
   legal_records: LegalRecord[]
   achievements: Achievement[]
   net_worth_records: NetWorthRecord[]
+  awards?: Award[]
+  outcome_metrics?: OutcomeMetric[]
   dynasty_connections: DynastyConnection[]
   creator: UserProfile | null
   vetters: UserProfile[]
@@ -233,6 +273,8 @@ export interface Database {
       legal_records: { Row: LegalRecord; Insert: Insertable<LegalRecord>; Update: Updatable<LegalRecord> }
       achievements: { Row: Achievement; Insert: Insertable<Achievement>; Update: Updatable<Achievement> }
       net_worth_records: { Row: NetWorthRecord; Insert: Insertable<NetWorthRecord>; Update: Updatable<NetWorthRecord> }
+      awards: { Row: Award; Insert: Insertable<Award>; Update: Updatable<Award> }
+      outcome_metrics: { Row: OutcomeMetric; Insert: Insertable<OutcomeMetric>; Update: Updatable<OutcomeMetric> }
       vetting_records: { Row: VettingRecord; Insert: Omit<VettingRecord, 'id' | 'vetted_at'>; Update: Partial<Omit<VettingRecord, 'id' | 'vetted_at'>> }
       civic_trust_ratings: { Row: CivicTrustRating; Insert: Omit<CivicTrustRating, 'id' | 'created_at'>; Update: Partial<Omit<CivicTrustRating, 'id' | 'created_at'>> }
       petitions: { Row: Petition; Insert: Omit<Petition, 'id' | 'created_at'>; Update: Partial<Omit<Petition, 'id' | 'created_at'>> }

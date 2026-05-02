@@ -1,4 +1,4 @@
-import type { ChedAccreditation, CoaFinding } from '@/types/database'
+import type { ChedAccreditation, CoaFinding, OmbudsmanDisposition } from '@/types/database'
 
 // Points contributed per education record (base score; multiply by 0.75 for incomplete)
 export const CHED_SCORES: Record<ChedAccreditation, number> = {
@@ -30,9 +30,41 @@ export const LEGAL_PENALTIES = {
   ongoing_appeal: 75,
 } as const
 
+// Additional Ombudsman penalty (per case, additive on top of court status)
+export const OMBUDSMAN_PENALTIES: Record<OmbudsmanDisposition, number> = {
+  dismissed: 0,
+  none: 0,
+  pending_at_ombudsman: 25,
+  admin_penalty: 50,
+  criminal_filed: 100,
+}
+
+// COMELEC disqualification adds a flat penalty when present on a legal record
+export const COMELEC_DISQUALIFICATION_PENALTY = 100
+
+// SALN integrity: late or non-filing adds a small penalty per occurrence
+export const SALN_LATE_PENALTY = 25
+
+// SGLG (DILG Seal of Good Local Governance) bonus per term
+export const SGLG_BONUS = 30
+
 // Caps on total points per category
 export const EDUCATION_CAP = 200
 export const ACHIEVEMENT_CAP = 300
+export const AWARDS_CAP = 150
+
+// Awards: per-award scoring keyed off well-known PH award names
+// Source: lower-cased substring match against the award name
+export function computeAwardPts(name: string | null | undefined): number {
+  if (!name) return 0
+  const n = name.toLowerCase()
+  if (n.includes('magsaysay')) return 100
+  if (n.includes('order of lakandula')) return 80
+  if (n.includes('order of national')) return 80
+  if (n.includes('medal of valor')) return 90
+  if (n.includes('toym') || n.includes('outstanding young')) return 60
+  return 25
+}
 
 // Points per achievement based on impact scope
 export const ACHIEVEMENT_SCORES: Record<string, number> = {
@@ -94,11 +126,16 @@ export function computeTrackPts(rec: {
   coa_finding: CoaFinding | null
   bills_authored: number | null
   bills_passed: number | null
+  bills_enacted_count?: number | null
+  sglg_awarded?: boolean | null
   attendance_rate: number | null
   is_current?: boolean
 }): number {
   // +40 flat bonus for completed terms (not still-serving positions)
   const completionBonus = rec.is_current === true ? 0 : 40
+
+  // +30 SGLG bonus per term that won DILG Seal of Good Local Governance
+  const sglgBonus = rec.sglg_awarded === true ? SGLG_BONUS : 0
 
   let base = 0
   if (rec.coa_finding === 'unqualified') base = 100
@@ -110,7 +147,8 @@ export function computeTrackPts(rec: {
     rec.bills_authored != null && rec.bills_authored > 0
   ) {
     const passRate = (rec.bills_passed ?? 0) / rec.bills_authored
-    base = Math.round(passRate * 85)
+    const enactedBonus = (rec.bills_enacted_count ?? 0) * 5
+    base = Math.min(95, 30 + Math.round(passRate * 55) + enactedBonus)
   }
 
   let mod = 0
@@ -122,7 +160,22 @@ export function computeTrackPts(rec: {
     else mod = -50
   }
 
-  return Math.max(0, completionBonus + base + mod)
+  return Math.max(0, completionBonus + sglgBonus + base + mod)
+}
+
+// Compute additional legal penalty contributions from Ombudsman + COMELEC fields
+export function computeExtraLegalPenalty(rec: {
+  ombudsman_disposition?: OmbudsmanDisposition | null
+  comelec_disqualification?: boolean | null
+}): number {
+  const omb = rec.ombudsman_disposition ? OMBUDSMAN_PENALTIES[rec.ombudsman_disposition] ?? 0 : 0
+  const comelec = rec.comelec_disqualification === true ? COMELEC_DISQUALIFICATION_PENALTY : 0
+  return omb + comelec
+}
+
+// Compute SALN integrity penalty for a single net-worth record
+export function computeSalnPenalty(rec: { saln_filed_on_time?: boolean | null }): number {
+  return rec.saln_filed_on_time === false ? SALN_LATE_PENALTY : 0
 }
 
 export function attendanceModifier(rate: number | null): number {

@@ -15,6 +15,7 @@ import type {
   LegalCaseStatus,
   AchievementCategory,
   ImpactScope,
+  OmbudsmanDisposition,
 } from '@/types/database'
 import SourceLink from '@/components/ui/SourceLink'
 import {
@@ -181,6 +182,8 @@ function TrackEditForm({
   const [coa, setCoa] = useState<CoaFinding>(r.coa_finding ?? 'unknown')
   const [billsAuthored, setBillsAuthored] = useState(r.bills_authored != null ? String(r.bills_authored) : '')
   const [billsPassed, setBillsPassed] = useState(r.bills_passed != null ? String(r.bills_passed) : '')
+  const [billsEnacted, setBillsEnacted] = useState(r.bills_enacted_count != null ? String(r.bills_enacted_count) : '')
+  const [sglg, setSglg] = useState<boolean>(r.sglg_awarded === true)
   const [attendance, setAttendance] = useState(r.attendance_rate != null ? String(r.attendance_rate) : '')
   const [notes, setNotes] = useState(r.notes ?? '')
   const [sourceUrl, setSourceUrl] = useState(r.source_url)
@@ -196,6 +199,8 @@ function TrackEditForm({
       coa_finding: coa,
       bills_authored: billsAuthored ? parseInt(billsAuthored) : null,
       bills_passed: billsPassed ? parseInt(billsPassed) : null,
+      bills_enacted_count: billsEnacted ? parseInt(billsEnacted) : null,
+      sglg_awarded: sglg,
       attendance_rate: attendance ? parseFloat(attendance) : null,
       notes: notes || null,
       source_url: sourceUrl,
@@ -245,9 +250,19 @@ function TrackEditForm({
           <input type="number" value={billsPassed} onChange={(e) => setBillsPassed(e.target.value)} placeholder="0" className={inputClass} />
         </div>
         <div>
+          <label className={labelClass}>Bills Enacted (RA)</label>
+          <input type="number" value={billsEnacted} onChange={(e) => setBillsEnacted(e.target.value)} placeholder="0" className={inputClass} />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div>
           <label className={labelClass}>Attendance %</label>
           <input type="number" min="0" max="100" step="0.1" value={attendance} onChange={(e) => setAttendance(e.target.value)} placeholder="95" className={inputClass} />
         </div>
+        <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer self-end pb-2">
+          <input type="checkbox" checked={sglg} onChange={(e) => setSglg(e.target.checked)} className="accent-[#1B2A4A]" />
+          DILG SGLG awarded (+30 pts)
+        </label>
       </div>
       <div>
         <label className={labelClass}>Notes</label>
@@ -288,6 +303,8 @@ function LegalEditForm({
   const [filing, setFiling] = useState(r.filing_date ?? '')
   const [resolution, setResolution] = useState(r.resolution_date ?? '')
   const [resolutionSummary, setResolutionSummary] = useState(r.resolution_summary ?? '')
+  const [ombudsman, setOmbudsman] = useState<OmbudsmanDisposition | ''>(r.ombudsman_disposition ?? '')
+  const [comelec, setComelec] = useState<boolean>(r.comelec_disqualification === true)
   const [sourceUrl, setSourceUrl] = useState(r.source_url)
   const [sourceLabel, setSourceLabel] = useState(r.source_label)
 
@@ -302,6 +319,8 @@ function LegalEditForm({
       filing_date: filing || null,
       resolution_date: resolution || null,
       resolution_summary: resolutionSummary || null,
+      ombudsman_disposition: (ombudsman || null) as OmbudsmanDisposition | null,
+      comelec_disqualification: comelec,
       source_url: sourceUrl,
       source_label: sourceLabel,
     })
@@ -358,6 +377,23 @@ function LegalEditForm({
       <div>
         <label className={labelClass}>Resolution Summary</label>
         <textarea value={resolutionSummary} onChange={(e) => setResolutionSummary(e.target.value)} rows={2} className={`${inputClass} resize-none`} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Ombudsman disposition</label>
+          <select value={ombudsman} onChange={(e) => setOmbudsman(e.target.value as OmbudsmanDisposition | '')} className={inputClass}>
+            <option value="">— None on record —</option>
+            <option value="dismissed">Dismissed (0 pts)</option>
+            <option value="pending_at_ombudsman">Pending at Ombudsman (−25 pts)</option>
+            <option value="admin_penalty">Administrative penalty (−50 pts)</option>
+            <option value="criminal_filed">Criminal case filed (−100 pts)</option>
+            <option value="none">None / not applicable</option>
+          </select>
+        </div>
+        <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer self-end pb-2">
+          <input type="checkbox" checked={comelec} onChange={(e) => setComelec(e.target.checked)} className="accent-red-600" />
+          COMELEC disqualification (−100 pts)
+        </label>
       </div>
       <div>
         <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
@@ -492,6 +528,8 @@ export default function RecordsManager({ politician: p }: Props) {
   const [trackCoa, setTrackCoa] = useState<CoaFinding>('unknown')
   const [trackBillsAuthored, setTrackBillsAuthored] = useState('')
   const [trackBillsPassed, setTrackBillsPassed] = useState('')
+  const [trackBillsEnacted, setTrackBillsEnacted] = useState('')
+  const [trackSglg, setTrackSglg] = useState(false)
   const [trackAttendance, setTrackAttendance] = useState('')
   const [trackSourceUrl, setTrackSourceUrl] = useState('')
   const [trackSourceLabel, setTrackSourceLabel] = useState('')
@@ -502,6 +540,8 @@ export default function RecordsManager({ politician: p }: Props) {
   const [legalCourt, setLegalCourt] = useState('')
   const [legalCharge, setLegalCharge] = useState('')
   const [legalFiling, setLegalFiling] = useState('')
+  const [legalOmbudsman, setLegalOmbudsman] = useState<OmbudsmanDisposition | ''>('')
+  const [legalComelec, setLegalComelec] = useState(false)
   const [legalSourceUrl, setLegalSourceUrl] = useState('')
   const [legalSourceLabel, setLegalSourceLabel] = useState('')
 
@@ -560,6 +600,8 @@ export default function RecordsManager({ politician: p }: Props) {
       coa_finding: trackCoa,
       bills_authored: trackBillsAuthored ? parseInt(trackBillsAuthored) : null,
       bills_passed: trackBillsPassed ? parseInt(trackBillsPassed) : null,
+      bills_enacted_count: trackBillsEnacted ? parseInt(trackBillsEnacted) : null,
+      sglg_awarded: trackSglg,
       attendance_rate: trackAttendance ? parseFloat(trackAttendance) : null,
       source_url: trackSourceUrl,
       source_label: trackSourceLabel,
@@ -567,7 +609,8 @@ export default function RecordsManager({ politician: p }: Props) {
     setSaving(false)
     if (error) { setError(error.message); return }
     setTrackPosition(''); setTrackStart(''); setTrackEnd('')
-    setTrackBillsAuthored(''); setTrackBillsPassed(''); setTrackAttendance('')
+    setTrackBillsAuthored(''); setTrackBillsPassed(''); setTrackBillsEnacted(''); setTrackSglg(false)
+    setTrackAttendance('')
     setTrackSourceUrl(''); setTrackSourceLabel('')
     await setUnderReview(p.id)
     refresh()
@@ -594,12 +637,15 @@ export default function RecordsManager({ politician: p }: Props) {
       court: legalCourt || null,
       charge: legalCharge || null,
       filing_date: legalFiling || null,
+      ombudsman_disposition: (legalOmbudsman || null) as OmbudsmanDisposition | null,
+      comelec_disqualification: legalComelec,
       source_url: legalSourceUrl,
       source_label: legalSourceLabel,
     })
     setSaving(false)
     if (error) { setError(error.message); return }
     setLegalTitle(''); setLegalCourt(''); setLegalCharge(''); setLegalFiling('')
+    setLegalOmbudsman(''); setLegalComelec(false)
     setLegalSourceUrl(''); setLegalSourceLabel('')
     await setUnderReview(p.id)
     refresh()
@@ -842,9 +888,19 @@ export default function RecordsManager({ politician: p }: Props) {
                 <input type="number" value={trackBillsPassed} onChange={(e) => setTrackBillsPassed(e.target.value)} placeholder="0" className={inputClass} />
               </div>
               <div>
+                <label className={labelClass}>Bills Enacted (RA)</label>
+                <input type="number" value={trackBillsEnacted} onChange={(e) => setTrackBillsEnacted(e.target.value)} placeholder="0" className={inputClass} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
                 <label className={labelClass}>Attendance %</label>
                 <input type="number" min="0" max="100" step="0.1" value={trackAttendance} onChange={(e) => setTrackAttendance(e.target.value)} placeholder="95" className={inputClass} />
               </div>
+              <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer self-end pb-2">
+                <input type="checkbox" checked={trackSglg} onChange={(e) => setTrackSglg(e.target.checked)} className="accent-[#1B2A4A]" />
+                DILG SGLG awarded (+30 pts)
+              </label>
             </div>
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
@@ -951,6 +1007,23 @@ export default function RecordsManager({ politician: p }: Props) {
                 <label className={labelClass}>Filing Date</label>
                 <input type="date" value={legalFiling} onChange={(e) => setLegalFiling(e.target.value)} className={inputClass} />
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelClass}>Ombudsman disposition</label>
+                <select value={legalOmbudsman} onChange={(e) => setLegalOmbudsman(e.target.value as OmbudsmanDisposition | '')} className={inputClass}>
+                  <option value="">— None on record —</option>
+                  <option value="dismissed">Dismissed (0 pts)</option>
+                  <option value="pending_at_ombudsman">Pending at Ombudsman (−25 pts)</option>
+                  <option value="admin_penalty">Administrative penalty (−50 pts)</option>
+                  <option value="criminal_filed">Criminal case filed (−100 pts)</option>
+                  <option value="none">None / not applicable</option>
+                </select>
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer self-end pb-2">
+                <input type="checkbox" checked={legalComelec} onChange={(e) => setLegalComelec(e.target.checked)} className="accent-red-600" />
+                COMELEC disqualification (−100 pts)
+              </label>
             </div>
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
