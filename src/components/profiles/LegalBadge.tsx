@@ -11,6 +11,13 @@ const statusConfig: Record<string, { label: string; bg: string; text: string; bo
   ongoing_appeal: { label: 'On Appeal',     bg: 'bg-amber-50',  text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-400' },
 }
 
+const ombudsmanLabel: Record<string, string> = {
+  dismissed: 'Ombudsman: Dismissed',
+  pending_at_ombudsman: 'Ombudsman: Pending',
+  admin_penalty: 'Ombudsman: Admin penalty',
+  criminal_filed: 'Ombudsman: Criminal filed',
+}
+
 export default function LegalBadge({ record: r, expanded = false, penalty }: Props) {
   const cfg = statusConfig[r.status] ?? statusConfig.dismissed
   const showPenalty = typeof penalty === 'number' && penalty > 0
@@ -38,6 +45,21 @@ export default function LegalBadge({ record: r, expanded = false, penalty }: Pro
             )}
           </div>
           <p className={`font-semibold text-sm ${cfg.text}`}>{r.case_title}</p>
+          {/* Sourced administrative flags — visible on collapsed and expanded views */}
+          {(r.ombudsman_disposition || r.comelec_disqualification) && (
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
+              {r.ombudsman_disposition && r.ombudsman_disposition !== 'none' && ombudsmanLabel[r.ombudsman_disposition] && (
+                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white/70 border border-current/30 text-slate-700">
+                  {ombudsmanLabel[r.ombudsman_disposition]}
+                </span>
+              )}
+              {r.comelec_disqualification && (
+                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white/70 border border-red-300 text-red-700">
+                  COMELEC disqualification
+                </span>
+              )}
+            </div>
+          )}
           {expanded && (
             <>
               {r.charge && <p className={`text-xs mt-1 opacity-80 ${cfg.text}`}>{r.charge}</p>}

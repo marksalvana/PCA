@@ -321,7 +321,17 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                             </p>
                           )}
                           {rec.bills_authored != null && (
-                            <p className="text-slate-400 text-xs mt-1">{rec.bills_authored} bills authored · {rec.bills_passed ?? 0} passed</p>
+                            <p className="text-slate-400 text-xs mt-1">
+                              {rec.bills_authored} bills authored · {rec.bills_passed ?? 0} passed
+                              {rec.bills_enacted_count != null && rec.bills_enacted_count > 0 && (
+                                <> · <span className="text-blue-700 font-semibold">{rec.bills_enacted_count} enacted (RA)</span></>
+                              )}
+                            </p>
+                          )}
+                          {rec.sglg_awarded === true && (
+                            <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-green-50 border border-green-200 text-green-700 mt-1.5">
+                              ★ DILG SGLG
+                            </span>
                           )}
                           {rec.attendance_rate != null && (
                             <p className="text-xs mt-1 text-slate-500">
