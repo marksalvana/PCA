@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Logo from './Logo'
 import { useLanguage } from '@/components/LanguageProvider'
 
 export default function FooterContent() {
@@ -13,13 +14,8 @@ export default function FooterContent() {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <svg viewBox="0 0 148 50" width="24" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 25 Q74 3 145 25 Q74 47 3 25 Z" stroke="#FBF5EB" strokeWidth="5" fill="none" strokeLinejoin="round"/>
-                <circle cx="74" cy="25" r="11" fill="#FBF5EB"/>
-                <polyline points="68,25 72,29 81,19" fill="none" stroke="#C8304B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="font-bold text-lg text-[#FBF5EB]" style={{ fontFamily: "'Public Sans', system-ui, sans-serif", letterSpacing: '-0.03em' }}>Politiko</span>
+            <div className="mb-2">
+              <Logo variant="light" height={32} />
             </div>
             <p className="text-[#FBF5EB]/50 text-xs label-mono">{t('footer_tagline')}</p>
           </div>
