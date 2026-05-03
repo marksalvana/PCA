@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Politician } from '@/types/database'
 import ScoreBadge from '@/components/ui/ScoreBadge'
-import { objectiveScoreBarPct, objectiveScoreColor } from '@/lib/scoring'
+import LensAwareScoreBlock from '@/components/lens/LensAwareScoreBlock'
 
 type Props = {
   politician: Politician
@@ -82,28 +82,8 @@ export default function ProfileCard({ politician: p, legalFlags = [] }: Props) {
           </div>
         </div>
 
-        {/* Objective Score */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Objective Score</span>
-              <span className="text-xs text-slate-300" title="Education + COA audit + legal record">ⓘ</span>
-            </div>
-            <ScoreBadge score={p.objective_score} size="sm" />
-          </div>
-          <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full score-bar-fill"
-              style={{
-                width: `${objectiveScoreBarPct(p.objective_score)}%`,
-                backgroundColor: objectiveScoreColor(p.objective_score),
-              }}
-            />
-          </div>
-          {p.objective_score == null && (
-            <p className="text-xs text-slate-400 italic">Insufficient verified data</p>
-          )}
-        </div>
+        {/* Objective Score — lens-aware */}
+        <LensAwareScoreBlock score={p.objective_score} breakdown={p.score_breakdown} />
 
         {/* Community Trust */}
         <div className="mt-3 pt-3 border-t border-slate-100">

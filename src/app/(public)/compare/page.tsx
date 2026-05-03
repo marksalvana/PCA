@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import CompareSelector from '@/components/comparison/CompareSelector'
 import CompareGrid from '@/components/comparison/CompareGrid'
-import LensPanel from '@/components/lens/LensPanel'
+import LensLink from '@/components/lens/LensLink'
 import ShareLensButton from '@/components/lens/ShareLensButton'
 import type { Politician, PoliticianWithDetails } from '@/types/database'
 
@@ -83,8 +83,8 @@ export default async function ComparePage({
       {bothSelected && politicianA && politicianB && (
         <div className="mt-8">
           <CompareGrid a={politicianA} b={politicianB} />
-          <LensPanel />
-          <div className="mt-3 flex justify-end">
+          <div className="mt-4 flex flex-wrap gap-2 justify-end">
+            <LensLink />
             <ShareLensButton slugA={politicianA.slug} slugB={politicianB.slug} />
           </div>
         </div>

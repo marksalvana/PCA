@@ -9,7 +9,7 @@ import DynastySection from '@/components/profiles/DynastySection'
 import ScoreBadge from '@/components/ui/ScoreBadge'
 import SourceLink from '@/components/ui/SourceLink'
 import LensAwareScoreBadge from '@/components/lens/LensAwareScoreBadge'
-import LensPanel from '@/components/lens/LensPanel'
+import LensLink from '@/components/lens/LensLink'
 import {
   computeTrackPts,
   computeAchievementPts,
@@ -222,16 +222,16 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             )}
           </div>
 
-          {/* Compare CTA */}
-          <Link
-            href={`/compare?a=${p.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors mb-3"
-          >
-            Compare {p.preferred_name ?? p.full_name} with another candidate →
-          </Link>
-
-          {/* Personal Lens — collapsible, optional */}
-          <LensPanel />
+          {/* Compare CTA + Lens link */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <Link
+              href={`/compare?a=${p.slug}`}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors"
+            >
+              Compare {p.preferred_name ?? p.full_name} with another candidate →
+            </Link>
+            <LensLink />
+          </div>
 
           {/* Education */}
           {p.education_records && p.education_records.length > 0 && (
