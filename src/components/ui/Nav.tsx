@@ -155,7 +155,7 @@ export default function Nav() {
             href="/login"
             className="ml-2 text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-1.5 rounded transition-colors"
           >
-            Admin
+            Login / Sign Up
           </Link>
         </nav>
 
@@ -217,7 +217,7 @@ export default function Nav() {
               href="/login"
               className="mt-3 text-center text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-2.5 rounded transition-colors"
             >
-              Admin
+              Login / Sign Up
             </Link>
           </nav>
         </div>
