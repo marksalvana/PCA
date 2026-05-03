@@ -6,15 +6,18 @@ import { usePathname } from 'next/navigation'
 import LanguageToggle from './LanguageToggle'
 import Logo from './Logo'
 
+type DropdownItem = { href: string; label: string; description?: string }
+type DropdownKey = 'contribute' | 'learn'
+
 const TOP_LEVEL = [
   { href: '/profiles', label: 'Profiles' },
   { href: '/compare',  label: 'Compare' },
   { href: '/lens',     label: 'Lens' },
 ] as const
 
-const MORE_GROUPS: { heading: string; items: { href: string; label: string; description?: string }[] }[] = [
-  {
-    heading: 'Contribute',
+const DROPDOWNS: Record<DropdownKey, { label: string; items: DropdownItem[] }> = {
+  contribute: {
+    label: 'Contribute',
     items: [
       { href: '/submit',       label: 'Submit a record',  description: 'Add education, track record, or achievement' },
       { href: '/petition',     label: 'Request a profile',description: 'Suggest a new politician to add' },
@@ -22,31 +25,36 @@ const MORE_GROUPS: { heading: string; items: { href: string; label: string; desc
       { href: '/forum',        label: 'Forum',            description: 'Discuss and give feedback' },
     ],
   },
-  {
-    heading: 'Learn',
+  learn: {
+    label: 'Learn',
     items: [
       { href: '/methodology', label: 'How It Works', description: 'Methodology and institutional sources' },
       { href: '/about',       label: 'About',        description: 'What Politiko is and isn\'t' },
     ],
   },
-]
+}
+
+const DROPDOWN_KEYS: DropdownKey[] = ['contribute', 'learn']
 
 // Flat list for mobile menu — keeps order matching desktop
 const MOBILE_GROUPS: { heading: string; items: { href: string; label: string }[] }[] = [
   { heading: '', items: TOP_LEVEL.map((l) => ({ href: l.href, label: l.label })) },
-  ...MORE_GROUPS.map((g) => ({ heading: g.heading, items: g.items.map((i) => ({ href: i.href, label: i.label })) })),
+  ...DROPDOWN_KEYS.map((k) => ({
+    heading: DROPDOWNS[k].label,
+    items: DROPDOWNS[k].items.map((i) => ({ href: i.href, label: i.label })),
+  })),
 ]
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [moreOpen, setMoreOpen] = useState(false)
-  const moreRef = useRef<HTMLDivElement>(null)
+  const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null)
+  const dropdownsRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
 
   // Close menus on route change
   useEffect(() => {
     setMobileOpen(false)
-    setMoreOpen(false)
+    setOpenDropdown(null)
   }, [pathname])
 
   // Lock body scroll while mobile menu is open
@@ -58,16 +66,16 @@ export default function Nav() {
     }
   }, [mobileOpen])
 
-  // Close "More" dropdown on outside click or Escape
+  // Close any open dropdown on outside click or Escape
   useEffect(() => {
-    if (!moreOpen) return
+    if (!openDropdown) return
     function handleClick(e: MouseEvent) {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-        setMoreOpen(false)
+      if (dropdownsRef.current && !dropdownsRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null)
       }
     }
     function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setMoreOpen(false)
+      if (e.key === 'Escape') setOpenDropdown(null)
     }
     document.addEventListener('mousedown', handleClick)
     document.addEventListener('keydown', handleKey)
@@ -75,7 +83,7 @@ export default function Nav() {
       document.removeEventListener('mousedown', handleClick)
       document.removeEventListener('keydown', handleKey)
     }
-  }, [moreOpen])
+  }, [openDropdown])
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#E8E4DC]">
@@ -98,56 +106,61 @@ export default function Nav() {
             </Link>
           ))}
 
-          {/* More dropdown */}
-          <div className="relative" ref={moreRef}>
-            <button
-              type="button"
-              onClick={() => setMoreOpen((v) => !v)}
-              aria-haspopup="menu"
-              aria-expanded={moreOpen}
-              className="text-sm text-[#4A4540] hover:text-[#1B2A4A] px-3 py-1.5 rounded hover:bg-[#F4F2EE] transition-colors font-medium inline-flex items-center gap-1"
-            >
-              More
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 12 12"
-                aria-hidden
-                className={`transition-transform ${moreOpen ? 'rotate-180' : ''}`}
-              >
-                <path d="M3 4.5 L6 8 L9 4.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {moreOpen && (
-              <div
-                role="menu"
-                className="absolute top-full right-0 mt-1 w-72 bg-white border border-[#E8E4DC] rounded-xl shadow-lg overflow-hidden"
-              >
-                {MORE_GROUPS.map((group, i) => (
-                  <div key={group.heading} className={i > 0 ? 'border-t border-[#E8E4DC]' : ''}>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-3 pt-3 pb-1">
-                      {group.heading}
-                    </p>
-                    <ul className="pb-2">
-                      {group.items.map((item) => (
-                        <li key={item.href}>
-                          <Link
-                            href={item.href}
-                            className="block px-3 py-2 hover:bg-[#F4F2EE] transition-colors"
-                            role="menuitem"
-                          >
-                            <span className="block text-sm font-semibold text-[#1B2A4A]">{item.label}</span>
-                            {item.description && (
-                              <span className="block text-xs text-slate-500 mt-0.5">{item.description}</span>
-                            )}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* Named dropdowns — Contribute, Learn */}
+          <div className="flex items-center gap-1" ref={dropdownsRef}>
+            {DROPDOWN_KEYS.map((key) => {
+              const dd = DROPDOWNS[key]
+              const isOpen = openDropdown === key
+              return (
+                <div key={key} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setOpenDropdown(isOpen ? null : key)}
+                    aria-haspopup="menu"
+                    aria-expanded={isOpen}
+                    className={`text-sm px-3 py-1.5 rounded transition-colors font-medium inline-flex items-center gap-1 ${
+                      isOpen
+                        ? 'text-[#1B2A4A] bg-[#F4F2EE]'
+                        : 'text-[#4A4540] hover:text-[#1B2A4A] hover:bg-[#F4F2EE]'
+                    }`}
+                  >
+                    {dd.label}
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 12 12"
+                      aria-hidden
+                      className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                    >
+                      <path d="M3 4.5 L6 8 L9 4.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  {isOpen && (
+                    <div
+                      role="menu"
+                      className="absolute top-full right-0 mt-1 w-72 bg-white border border-[#E8E4DC] rounded-xl shadow-lg overflow-hidden"
+                    >
+                      <ul className="py-2">
+                        {dd.items.map((item) => (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              className="block px-3 py-2 hover:bg-[#F4F2EE] transition-colors"
+                              role="menuitem"
+                            >
+                              <span className="block text-sm font-semibold text-[#1B2A4A]">{item.label}</span>
+                              {item.description && (
+                                <span className="block text-xs text-slate-500 mt-0.5">{item.description}</span>
+                              )}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
 
           <LanguageToggle />
