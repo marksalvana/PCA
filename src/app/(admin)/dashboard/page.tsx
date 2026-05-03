@@ -11,11 +11,13 @@ export default async function DashboardPage() {
     { count: drafts },
     { count: pendingVetting },
     { count: petitions },
+    { count: pendingSubmissions },
   ] = await Promise.all([
     supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('status', 'published'),
     supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('status', 'draft'),
     supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('status', 'under_review'),
     supabase.from('petitions').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('record_submissions').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
   const stats = [
@@ -23,6 +25,7 @@ export default async function DashboardPage() {
     { label: 'Drafts', value: drafts ?? 0, href: '/admin/profiles', color: 'text-amber-400' },
     { label: 'Awaiting Vetting', value: pendingVetting ?? 0, href: '/vetting', color: 'text-[#60a5fa]' },
     { label: 'Pending Petitions', value: petitions ?? 0, href: '/admin/petitions', color: 'text-[#fcd116]' },
+    { label: 'Pending Submissions', value: pendingSubmissions ?? 0, href: '/admin/submissions', color: 'text-orange-400' },
   ]
 
   return (

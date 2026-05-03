@@ -2,11 +2,12 @@ import Link from 'next/link'
 import type { UserRole } from '@/types/database'
 
 const links = [
-  { href: '/dashboard',       label: 'Dashboard',     roles: ['admin', 'vetter', 'superadmin'] },
-  { href: '/admin/profiles',  label: 'Profiles',      roles: ['admin', 'superadmin'] },
-  { href: '/admin/profiles/new', label: '+ New Profile', roles: ['admin', 'superadmin'] },
-  { href: '/vetting',         label: 'Vetting Queue', roles: ['vetter', 'superadmin'] },
-  { href: '/profiles',        label: '← Public Site', roles: ['admin', 'vetter', 'superadmin'] },
+  { href: '/dashboard',          label: 'Dashboard',         roles: ['admin', 'vetter', 'superadmin'] },
+  { href: '/admin/profiles',     label: 'Profiles',          roles: ['admin', 'superadmin'] },
+  { href: '/admin/profiles/new', label: '+ New Profile',     roles: ['admin', 'superadmin'] },
+  { href: '/vetting',            label: 'Vetting Queue',     roles: ['vetter', 'superadmin'] },
+  { href: '/admin/submissions',  label: 'Submissions Queue', roles: ['admin', 'vetter', 'superadmin'] },
+  { href: '/profiles',           label: '← Public Site',     roles: ['admin', 'vetter', 'superadmin'] },
 ]
 
 const roleLabel: Record<UserRole, string> = {
