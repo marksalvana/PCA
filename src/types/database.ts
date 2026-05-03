@@ -190,6 +190,58 @@ export interface Award {
   created_at: string
 }
 
+export type SubmissionType = 'education' | 'track_record' | 'achievement'
+export type SubmissionStatus =
+  | 'pending' | 'under_review' | 'accepted' | 'rejected' | 'duplicate'
+
+export interface RecordSubmissionPayload {
+  // Common fields any submission_type may have populated
+  // Education
+  institution?: string
+  degree?: string
+  field_of_study?: string
+  year_started?: number
+  year_ended?: number
+  is_completed?: boolean
+  ched_accreditation?: ChedAccreditation
+  // Track record
+  position?: string
+  start_date?: string
+  end_date?: string
+  is_current?: boolean
+  coa_finding?: CoaFinding
+  bills_authored?: number
+  bills_passed?: number
+  bills_enacted_count?: number
+  sglg_awarded?: boolean
+  attendance_rate?: number
+  // Achievement
+  title?: string
+  description?: string
+  impact_scope?: ImpactScope
+  category?: AchievementCategory
+  year?: number
+}
+
+export interface RecordSubmission {
+  id: string
+  politician_id: string
+  submission_type: SubmissionType
+  payload: RecordSubmissionPayload
+  source_url: string
+  source_label: string
+  supporting_document_url: string | null
+  explanation: string
+  submitter_name: string
+  submitter_email: string
+  submitter_user_id: string | null
+  status: SubmissionStatus
+  admin_notes: string | null
+  reviewed_by: string | null
+  created_at: string
+  resolved_at: string | null
+}
+
 export interface OutcomeMetric {
   id: string
   politician_id: string
@@ -292,6 +344,7 @@ export interface Database {
       net_worth_records: { Row: NetWorthRecord; Insert: Insertable<NetWorthRecord>; Update: Updatable<NetWorthRecord> }
       awards: { Row: Award; Insert: Insertable<Award>; Update: Updatable<Award> }
       outcome_metrics: { Row: OutcomeMetric; Insert: Insertable<OutcomeMetric>; Update: Updatable<OutcomeMetric> }
+      record_submissions: { Row: RecordSubmission; Insert: Insertable<RecordSubmission>; Update: Updatable<RecordSubmission> }
       vetting_records: { Row: VettingRecord; Insert: Omit<VettingRecord, 'id' | 'vetted_at'>; Update: Partial<Omit<VettingRecord, 'id' | 'vetted_at'>> }
       civic_trust_ratings: { Row: CivicTrustRating; Insert: Omit<CivicTrustRating, 'id' | 'created_at'>; Update: Partial<Omit<CivicTrustRating, 'id' | 'created_at'>> }
       petitions: { Row: Petition; Insert: Omit<Petition, 'id' | 'created_at'>; Update: Partial<Omit<Petition, 'id' | 'created_at'>> }

@@ -222,7 +222,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             )}
           </div>
 
-          {/* Compare CTA + Lens link */}
+          {/* Compare CTA + Lens link + Contribute */}
           <div className="flex flex-wrap gap-2 mb-6">
             <Link
               href={`/compare?a=${p.slug}`}
@@ -231,6 +231,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               Compare {p.preferred_name ?? p.full_name} with another candidate →
             </Link>
             <LensLink />
+            <Link
+              href={`/submit?politician=${p.slug}`}
+              className="inline-flex items-center gap-2 text-xs font-bold border border-slate-200 bg-slate-50 hover:border-slate-300 hover:text-[#1B2A4A] text-slate-600 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              ＋ Submit a record for {p.preferred_name ?? p.full_name}
+            </Link>
           </div>
 
           {/* Education */}
