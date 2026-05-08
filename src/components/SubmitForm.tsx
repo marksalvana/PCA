@@ -388,9 +388,34 @@ export default function SubmitForm({ politicians, defaultPoliticianId }: Props) 
       {type === 'achievement' && (
         <div className="card p-5 flex flex-col gap-4">
           <p className="text-sm font-black text-slate-900">Achievement details</p>
+
+          {/* Policy notice: biographical firsts are not scoring achievements */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-900 leading-relaxed">
+            <p className="font-bold mb-1">What counts as an achievement?</p>
+            <p>
+              Sourced governance accomplishments — bills enacted into law (RA-numbered),
+              budget secured for projects, programs implemented, awards from named institutions
+              with published criteria.
+            </p>
+            <p className="mt-2 font-bold">What doesn&apos;t count?</p>
+            <p>
+              Demographic firsts (&ldquo;first female X&rdquo;, &ldquo;youngest senator&rdquo;,
+              &ldquo;first Filipino to&hellip;&rdquo;) and biographical superlatives are
+              biographical facts, not governance accomplishments. They will not be scored.
+            </p>
+          </div>
+
           <div>
             <label className={labelClass}>Title <span className="text-red-600">*</span></label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className={inputClass} placeholder="Authored the Universal Health Care Act" />
+            {/^\s*(first|youngest|oldest|sole|only)\s/i.test(title) && (
+              <p className="text-xs text-amber-700 mt-1.5 leading-relaxed">
+                ⚠ This looks like a demographic first or biographical superlative. Submissions
+                like &ldquo;first female mayor&rdquo; or &ldquo;youngest senator&rdquo; are not
+                scored as achievements — vetters typically reject these. If this is actually
+                a sourced governance accomplishment, rephrase the title.
+              </p>
+            )}
           </div>
           <div>
             <label className={labelClass}>Description</label>

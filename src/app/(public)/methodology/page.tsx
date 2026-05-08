@@ -415,6 +415,17 @@ export default function MethodologyPage() {
           <p className="text-xs text-slate-400 leading-relaxed">
             Achievements without a set impact scope contribute 0 pts. Admins must classify the scope before a record influences the score — leaving it blank is a prompt to research the correct classification, not a default.
           </p>
+
+          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">What does NOT count as an achievement</p>
+            <p className="text-xs text-amber-900 leading-relaxed">
+              Demographic firsts (&ldquo;first female Vice President&rdquo;, &ldquo;youngest senator&rdquo;,
+              &ldquo;first Filipino X&rdquo;) and biographical superlatives are biographical facts about
+              the person, not sourced governance accomplishments. We display them on a profile when
+              they&apos;re notable, but they do not contribute to the Objective Score. The score is
+              meant to measure what the politician <em>did in office</em>, not what they happened to be.
+            </p>
+          </div>
         </div>
 
         <div className="card p-4 border-l-4 border-l-blue-300">
