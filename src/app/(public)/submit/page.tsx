@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import SubmitForm from '@/components/SubmitForm'
 import Link from 'next/link'
+import type { SubmissionType } from '@/types/database'
 
 export const metadata = {
   title: 'Submit a Record — Politiko',
@@ -10,7 +11,7 @@ export const metadata = {
 export default async function SubmitPage({
   searchParams,
 }: {
-  searchParams: Promise<{ politician?: string }>
+  searchParams: Promise<{ politician?: string; type?: string }>
 }) {
   const sp = await searchParams
   const supabase = await createClient()
@@ -34,6 +35,13 @@ export default async function SubmitPage({
   const defaultPoliticianId = sp.politician
     ? list.find((p) => p.slug === sp.politician)?.id
     : undefined
+
+  // Resolve ?type=education|track_record|achievement to pre-select section
+  const allowedTypes: SubmissionType[] = ['education', 'track_record', 'achievement']
+  const defaultType: SubmissionType | undefined =
+    sp.type && (allowedTypes as string[]).includes(sp.type)
+      ? (sp.type as SubmissionType)
+      : undefined
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
@@ -75,7 +83,7 @@ export default async function SubmitPage({
           <p className="text-slate-500">No politicians published yet — nothing to submit against.</p>
         </div>
       ) : (
-        <SubmitForm politicians={list} defaultPoliticianId={defaultPoliticianId} />
+        <SubmitForm politicians={list} defaultPoliticianId={defaultPoliticianId} defaultType={defaultType} />
       )}
 
     </div>

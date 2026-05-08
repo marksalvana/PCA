@@ -22,6 +22,8 @@ type Props = {
   politicians: PoliticianOption[]
   /** Optional pre-selected politician (e.g. from ?politician=slug query param) */
   defaultPoliticianId?: string
+  /** Optional pre-selected submission type (e.g. from ?type=education) */
+  defaultType?: SubmissionType
 }
 
 const inputClass =
@@ -47,9 +49,9 @@ const TYPE_OPTIONS: { value: SubmissionType; label: string; description: string 
   },
 ]
 
-export default function SubmitForm({ politicians, defaultPoliticianId }: Props) {
+export default function SubmitForm({ politicians, defaultPoliticianId, defaultType }: Props) {
   const [politicianId, setPoliticianId] = useState(defaultPoliticianId ?? '')
-  const [type, setType] = useState<SubmissionType>('education')
+  const [type, setType] = useState<SubmissionType>(defaultType ?? 'education')
 
   // Type-specific payload fields
   const [institution, setInstitution] = useState('')

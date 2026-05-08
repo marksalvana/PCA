@@ -42,6 +42,39 @@ function initials(name: string) {
   return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
 }
 
+/**
+ * Empty-state card for scoring sections that have no records yet.
+ * Visible on every published profile so readers see what is measured
+ * even when no data has been submitted yet, and so contributors are
+ * prompted to submit.
+ */
+function EmptyState({
+  description,
+  submitHref,
+  submitLabel,
+}: {
+  description: string
+  submitHref?: string
+  submitLabel?: string
+}) {
+  return (
+    <div className="card p-5 border-dashed border-slate-200 bg-slate-50/40 text-center">
+      <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">No data yet</p>
+      <p className="text-sm text-slate-500 leading-relaxed mb-3 max-w-md mx-auto">
+        {description}
+      </p>
+      {submitHref && (
+        <Link
+          href={submitHref}
+          className="inline-flex items-center gap-1 text-xs font-bold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+        >
+          ＋ {submitLabel ?? 'Submit a record'}
+        </Link>
+      )}
+    </div>
+  )
+}
+
 function avatarColor(name: string) {
   const colors = [
     'bg-blue-600', 'bg-indigo-600', 'bg-purple-600',
@@ -68,7 +101,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
   const { data: politician } = await supabase
     .from('politicians')
-    .select('*, education_records(*), track_records(*), legal_records(*), achievements(*), net_worth_records(*), dynasty_connections(*)')
+    .select('*, education_records(*), track_records(*), legal_records(*), achievements(*), net_worth_records(*), awards(*), outcome_metrics(*), dynasty_connections(*)')
     .eq('slug', slug)
     .eq('status', 'published')
     .single()
@@ -239,14 +272,19 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
           </div>
 
           {/* Education */}
-          {p.education_records && p.education_records.length > 0 && (
-            <section className="mb-5">
-              <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-[#1B2A4A] rounded-md flex items-center justify-center text-white text-sm leading-none">🎓</span>
-                Education
-              </h2>
-              <div className="flex flex-col gap-2">
-                {p.education_records.map((rec) => {
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-[#1B2A4A] rounded-md flex items-center justify-center text-white text-sm leading-none">🎓</span>
+              Education
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.education_records?.length ? (
+                <EmptyState
+                  description="Schools attended and degrees earned, scored by CHED accreditation tier of the institution. Help build this profile."
+                  submitHref={`/submit?politician=${p.slug}&type=education`}
+                  submitLabel="Submit education record"
+                />
+              ) : p.education_records.map((rec) => {
                   const pts = computeEducationPts(rec)
                   const showBar = rec.ched_accreditation && rec.ched_accreditation !== 'unknown'
                   return (
@@ -284,17 +322,21 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 })}
               </div>
             </section>
-          )}
 
           {/* Track Record */}
-          {p.track_records && p.track_records.length > 0 && (
-            <section className="mb-5">
-              <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-[#1B2A4A] rounded-md flex items-center justify-center text-white text-sm leading-none">📋</span>
-                Track Record
-              </h2>
-              <div className="flex flex-col gap-2">
-                {p.track_records.map((rec) => {
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-[#1B2A4A] rounded-md flex items-center justify-center text-white text-sm leading-none">📋</span>
+              Track Record
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.track_records?.length ? (
+                <EmptyState
+                  description="Positions held in office, scored by COA audit findings, attendance rate, bills enacted, and DILG SGLG awards. Help build this profile."
+                  submitHref={`/submit?politician=${p.slug}&type=track_record`}
+                  submitLabel="Submit track record"
+                />
+              ) : p.track_records.map((rec) => {
                   const pts = computeTrackPts(rec)
                   const attMod = attendanceModifier(rec.attendance_rate)
                   const hasBillsFallback = (rec.coa_finding === 'not_applicable' || rec.coa_finding === 'unknown' || rec.coa_finding == null)
@@ -366,17 +408,21 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 })}
               </div>
             </section>
-          )}
 
           {/* Achievements */}
-          {p.achievements && p.achievements.length > 0 && (
-            <section className="mb-5">
-              <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-amber-500 rounded-md flex items-center justify-center text-white text-sm leading-none">★</span>
-                Achievements
-              </h2>
-              <div className="flex flex-col gap-2">
-                {p.achievements.map((ach) => {
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-amber-500 rounded-md flex items-center justify-center text-white text-sm leading-none">★</span>
+              Achievements
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.achievements?.length ? (
+                <EmptyState
+                  description="Sourced governance accomplishments — bills enacted into RA-numbered laws, programmes implemented, budget secured, scored by impact scope. Demographic firsts, election wins, and personal accomplishments don't count."
+                  submitHref={`/submit?politician=${p.slug}&type=achievement`}
+                  submitLabel="Submit achievement"
+                />
+              ) : p.achievements.map((ach) => {
                   const pts = computeAchievementPts(ach.impact_scope)
                   const scopeColor =
                     ach.impact_scope === 'national_landmark' ? 'text-blue-800 bg-blue-100 border-blue-300' :
@@ -426,25 +472,156 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 })}
               </div>
             </section>
-          )}
+
+          {/* Awards (named institutional honors) */}
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-amber-600 rounded-md flex items-center justify-center text-white text-sm leading-none">🏅</span>
+              Awards
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.awards?.length ? (
+                <EmptyState
+                  description="Named institutional honors with their own published criteria — Magsaysay, Order of Lakandula, TOYM, PMA Lifetime Achievement, etc. Each award contributes points based on the issuing body."
+                />
+              ) : p.awards.map((aw) => (
+                <div key={aw.id} className="card p-4 border-l-4 border-l-amber-500">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <p className="font-semibold text-slate-900">{aw.name}</p>
+                        {!aw.is_verified && (
+                          <span className="text-xs font-bold text-slate-400 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md">Unverified</span>
+                        )}
+                      </div>
+                      <p className="text-slate-500 text-sm">
+                        {aw.issuing_body}{aw.year ? ` · ${aw.year}` : ''}
+                      </p>
+                      {aw.citation_text && (
+                        <p className="text-slate-500 text-sm mt-1">{aw.citation_text}</p>
+                      )}
+                      <SourceLink url={aw.source_url} label={aw.source_label} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {/* Legal Records */}
-          {p.legal_records && p.legal_records.length > 0 && (
-            <section className="mb-5">
-              <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
-                <span className="w-6 h-6 bg-red-500 rounded-md flex items-center justify-center text-white text-sm leading-none">⚖</span>
-                Legal Records
-              </h2>
-              <div className="flex flex-col gap-2">
-                {p.legal_records.map((rec) => {
-                  const penalty = LEGAL_PENALTIES[rec.status as keyof typeof LEGAL_PENALTIES] ?? 0
-                  return (
-                    <LegalBadge key={rec.id} record={rec} expanded penalty={penalty} />
-                  )
-                })}
-              </div>
-            </section>
-          )}
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-red-500 rounded-md flex items-center justify-center text-white text-sm leading-none">⚖</span>
+              Legal Records
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.legal_records?.length ? (
+                <EmptyState
+                  description="Pending cases, convictions, on-appeal status, plus Office of the Ombudsman dispositions and COMELEC disqualifications. Each record requires a court or agency source."
+                  submitHref={`/submit?politician=${p.slug}`}
+                  submitLabel="Submit a record"
+                />
+              ) : p.legal_records.map((rec) => {
+                const penalty = LEGAL_PENALTIES[rec.status as keyof typeof LEGAL_PENALTIES] ?? 0
+                return (
+                  <LegalBadge key={rec.id} record={rec} expanded penalty={penalty} />
+                )
+              })}
+            </div>
+          </section>
+
+          {/* Net Worth — SALN */}
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-emerald-600 rounded-md flex items-center justify-center text-white text-sm leading-none">₱</span>
+              Net Worth (SALN)
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.net_worth_records?.length ? (
+                <EmptyState
+                  description="Annual Statements of Assets, Liabilities, and Net Worth filed under RA 6713. Year-over-year deltas vs. declared income are basis for RA 1379 lifestyle checks. Late or non-filing penalizes the score."
+                />
+              ) : p.net_worth_records.map((nw) => (
+                <div key={nw.id} className="card p-4">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <p className="font-semibold text-slate-900">SALN {nw.year}</p>
+                        {nw.saln_filed_on_time === false && (
+                          <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded-md">Late filing −25 pts</span>
+                        )}
+                        {!nw.is_verified && (
+                          <span className="text-xs font-bold text-slate-400 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md">Unverified</span>
+                        )}
+                      </div>
+                      <div className="text-slate-500 text-sm grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-0.5 mt-1">
+                        {nw.declared_net_worth != null && (
+                          <p>Net worth: <span className="text-slate-700 font-semibold tabular-nums">₱{Number(nw.declared_net_worth).toLocaleString()}</span></p>
+                        )}
+                        {nw.assets != null && (
+                          <p>Assets: <span className="text-slate-700 font-semibold tabular-nums">₱{Number(nw.assets).toLocaleString()}</span></p>
+                        )}
+                        {nw.liabilities != null && (
+                          <p>Liabilities: <span className="text-slate-700 font-semibold tabular-nums">₱{Number(nw.liabilities).toLocaleString()}</span></p>
+                        )}
+                        {nw.declared_income != null && (
+                          <p>Declared income: <span className="text-slate-700 font-semibold tabular-nums">₱{Number(nw.declared_income).toLocaleString()}</span></p>
+                        )}
+                      </div>
+                      <SourceLink url={nw.source_url} label={nw.source_label} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Outcome metrics — PSA pre/post-tenure indicators */}
+          <section className="mb-5">
+            <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-teal-600 rounded-md flex items-center justify-center text-white text-sm leading-none">📊</span>
+              Outcomes
+            </h2>
+            <div className="flex flex-col gap-2">
+              {!p.outcome_metrics?.length ? (
+                <EmptyState
+                  description="PSA-tracked socioeconomic indicators (poverty incidence, IRA utilization, etc.) measured before and after the politician's tenure in their jurisdiction. The hardest signal to source — most profiles will be empty here."
+                />
+              ) : p.outcome_metrics.map((om) => {
+                const delta = om.baseline_value != null && om.end_value != null
+                  ? Number(om.end_value) - Number(om.baseline_value)
+                  : null
+                return (
+                  <div key={om.id} className="card p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <p className="font-semibold text-slate-900 capitalize">
+                            {om.metric.replace(/_/g, ' ')}
+                          </p>
+                          <span className="text-xs text-slate-500">— {om.jurisdiction}</span>
+                          {!om.is_verified && (
+                            <span className="text-xs font-bold text-slate-400 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md">Unverified</span>
+                          )}
+                        </div>
+                        <p className="text-slate-500 text-sm">
+                          {om.baseline_value ?? '—'}{om.baseline_year ? ` (${om.baseline_year})` : ''}
+                          {' → '}
+                          {om.end_value ?? '—'}{om.end_year ? ` (${om.end_year})` : ''}
+                          {delta != null && (
+                            <span className={`ml-2 font-bold ${delta < 0 ? 'text-green-600' : delta > 0 ? 'text-red-600' : 'text-slate-400'}`}>
+                              {delta > 0 ? '+' : ''}{delta.toFixed(2)}
+                            </span>
+                          )}
+                        </p>
+                        <SourceLink url={om.source_url} label={om.source_label} />
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
 
           {/* Community Trust */}
           <section className="mb-5 card p-5" id="rate">
