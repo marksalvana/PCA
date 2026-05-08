@@ -417,14 +417,25 @@ export default function MethodologyPage() {
           </p>
 
           <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">What does NOT count as an achievement</p>
-            <p className="text-xs text-amber-900 leading-relaxed">
-              Demographic firsts (&ldquo;first female Vice President&rdquo;, &ldquo;youngest senator&rdquo;,
-              &ldquo;first Filipino X&rdquo;) and biographical superlatives are biographical facts about
-              the person, not sourced governance accomplishments. We display them on a profile when
-              they&apos;re notable, but they do not contribute to the Objective Score. The score is
-              meant to measure what the politician <em>did in office</em>, not what they happened to be.
+            <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-2">What does NOT count as an achievement</p>
+            <p className="text-xs text-amber-900 leading-relaxed mb-2">
+              The Objective Score measures what the politician <em>did in office</em> — sourced
+              governance work. Two categories of records show up on profiles as biographical
+              context but contribute 0 points:
             </p>
+            <ul className="text-xs text-amber-900 leading-relaxed list-disc list-inside space-y-1">
+              <li>
+                <span className="font-bold">Demographic firsts</span> &mdash; &ldquo;first female
+                Vice President&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Filipino X&rdquo;.
+                These are facts about who the person is, not what they accomplished.
+              </li>
+              <li>
+                <span className="font-bold">Election outcomes</span> &mdash; &ldquo;won the 2016
+                presidential election&rdquo;, &ldquo;topped the Senate race&rdquo;, &ldquo;most
+                votes in PH history&rdquo;, &ldquo;re-elected for a third term&rdquo;. These are
+                campaign results, not governance work.
+              </li>
+            </ul>
           </div>
         </div>
 

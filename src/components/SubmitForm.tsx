@@ -389,7 +389,7 @@ export default function SubmitForm({ politicians, defaultPoliticianId }: Props) 
         <div className="card p-5 flex flex-col gap-4">
           <p className="text-sm font-black text-slate-900">Achievement details</p>
 
-          {/* Policy notice: biographical firsts are not scoring achievements */}
+          {/* Policy notice: biographical firsts and election outcomes are not scoring achievements */}
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-900 leading-relaxed">
             <p className="font-bold mb-1">What counts as an achievement?</p>
             <p>
@@ -398,24 +398,44 @@ export default function SubmitForm({ politicians, defaultPoliticianId }: Props) 
               with published criteria.
             </p>
             <p className="mt-2 font-bold">What doesn&apos;t count?</p>
-            <p>
-              Demographic firsts (&ldquo;first female X&rdquo;, &ldquo;youngest senator&rdquo;,
-              &ldquo;first Filipino to&hellip;&rdquo;) and biographical superlatives are
-              biographical facts, not governance accomplishments. They will not be scored.
-            </p>
+            <ul className="list-disc list-inside space-y-1 mt-1">
+              <li>
+                <span className="font-semibold">Demographic firsts</span> &mdash; &ldquo;first
+                female VP&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Filipino to&hellip;&rdquo;
+                These are biographical facts, not governance work.
+              </li>
+              <li>
+                <span className="font-semibold">Election outcomes</span> &mdash; &ldquo;Won 2016
+                Presidential Election&rdquo;, &ldquo;Topped Senate race&rdquo;, &ldquo;most votes
+                in PH history&rdquo;, &ldquo;re-elected for 3rd term&rdquo;. These are campaign
+                results, not what the politician did in office.
+              </li>
+            </ul>
           </div>
 
           <div>
             <label className={labelClass}>Title <span className="text-red-600">*</span></label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className={inputClass} placeholder="Authored the Universal Health Care Act" />
-            {/^\s*(first|youngest|oldest|sole|only)\s/i.test(title) && (
-              <p className="text-xs text-amber-700 mt-1.5 leading-relaxed">
-                ⚠ This looks like a demographic first or biographical superlative. Submissions
-                like &ldquo;first female mayor&rdquo; or &ldquo;youngest senator&rdquo; are not
-                scored as achievements — vetters typically reject these. If this is actually
-                a sourced governance accomplishment, rephrase the title.
-              </p>
-            )}
+            {(() => {
+              const t = title.trim()
+              const isDemographicFirst = /^(first|youngest|oldest|sole|only)\s/i.test(t)
+              const isElectionOutcome =
+                /\b(won|topped|winner of)\b.*\b(election|presidential|senate|senatorial|gubernatorial|mayoral|midterm|race)\b/i.test(t)
+                || /\b(re-?elected|reelected)\b/i.test(t)
+                || /\belected\s+(as|to|in)\b/i.test(t)
+                || /\b(most|highest|second-highest|record-breaking)\s+(number\s+of\s+)?votes?\b/i.test(t)
+                || /\btop\s+(vote-?getter|placer)\b/i.test(t)
+                || /\b\d+(st|nd|rd|th)\s+(consecutive\s+)?term\b/i.test(t)
+                || /\b(landslide|sweeping)\s+(victory|win)\b/i.test(t)
+              if (!isDemographicFirst && !isElectionOutcome) return null
+              return (
+                <p className="text-xs text-amber-700 mt-1.5 leading-relaxed">
+                  ⚠ This looks like {isDemographicFirst ? 'a demographic first or biographical superlative' : 'an electoral outcome / campaign result'}.
+                  Submissions like this are not scored as achievements — vetters typically reject
+                  them. If this is actually a sourced governance accomplishment, rephrase the title.
+                </p>
+              )
+            })()}
           </div>
           <div>
             <label className={labelClass}>Description</label>
