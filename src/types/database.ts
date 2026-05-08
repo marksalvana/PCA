@@ -304,6 +304,16 @@ export interface ForumPost {
   created_at: string
 }
 
+export type ReactionType = 'like' | 'dislike'
+
+export interface ForumReaction {
+  id: string
+  post_id: string
+  user_id: string
+  reaction: ReactionType
+  created_at: string
+}
+
 export interface ScoringBenchmark {
   id: string
   category: string
@@ -354,6 +364,11 @@ export interface Database {
         Row: ForumPost
         Insert: { author_name: string; content: string; category?: ForumCategory; user_id?: string | null; is_pinned?: boolean }
         Update: { author_name?: string; content?: string; category?: ForumCategory; user_id?: string | null; is_pinned?: boolean }
+      }
+      forum_reactions: {
+        Row: ForumReaction
+        Insert: { post_id: string; user_id: string; reaction: ReactionType }
+        Update: { reaction?: ReactionType }
       }
     }
   }

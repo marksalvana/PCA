@@ -1,6 +1,8 @@
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import ForumForm from './ForumForm'
+import ReactionButtons from '@/components/forum/ReactionButtons'
+import type { ReactionType } from '@/types/database'
 
 export const metadata = { title: 'Community Forum — Politiko' }
 
@@ -11,6 +13,12 @@ type ForumPost = {
   category: string
   is_pinned: boolean
   created_at: string
+}
+
+type ReactionRow = {
+  post_id: string
+  user_id: string
+  reaction: ReactionType
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -56,6 +64,30 @@ export default async function ForumPage({
 
   const { data } = await query
   const posts = (data ?? []) as ForumPost[]
+
+  // Fetch reactions for the visible posts + the viewer's own reactions in parallel.
+  const postIds = posts.map((p) => p.id)
+  const [{ data: reactionsData }, { data: { user } }] = await Promise.all([
+    postIds.length === 0
+      ? Promise.resolve({ data: [] as ReactionRow[] })
+      : db
+          .from('forum_reactions')
+          .select('post_id, user_id, reaction')
+          .in('post_id', postIds),
+    supabase.auth.getUser(),
+  ])
+  const reactions = (reactionsData ?? []) as ReactionRow[]
+
+  // Bucket counts + viewer's own reaction by post_id for O(1) lookup
+  const reactionMap = new Map<string, { likes: number; dislikes: number; userReaction: ReactionType | null }>()
+  for (const id of postIds) reactionMap.set(id, { likes: 0, dislikes: 0, userReaction: null })
+  for (const r of reactions) {
+    const bucket = reactionMap.get(r.post_id)
+    if (!bucket) continue
+    if (r.reaction === 'like') bucket.likes += 1
+    else if (r.reaction === 'dislike') bucket.dislikes += 1
+    if (user && r.user_id === user.id) bucket.userReaction = r.reaction
+  }
 
   const ALL_CATEGORIES = ['suggestion', 'feedback', 'question', 'bug_report', 'general']
 
@@ -106,27 +138,37 @@ export default async function ForumPage({
       {/* Posts list */}
       {posts.length > 0 ? (
         <div className="space-y-3">
-          {posts.map((post) => (
-            <div key={post.id} className={`card p-4 ${post.is_pinned ? 'border-l-4 border-l-[#1B2A4A]' : ''}`}>
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  {post.is_pinned && (
-                    <span className="text-xs font-black text-[#1B2A4A]">📌 Pinned</span>
-                  )}
-                  <span className="text-sm font-bold text-slate-900">{post.author_name}</span>
-                  <span className={`text-xs font-bold border px-2 py-0.5 rounded-md ${CATEGORY_COLORS[post.category] ?? CATEGORY_COLORS.general}`}>
-                    {CATEGORY_LABELS[post.category] ?? post.category}
-                  </span>
+          {posts.map((post) => {
+            const counts = reactionMap.get(post.id) ?? { likes: 0, dislikes: 0, userReaction: null }
+            return (
+              <div key={post.id} className={`card p-4 ${post.is_pinned ? 'border-l-4 border-l-[#1B2A4A]' : ''}`}>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {post.is_pinned && (
+                      <span className="text-xs font-black text-[#1B2A4A]">📌 Pinned</span>
+                    )}
+                    <span className="text-sm font-bold text-slate-900">{post.author_name}</span>
+                    <span className={`text-xs font-bold border px-2 py-0.5 rounded-md ${CATEGORY_COLORS[post.category] ?? CATEGORY_COLORS.general}`}>
+                      {CATEGORY_LABELS[post.category] ?? post.category}
+                    </span>
+                  </div>
+                  <time className="text-xs text-slate-400 shrink-0">
+                    {new Date(post.created_at).toLocaleDateString('en-PH', {
+                      year: 'numeric', month: 'short', day: 'numeric',
+                    })}
+                  </time>
                 </div>
-                <time className="text-xs text-slate-400 shrink-0">
-                  {new Date(post.created_at).toLocaleDateString('en-PH', {
-                    year: 'numeric', month: 'short', day: 'numeric',
-                  })}
-                </time>
+                <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{post.content}</p>
+                <ReactionButtons
+                  postId={post.id}
+                  likeCount={counts.likes}
+                  dislikeCount={counts.dislikes}
+                  userReaction={counts.userReaction}
+                  isLoggedIn={!!user}
+                />
               </div>
-              <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{post.content}</p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       ) : (
         <div className="text-center py-20 card">
