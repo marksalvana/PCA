@@ -389,26 +389,30 @@ export default function SubmitForm({ politicians, defaultPoliticianId }: Props) 
         <div className="card p-5 flex flex-col gap-4">
           <p className="text-sm font-black text-slate-900">Achievement details</p>
 
-          {/* Policy notice: biographical firsts and election outcomes are not scoring achievements */}
+          {/* Policy notice: biographical firsts, election outcomes, and personal achievements are not scoring */}
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-900 leading-relaxed">
             <p className="font-bold mb-1">What counts as an achievement?</p>
             <p>
-              Sourced governance accomplishments — bills enacted into law (RA-numbered),
+              Sourced governance accomplishments &mdash; bills enacted into law (RA-numbered),
               budget secured for projects, programs implemented, awards from named institutions
-              with published criteria.
+              with published criteria for governance work.
             </p>
             <p className="mt-2 font-bold">What doesn&apos;t count?</p>
             <ul className="list-disc list-inside space-y-1 mt-1">
               <li>
                 <span className="font-semibold">Demographic firsts</span> &mdash; &ldquo;first
                 female VP&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Filipino to&hellip;&rdquo;
-                These are biographical facts, not governance work.
               </li>
               <li>
                 <span className="font-semibold">Election outcomes</span> &mdash; &ldquo;Won 2016
                 Presidential Election&rdquo;, &ldquo;Topped Senate race&rdquo;, &ldquo;most votes
-                in PH history&rdquo;, &ldquo;re-elected for 3rd term&rdquo;. These are campaign
-                results, not what the politician did in office.
+                in PH history&rdquo;, &ldquo;re-elected for 3rd term&rdquo;.
+              </li>
+              <li>
+                <span className="font-semibold">Personal accomplishments outside office</span>
+                &mdash; boxing titles, Olympic medals, acting/music awards, film/TV credits,
+                Hall of Fame inductions, brand endorsements. These are personal accomplishments
+                outside the office of politics, not governance work.
               </li>
             </ul>
           </div>
@@ -427,12 +431,23 @@ export default function SubmitForm({ politicians, defaultPoliticianId }: Props) 
                 || /\btop\s+(vote-?getter|placer)\b/i.test(t)
                 || /\b\d+(st|nd|rd|th)\s+(consecutive\s+)?term\b/i.test(t)
                 || /\b(landslide|sweeping)\s+(victory|win)\b/i.test(t)
-              if (!isDemographicFirst && !isElectionOutcome) return null
+              const isPersonal =
+                /\b(boxing|boxer|world\s+champion|division\s+world|wba|wbc|ibf|wbo|olympic|gold\s+medal|silver\s+medal|bronze\s+medal)\b/i.test(t)
+                || /\b(actor|actress|movie|film|television|telenovela|famas|metro\s+manila\s+film|hall\s+of\s+fame)\b/i.test(t)
+                || /\bbest\s+(actor|actress|director|musical|picture|composer|recording|song)\b/i.test(t)
+                || /\b(recording\s+artist|singer|album|grammy|gold\s+record|platinum\s+record)\b/i.test(t)
+                || /\b(brand\s+ambassador|product\s+endorsement)\b/i.test(t)
+              if (!isDemographicFirst && !isElectionOutcome && !isPersonal) return null
+              const reason = isDemographicFirst
+                ? 'a demographic first or biographical superlative'
+                : isElectionOutcome
+                  ? 'an electoral outcome / campaign result'
+                  : 'a personal accomplishment outside the office of politics'
               return (
                 <p className="text-xs text-amber-700 mt-1.5 leading-relaxed">
-                  ⚠ This looks like {isDemographicFirst ? 'a demographic first or biographical superlative' : 'an electoral outcome / campaign result'}.
-                  Submissions like this are not scored as achievements — vetters typically reject
-                  them. If this is actually a sourced governance accomplishment, rephrase the title.
+                  ⚠ This looks like {reason}. Submissions like this are not scored as achievements
+                  — vetters typically reject them. If this is actually a sourced governance
+                  accomplishment, rephrase the title.
                 </p>
               )
             })()}
