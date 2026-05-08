@@ -15,7 +15,6 @@ import {
   computeAchievementPts,
   computeEducationPts,
   attendanceModifier,
-  CHED_SCORES,
   LEGAL_PENALTIES,
 } from '@/lib/scoring'
 import RatingWidget from '@/components/profiles/RatingWidget'
@@ -248,7 +247,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               </h2>
               <div className="flex flex-col gap-2">
                 {p.education_records.map((rec) => {
-                  const basePts = rec.ched_accreditation ? CHED_SCORES[rec.ched_accreditation] : 0
                   const pts = computeEducationPts(rec)
                   const showBar = rec.ched_accreditation && rec.ched_accreditation !== 'unknown'
                   return (
@@ -274,7 +272,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                         </div>
                         <div className="flex flex-col items-end gap-1.5 shrink-0">
                           {showBar && (
-                            <ProfileStatBar score={basePts} label={rec.ched_accreditation ?? 'unknown'} />
+                            <ProfileStatBar score={pts} label={rec.ched_accreditation ?? 'unknown'} />
                           )}
                           <span className={`text-xs font-black px-2 py-0.5 rounded-md tabular-nums border ${rec.is_verified ? 'text-blue-700 bg-blue-50 border-blue-200' : 'text-slate-400 bg-slate-50 border-slate-200'}`}>
                             +{pts} pts
@@ -299,7 +297,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 {p.track_records.map((rec) => {
                   const pts = computeTrackPts(rec)
                   const attMod = attendanceModifier(rec.attendance_rate)
-                  const hasScorable = rec.coa_finding && rec.coa_finding !== 'unknown'
+                  const hasBillsFallback = (rec.coa_finding === 'not_applicable' || rec.coa_finding === 'unknown' || rec.coa_finding == null)
+                    && rec.bills_authored != null && rec.bills_authored > 0
+                  const hasScorable = pts > 0 || (rec.coa_finding && rec.coa_finding !== 'unknown') || hasBillsFallback
                   const coaLabel = rec.coa_finding && rec.coa_finding !== 'not_applicable' && rec.coa_finding !== 'unknown'
                     ? rec.coa_finding
                     : null
@@ -352,7 +352,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                         <div className="flex flex-col items-end gap-1.5 shrink-0">
                           {hasScorable && (
                             <ProfileStatBar
-                              score={rec.coa_finding === 'unqualified' ? 100 : rec.coa_finding === 'qualified' ? 60 : rec.coa_finding === 'adverse' ? 20 : rec.coa_finding === 'disclaimer' ? 10 : rec.performance_score ?? 0}
+                              score={pts}
                               label={coaLabel ?? 'not_applicable'}
                             />
                           )}
