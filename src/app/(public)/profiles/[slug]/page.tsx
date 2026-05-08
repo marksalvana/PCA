@@ -483,6 +483,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               {!p.awards?.length ? (
                 <EmptyState
                   description="Named institutional honors with their own published criteria — Magsaysay, Order of Lakandula, TOYM, PMA Lifetime Achievement, etc. Each award contributes points based on the issuing body."
+                  submitHref={`/submit?politician=${p.slug}&type=achievement`}
+                  submitLabel="Submit an award"
                 />
               ) : p.awards.map((aw) => (
                 <div key={aw.id} className="card p-4 border-l-4 border-l-amber-500">
@@ -540,6 +542,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               {!p.net_worth_records?.length ? (
                 <EmptyState
                   description="Annual Statements of Assets, Liabilities, and Net Worth filed under RA 6713. Year-over-year deltas vs. declared income are basis for RA 1379 lifestyle checks. Late or non-filing penalizes the score."
+                  submitHref={`/submit?politician=${p.slug}`}
+                  submitLabel="Submit a SALN record"
                 />
               ) : p.net_worth_records.map((nw) => (
                 <div key={nw.id} className="card p-4">
@@ -586,6 +590,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
               {!p.outcome_metrics?.length ? (
                 <EmptyState
                   description="PSA-tracked socioeconomic indicators (poverty incidence, IRA utilization, etc.) measured before and after the politician's tenure in their jurisdiction. The hardest signal to source — most profiles will be empty here."
+                  submitHref={`/submit?politician=${p.slug}`}
+                  submitLabel="Submit an outcome metric"
                 />
               ) : p.outcome_metrics.map((om) => {
                 const delta = om.baseline_value != null && om.end_value != null
