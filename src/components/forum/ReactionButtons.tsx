@@ -2,17 +2,26 @@
 
 import { useOptimistic, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { toggleReaction } from '@/lib/actions/forum'
 import type { ReactionType } from '@/types/database'
 
+type ToggleResult = { success: true } | { error: string }
+type ToggleAction = (targetId: string, reaction: ReactionType) => Promise<ToggleResult>
+
 type Props = {
-  postId: string
+  /** ID of the thing being reacted to — a forum post id or a forum reply id */
+  targetId: string
   likeCount: number
   dislikeCount: number
-  /** Current user's existing reaction on this post, or null if none */
+  /** Current user's existing reaction on this target, or null if none */
   userReaction: ReactionType | null
-  /** Whether the viewer is signed in. When false, buttons prompt sign-in instead of reacting. */
+  /** Whether the viewer is signed in. When false, buttons send to /login. */
   isLoggedIn: boolean
+  /** Server action that handles the toggle (toggleReaction or toggleReplyReaction) */
+  onToggle: ToggleAction
+  /** Path to redirect anonymous users back to after sign-in. Defaults to /forum. */
+  loginNext?: string
+  /** Pixel size for the icon. Defaults to 16; replies use 14 for tighter spacing. */
+  iconSize?: number
 }
 
 type ReactionState = {
@@ -58,11 +67,14 @@ function reactionReducer(state: ReactionState, action: ReactionType): ReactionSt
 }
 
 export default function ReactionButtons({
-  postId,
+  targetId,
   likeCount,
   dislikeCount,
   userReaction,
   isLoggedIn,
+  onToggle,
+  loginNext = '/forum',
+  iconSize = 16,
 }: Props) {
   const [, startTransition] = useTransition()
   const router = useRouter()
@@ -73,18 +85,15 @@ export default function ReactionButtons({
 
   function handle(reaction: ReactionType) {
     if (!isLoggedIn) {
-      router.push('/login?next=/forum')
+      router.push(`/login?next=${encodeURIComponent(loginNext)}`)
       return
     }
     startTransition(async () => {
-      // Optimistic update — UI flips immediately
       applyOptimistic(reaction)
-      const result = await toggleReaction(postId, reaction)
+      const result = await onToggle(targetId, reaction)
       if ('error' in result) {
-        // Optimistic state auto-reverts on next render; surface the failure
         alert(result.error)
       }
-      // Re-fetch server state so counts include other users' concurrent reactions
       router.refresh()
     })
   }
@@ -93,12 +102,13 @@ export default function ReactionButtons({
   const dislikeActive = optimistic.userReaction === 'dislike'
 
   return (
-    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+    <div className="flex items-center gap-2">
       <ReactionButton
         kind="like"
         active={likeActive}
         count={optimistic.likeCount}
         loggedIn={isLoggedIn}
+        iconSize={iconSize}
         onClick={() => handle('like')}
       />
       <ReactionButton
@@ -106,10 +116,11 @@ export default function ReactionButtons({
         active={dislikeActive}
         count={optimistic.dislikeCount}
         loggedIn={isLoggedIn}
+        iconSize={iconSize}
         onClick={() => handle('dislike')}
       />
       {!isLoggedIn && (
-        <span className="text-[11px] text-slate-400 ml-auto italic">Sign in to react</span>
+        <span className="text-[11px] text-slate-400 italic">Sign in to react</span>
       )}
     </div>
   )
@@ -120,12 +131,14 @@ function ReactionButton({
   active,
   count,
   loggedIn,
+  iconSize,
   onClick,
 }: {
   kind: ReactionType
   active: boolean
   count: number
   loggedIn: boolean
+  iconSize: number
   onClick: () => void
 }) {
   const isLike = kind === 'like'
@@ -151,8 +164,8 @@ function ReactionButton({
     >
       {/* Lucide thumbs-up / thumbs-down. Stroke-only when idle, filled-with-currentColor when active. */}
       <svg
-        width="16"
-        height="16"
+        width={iconSize}
+        height={iconSize}
         viewBox="0 0 24 24"
         fill={active ? 'currentColor' : 'none'}
         stroke="currentColor"

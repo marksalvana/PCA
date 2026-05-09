@@ -42,6 +42,120 @@ export async function submitForumPost(formData: FormData) {
 }
 
 /**
+ * Submit a reply (or nested reply) to a forum post.
+ *
+ * - When parent_reply_id is null/empty, this is a top-level reply at
+ *   depth=0.
+ * - When parent_reply_id is set, depth = parent.depth + 1. Maximum depth
+ *   is 2 (i.e. 3 levels: post → reply → nested → nested-nested). The
+ *   action rejects anything beyond that, with a DB CHECK as defense.
+ * - Allows anonymous posting (user_id null) to match the forum_posts
+ *   pattern, but author_name is always required.
+ */
+export async function submitReply(formData: FormData) {
+  const postId = (formData.get('post_id') as string | null)?.trim()
+  const parentReplyId = (formData.get('parent_reply_id') as string | null)?.trim() || null
+  const authorName = (formData.get('author_name') as string | null)?.trim()
+  const content = (formData.get('content') as string | null)?.trim()
+
+  if (!postId) return { error: 'Missing post.' }
+  if (!authorName || authorName.length < 2) {
+    return { error: 'Please enter your name (at least 2 characters).' }
+  }
+  if (!content || content.length < 5) {
+    return { error: 'Please write a reply (at least 5 characters).' }
+  }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any
+
+  // Compute depth — 0 if top-level, parent.depth + 1 otherwise.
+  let depth = 0
+  if (parentReplyId) {
+    const { data: parent, error: parentErr } = await db
+      .from('forum_replies')
+      .select('depth, post_id')
+      .eq('id', parentReplyId)
+      .maybeSingle()
+    if (parentErr || !parent) {
+      return { error: 'Parent reply not found.' }
+    }
+    if (parent.post_id !== postId) {
+      return { error: 'Parent reply belongs to a different post.' }
+    }
+    if (parent.depth >= 2) {
+      return { error: 'Replies can only nest 3 levels deep.' }
+    }
+    depth = parent.depth + 1
+  }
+
+  const { error } = await db.from('forum_replies').insert({
+    post_id: postId,
+    parent_reply_id: parentReplyId,
+    depth,
+    user_id: user?.id ?? null,
+    author_name: authorName,
+    content,
+  })
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/forum')
+  return { success: true }
+}
+
+/**
+ * Toggle a like/dislike reaction on a forum reply. Same state-transition
+ * shape as toggleReaction, just hitting forum_reply_reactions instead of
+ * forum_reactions.
+ */
+export async function toggleReplyReaction(
+  replyId: string,
+  reaction: ReactionType,
+): Promise<{ success: true } | { error: string }> {
+  if (reaction !== 'like' && reaction !== 'dislike') {
+    return { error: 'Invalid reaction.' }
+  }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Sign in to react to replies.' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any
+
+  const { data: existing } = await db
+    .from('forum_reply_reactions')
+    .select('id, reaction')
+    .eq('reply_id', replyId)
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (existing) {
+    if (existing.reaction === reaction) {
+      const { error } = await db.from('forum_reply_reactions').delete().eq('id', existing.id)
+      if (error) return { error: error.message }
+    } else {
+      const { error } = await db.from('forum_reply_reactions').update({ reaction }).eq('id', existing.id)
+      if (error) return { error: error.message }
+    }
+  } else {
+    const { error } = await db.from('forum_reply_reactions').insert({
+      reply_id: replyId,
+      user_id: user.id,
+      reaction,
+    })
+    if (error) return { error: error.message }
+  }
+
+  revalidatePath('/forum')
+  return { success: true }
+}
+
+/**
  * Toggle a like/dislike reaction on a forum post.
  *
  * State transitions:
@@ -55,7 +169,10 @@ export async function submitForumPost(formData: FormData) {
  * Authentication required. Anonymous users get a clear error so the UI
  * can prompt them to sign in.
  */
-export async function toggleReaction(postId: string, reaction: ReactionType) {
+export async function toggleReaction(
+  postId: string,
+  reaction: ReactionType,
+): Promise<{ success: true } | { error: string }> {
   if (reaction !== 'like' && reaction !== 'dislike') {
     return { error: 'Invalid reaction.' }
   }

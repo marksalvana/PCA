@@ -1,8 +1,9 @@
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import ForumForm from './ForumForm'
-import ReactionButtons from '@/components/forum/ReactionButtons'
-import type { ReactionType } from '@/types/database'
+import PostFooter from '@/components/forum/PostFooter'
+import RepliesThread, { type ReplyWithReactions } from '@/components/forum/RepliesThread'
+import type { ForumReply, ReactionType } from '@/types/database'
 
 export const metadata = { title: 'Community Forum — Politiko' }
 
@@ -17,6 +18,12 @@ type ForumPost = {
 
 type ReactionRow = {
   post_id: string
+  user_id: string
+  reaction: ReactionType
+}
+
+type ReplyReactionRow = {
+  reply_id: string
   user_id: string
   reaction: ReactionType
 }
@@ -65,20 +72,31 @@ export default async function ForumPage({
   const { data } = await query
   const posts = (data ?? []) as ForumPost[]
 
-  // Fetch reactions for the visible posts + the viewer's own reactions in parallel.
+  // Fetch in parallel:
+  //  1. post-level reactions for the visible posts
+  //  2. all replies (any depth) for the visible posts
+  //  3. the auth user
   const postIds = posts.map((p) => p.id)
-  const [{ data: reactionsData }, { data: { user } }] = await Promise.all([
+  const [{ data: reactionsData }, { data: repliesData }, { data: { user } }] = await Promise.all([
     postIds.length === 0
       ? Promise.resolve({ data: [] as ReactionRow[] })
       : db
           .from('forum_reactions')
           .select('post_id, user_id, reaction')
           .in('post_id', postIds),
+    postIds.length === 0
+      ? Promise.resolve({ data: [] as ForumReply[] })
+      : db
+          .from('forum_replies')
+          .select('id, post_id, parent_reply_id, depth, user_id, author_name, content, created_at')
+          .in('post_id', postIds)
+          .order('created_at', { ascending: true }),
     supabase.auth.getUser(),
   ])
   const reactions = (reactionsData ?? []) as ReactionRow[]
+  const allReplies = (repliesData ?? []) as ForumReply[]
 
-  // Bucket counts + viewer's own reaction by post_id for O(1) lookup
+  // Bucket post-level reaction counts + viewer's own reaction by post_id
   const reactionMap = new Map<string, { likes: number; dislikes: number; userReaction: ReactionType | null }>()
   for (const id of postIds) reactionMap.set(id, { likes: 0, dislikes: 0, userReaction: null })
   for (const r of reactions) {
@@ -87,6 +105,46 @@ export default async function ForumPage({
     if (r.reaction === 'like') bucket.likes += 1
     else if (r.reaction === 'dislike') bucket.dislikes += 1
     if (user && r.user_id === user.id) bucket.userReaction = r.reaction
+  }
+
+  // Fetch reply-level reactions for all visible replies, then bucket
+  const replyIds = allReplies.map((r) => r.id)
+  const { data: replyReactionsData } = replyIds.length === 0
+    ? { data: [] as ReplyReactionRow[] }
+    : await db
+        .from('forum_reply_reactions')
+        .select('reply_id, user_id, reaction')
+        .in('reply_id', replyIds)
+  const replyReactions = (replyReactionsData ?? []) as ReplyReactionRow[]
+
+  const replyReactionMap = new Map<string, { likes: number; dislikes: number; userReaction: ReactionType | null }>()
+  for (const id of replyIds) replyReactionMap.set(id, { likes: 0, dislikes: 0, userReaction: null })
+  for (const r of replyReactions) {
+    const bucket = replyReactionMap.get(r.reply_id)
+    if (!bucket) continue
+    if (r.reaction === 'like') bucket.likes += 1
+    else if (r.reaction === 'dislike') bucket.dislikes += 1
+    if (user && r.user_id === user.id) bucket.userReaction = r.reaction
+  }
+
+  // Group replies by post_id and decorate each with its reaction counts
+  const repliesByPost = new Map<string, ReplyWithReactions[]>()
+  for (const r of allReplies) {
+    const existing = repliesByPost.get(r.post_id) ?? []
+    const counts = replyReactionMap.get(r.id) ?? { likes: 0, dislikes: 0, userReaction: null }
+    existing.push({ ...r, likeCount: counts.likes, dislikeCount: counts.dislikes, userReaction: counts.userReaction })
+    repliesByPost.set(r.post_id, existing)
+  }
+
+  // Look up the viewer's display_name to pre-fill reply composers
+  let viewerDisplayName: string | undefined
+  if (user) {
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('display_name')
+      .eq('id', user.id)
+      .maybeSingle<{ display_name: string }>()
+    viewerDisplayName = profile?.display_name
   }
 
   const ALL_CATEGORIES = ['suggestion', 'feedback', 'question', 'bug_report', 'general']
@@ -140,6 +198,7 @@ export default async function ForumPage({
         <div className="space-y-3">
           {posts.map((post) => {
             const counts = reactionMap.get(post.id) ?? { likes: 0, dislikes: 0, userReaction: null }
+            const postReplies = repliesByPost.get(post.id) ?? []
             return (
               <div key={post.id} className={`card p-4 ${post.is_pinned ? 'border-l-4 border-l-[#1B2A4A]' : ''}`}>
                 <div className="flex items-start justify-between gap-3 mb-2">
@@ -159,12 +218,20 @@ export default async function ForumPage({
                   </time>
                 </div>
                 <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{post.content}</p>
-                <ReactionButtons
+                <PostFooter
                   postId={post.id}
                   likeCount={counts.likes}
                   dislikeCount={counts.dislikes}
                   userReaction={counts.userReaction}
                   isLoggedIn={!!user}
+                  replyCount={postReplies.length}
+                  defaultAuthorName={viewerDisplayName}
+                />
+                <RepliesThread
+                  postId={post.id}
+                  replies={postReplies}
+                  isLoggedIn={!!user}
+                  defaultAuthorName={viewerDisplayName}
                 />
               </div>
             )

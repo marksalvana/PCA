@@ -314,6 +314,25 @@ export interface ForumReaction {
   created_at: string
 }
 
+export interface ForumReply {
+  id: string
+  post_id: string
+  parent_reply_id: string | null
+  depth: number  // 0, 1, or 2 (enforced by DB CHECK)
+  user_id: string | null
+  author_name: string
+  content: string
+  created_at: string
+}
+
+export interface ForumReplyReaction {
+  id: string
+  reply_id: string
+  user_id: string
+  reaction: ReactionType
+  created_at: string
+}
+
 export interface ScoringBenchmark {
   id: string
   category: string
@@ -368,6 +387,16 @@ export interface Database {
       forum_reactions: {
         Row: ForumReaction
         Insert: { post_id: string; user_id: string; reaction: ReactionType }
+        Update: { reaction?: ReactionType }
+      }
+      forum_replies: {
+        Row: ForumReply
+        Insert: { post_id: string; parent_reply_id?: string | null; depth: number; user_id?: string | null; author_name: string; content: string }
+        Update: { content?: string }
+      }
+      forum_reply_reactions: {
+        Row: ForumReplyReaction
+        Insert: { reply_id: string; user_id: string; reaction: ReactionType }
         Update: { reaction?: ReactionType }
       }
     }
