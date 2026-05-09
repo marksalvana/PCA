@@ -1,5 +1,6 @@
 import type { LegalRecord } from '@/types/database'
 import SourceLink from '@/components/ui/SourceLink'
+import { CONVICTION_CATEGORY_LABELS } from '@/lib/scoring'
 
 type Props = { record: LegalRecord; expanded?: boolean; penalty?: number }
 
@@ -33,6 +34,11 @@ export default function LegalBadge({ record: r, expanded = false, penalty }: Pro
                 {cfg.label}
               </span>
               <span className={`text-xs capitalize opacity-70 ${cfg.text}`}>{r.case_type}</span>
+              {r.status === 'convicted' && r.sentence_category && (
+                <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white/70 border border-current/30 ${cfg.text}`}>
+                  {CONVICTION_CATEGORY_LABELS[r.sentence_category]}
+                </span>
+              )}
             </div>
             {showPenalty && (
               <span className={`text-xs font-black px-2 py-0.5 rounded-md tabular-nums border shrink-0 ${

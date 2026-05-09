@@ -1,4 +1,4 @@
-import type { ChedAccreditation, CoaFinding, OmbudsmanDisposition, ScoreBreakdown } from '@/types/database'
+import type { ChedAccreditation, CoaFinding, OmbudsmanDisposition, ScoreBreakdown, SentenceCategory, LegalCaseStatus } from '@/types/database'
 
 // Points contributed per education record (base score; multiply by 0.75 for incomplete)
 export const CHED_SCORES: Record<ChedAccreditation, number> = {
@@ -23,12 +23,53 @@ export const COA_SCORES: Record<CoaFinding, number> = {
   unknown: 0,         // no verifiable data — contributes 0
 }
 
-// Legal penalty per case
+// Legal penalty per case (non-conviction statuses).
+// Convictions use the tiered CONVICTION_PENALTIES map below — call
+// convictionPenalty() to resolve the right value for a given category.
 export const LEGAL_PENALTIES = {
   pending: 75,
-  convicted: 350,
   ongoing_appeal: 75,
 } as const
+
+// Tiered conviction penalty by PH penal classification (migration 023).
+// 'mayor' (-350) is the default when status='convicted' but category is NULL,
+// matching the historical fixed penalty so legacy rows don't drift.
+export const CONVICTION_PENALTIES: Record<SentenceCategory, number> = {
+  civil:        50,
+  arresto:     100,
+  correccional: 200,
+  mayor:        350,
+  temporal:     500,
+  perpetua:     700,
+}
+
+// Human-readable labels for each sentence category.
+export const CONVICTION_CATEGORY_LABELS: Record<SentenceCategory, string> = {
+  civil:        'Civil',
+  arresto:      'Arresto',
+  correccional: 'Prisión correccional',
+  mayor:        'Prisión mayor',
+  temporal:     'Reclusión temporal',
+  perpetua:     'Reclusión perpetua',
+}
+
+// Resolve the per-row penalty for a conviction. Falls back to 'mayor'
+// (-350) when category is null — the historical default.
+export function convictionPenalty(category: SentenceCategory | null | undefined): number {
+  return CONVICTION_PENALTIES[category ?? 'mayor']
+}
+
+// Resolve the legal penalty for a record by status. Use this instead
+// of indexing LEGAL_PENALTIES directly so convicted rows pick up the
+// tiered penalty.
+export function legalRecordPenalty(rec: {
+  status: LegalCaseStatus
+  sentence_category?: SentenceCategory | null
+}): number {
+  if (rec.status === 'convicted') return convictionPenalty(rec.sentence_category ?? null)
+  if (rec.status === 'pending' || rec.status === 'ongoing_appeal') return LEGAL_PENALTIES[rec.status]
+  return 0
+}
 
 // Additional Ombudsman penalty (per case, additive on top of court status)
 export const OMBUDSMAN_PENALTIES: Record<OmbudsmanDisposition, number> = {

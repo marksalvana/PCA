@@ -16,6 +16,7 @@ import type {
   AchievementCategory,
   ImpactScope,
   OmbudsmanDisposition,
+  SentenceCategory,
 } from '@/types/database'
 import SourceLink from '@/components/ui/SourceLink'
 import {
@@ -23,7 +24,8 @@ import {
   computeTrackPts,
   computeAchievementPts,
   attendanceModifier,
-  LEGAL_PENALTIES,
+  legalRecordPenalty,
+  CONVICTION_PENALTIES,
 } from '@/lib/scoring'
 
 type Tab = 'education' | 'track' | 'legal' | 'achievements'
@@ -305,6 +307,7 @@ function LegalEditForm({
   const [resolutionSummary, setResolutionSummary] = useState(r.resolution_summary ?? '')
   const [ombudsman, setOmbudsman] = useState<OmbudsmanDisposition | ''>(r.ombudsman_disposition ?? '')
   const [comelec, setComelec] = useState<boolean>(r.comelec_disqualification === true)
+  const [sentenceCategory, setSentenceCategory] = useState<SentenceCategory | ''>(r.sentence_category ?? '')
   const [sourceUrl, setSourceUrl] = useState(r.source_url)
   const [sourceLabel, setSourceLabel] = useState(r.source_label)
 
@@ -321,6 +324,7 @@ function LegalEditForm({
       resolution_summary: resolutionSummary || null,
       ombudsman_disposition: (ombudsman || null) as OmbudsmanDisposition | null,
       comelec_disqualification: comelec,
+      sentence_category: status === 'convicted' ? (sentenceCategory || null) as SentenceCategory | null : null,
       source_url: sourceUrl,
       source_label: sourceLabel,
     })
@@ -395,6 +399,27 @@ function LegalEditForm({
           COMELEC disqualification (−100 pts)
         </label>
       </div>
+      {status === 'convicted' && (
+        <div>
+          <label className={labelClass}>
+            Sentence category <span className="text-red-400">*</span>
+            <span className="ml-1 text-gray-500 font-normal">(PH penal classification)</span>
+          </label>
+          <select
+            value={sentenceCategory}
+            onChange={(e) => setSentenceCategory(e.target.value as SentenceCategory | '')}
+            className={inputClass}
+          >
+            <option value="">— Select sentence tier (defaults to Prisión mayor: −350 pts) —</option>
+            <option value="civil">Civil — civil judgment / contempt, no PH imprisonment (−{CONVICTION_PENALTIES.civil} pts)</option>
+            <option value="arresto">Arresto — 1 day to 6 months (−{CONVICTION_PENALTIES.arresto} pts)</option>
+            <option value="correccional">Prisión correccional — 6 months to 6 years (−{CONVICTION_PENALTIES.correccional} pts)</option>
+            <option value="mayor">Prisión mayor — 6 to 12 years (−{CONVICTION_PENALTIES.mayor} pts)</option>
+            <option value="temporal">Reclusión temporal — 12 to 20 years (−{CONVICTION_PENALTIES.temporal} pts)</option>
+            <option value="perpetua">Reclusión perpetua / life (−{CONVICTION_PENALTIES.perpetua} pts)</option>
+          </select>
+        </div>
+      )}
       <div>
         <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
         <input type="url" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} required className={inputClass} />
@@ -542,6 +567,7 @@ export default function RecordsManager({ politician: p }: Props) {
   const [legalFiling, setLegalFiling] = useState('')
   const [legalOmbudsman, setLegalOmbudsman] = useState<OmbudsmanDisposition | ''>('')
   const [legalComelec, setLegalComelec] = useState(false)
+  const [legalSentenceCategory, setLegalSentenceCategory] = useState<SentenceCategory | ''>('')
   const [legalSourceUrl, setLegalSourceUrl] = useState('')
   const [legalSourceLabel, setLegalSourceLabel] = useState('')
 
@@ -639,13 +665,14 @@ export default function RecordsManager({ politician: p }: Props) {
       filing_date: legalFiling || null,
       ombudsman_disposition: (legalOmbudsman || null) as OmbudsmanDisposition | null,
       comelec_disqualification: legalComelec,
+      sentence_category: legalStatus === 'convicted' ? (legalSentenceCategory || null) as SentenceCategory | null : null,
       source_url: legalSourceUrl,
       source_label: legalSourceLabel,
     })
     setSaving(false)
     if (error) { setError(error.message); return }
     setLegalTitle(''); setLegalCourt(''); setLegalCharge(''); setLegalFiling('')
-    setLegalOmbudsman(''); setLegalComelec(false)
+    setLegalOmbudsman(''); setLegalComelec(false); setLegalSentenceCategory('')
     setLegalSourceUrl(''); setLegalSourceLabel('')
     await setUnderReview(p.id)
     refresh()
@@ -1025,6 +1052,27 @@ export default function RecordsManager({ politician: p }: Props) {
                 COMELEC disqualification (−100 pts)
               </label>
             </div>
+            {legalStatus === 'convicted' && (
+              <div>
+                <label className={labelClass}>
+                  Sentence category <span className="text-red-400">*</span>
+                  <span className="ml-1 text-gray-500 font-normal">(PH penal classification)</span>
+                </label>
+                <select
+                  value={legalSentenceCategory}
+                  onChange={(e) => setLegalSentenceCategory(e.target.value as SentenceCategory | '')}
+                  className={inputClass}
+                >
+                  <option value="">— Select sentence tier (defaults to Prisión mayor: −350 pts) —</option>
+                  <option value="civil">Civil — civil judgment / contempt, no PH imprisonment (−{CONVICTION_PENALTIES.civil} pts)</option>
+                  <option value="arresto">Arresto — 1 day to 6 months (−{CONVICTION_PENALTIES.arresto} pts)</option>
+                  <option value="correccional">Prisión correccional — 6 months to 6 years (−{CONVICTION_PENALTIES.correccional} pts)</option>
+                  <option value="mayor">Prisión mayor — 6 to 12 years (−{CONVICTION_PENALTIES.mayor} pts)</option>
+                  <option value="temporal">Reclusión temporal — 12 to 20 years (−{CONVICTION_PENALTIES.temporal} pts)</option>
+                  <option value="perpetua">Reclusión perpetua / life (−{CONVICTION_PENALTIES.perpetua} pts)</option>
+                </select>
+              </div>
+            )}
             <div>
               <label className={labelClass}>Source URL <span className="text-red-400">*</span></label>
               <input type="url" value={legalSourceUrl} onChange={(e) => setLegalSourceUrl(e.target.value)} required placeholder="https://..." className={inputClass} />
@@ -1042,7 +1090,7 @@ export default function RecordsManager({ politician: p }: Props) {
             <h3 className="font-bold text-white text-sm mb-3">Existing Records ({p.legal_records?.length ?? 0})</h3>
             <div className="flex flex-col gap-2">
               {p.legal_records?.map((r) => {
-                const penalty = LEGAL_PENALTIES[r.status as keyof typeof LEGAL_PENALTIES] ?? 0
+                const penalty = legalRecordPenalty(r)
                 return (
                   <div key={r.id}>
                     {editingId === r.id ? (

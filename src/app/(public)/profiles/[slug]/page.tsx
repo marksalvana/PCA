@@ -15,7 +15,7 @@ import {
   computeAchievementPts,
   computeEducationPts,
   attendanceModifier,
-  LEGAL_PENALTIES,
+  legalRecordPenalty,
 } from '@/lib/scoring'
 import RatingWidget from '@/components/profiles/RatingWidget'
 import type { PoliticianWithDetails, VettingRecord, UserProfile } from '@/types/database'
@@ -507,7 +507,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                   submitLabel="Submit a record"
                 />
               ) : p.legal_records.map((rec) => {
-                const penalty = LEGAL_PENALTIES[rec.status as keyof typeof LEGAL_PENALTIES] ?? 0
+                const penalty = legalRecordPenalty(rec)
                 return (
                   <LegalBadge key={rec.id} record={rec} expanded penalty={penalty} />
                 )

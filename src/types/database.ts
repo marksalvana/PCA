@@ -68,6 +68,19 @@ export type CoaFinding =
 export type LegalCaseType = 'criminal' | 'civil' | 'administrative' | 'electoral'
 export type LegalCaseStatus =
   | 'pending' | 'convicted' | 'acquitted' | 'dismissed' | 'ongoing_appeal'
+/**
+ * Severity tier of a conviction sentence per PH penal classification.
+ * Used to compute the conviction penalty (see compute_objective_score
+ * in migration 023). Required when status='convicted'; ignored otherwise.
+ * Default fallback for legacy convicted rows with NULL category is 'mayor'.
+ */
+export type SentenceCategory =
+  | 'civil'         // Civil judgment / contempt order, no PH imprisonment
+  | 'arresto'       // Arresto menor / mayor (1 day – 6 months)
+  | 'correccional'  // Prisión correccional (6 months – 6 years)
+  | 'mayor'         // Prisión mayor (6 – 12 years)
+  | 'temporal'      // Reclusión temporal (12 – 20 years)
+  | 'perpetua'      // Reclusión perpetua / life
 export type VettingAction = 'approved' | 'flagged' | 'rejected' | 'requested_correction'
 export type PetitionStatus = 'pending' | 'accepted' | 'rejected' | 'already_exists'
 export type AchievementCategory =
@@ -196,6 +209,7 @@ export interface LegalRecord {
   resolution_summary: string | null
   ombudsman_disposition: OmbudsmanDisposition | null
   comelec_disqualification: boolean | null
+  sentence_category: SentenceCategory | null
   source_url: string
   source_label: string
   created_by: string | null
