@@ -254,23 +254,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
             )}
           </div>
 
-          {/* Compare CTA + Lens link + Contribute */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            <Link
-              href={`/compare?a=${p.slug}`}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-4 py-2 rounded-lg transition-colors"
-            >
-              Compare {p.preferred_name ?? p.full_name} with another candidate →
-            </Link>
-            <LensLink />
-            <Link
-              href={`/submit?politician=${p.slug}`}
-              className="inline-flex items-center gap-2 text-xs font-bold border border-slate-200 bg-slate-50 hover:border-slate-300 hover:text-[#1B2A4A] text-slate-600 px-3 py-1.5 rounded-lg transition-colors"
-            >
-              ＋ Submit a record for {p.preferred_name ?? p.full_name}
-            </Link>
-          </div>
-
           {/* Education */}
           <section className="mb-5">
             <h2 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
@@ -668,6 +651,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
         {/* ── Sidebar ── */}
         <aside className="mt-6 lg:mt-0 space-y-4">
+
+          {/* Actions: compare, personalize lens, submit a record */}
+          <div className="card p-4">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Actions</h3>
+            <div className="flex flex-col gap-2">
+              <Link
+                href={`/compare?a=${p.slug}`}
+                className="inline-flex items-center justify-between gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-2 rounded-lg transition-colors"
+              >
+                <span>Compare {p.preferred_name ?? p.full_name}</span>
+                <span aria-hidden>→</span>
+              </Link>
+              <LensLink />
+              <Link
+                href={`/submit?politician=${p.slug}`}
+                className="inline-flex items-center justify-between gap-2 text-xs font-bold border border-slate-200 bg-slate-50 hover:border-slate-300 hover:text-[#1B2A4A] text-slate-600 px-3 py-2 rounded-lg transition-colors"
+              >
+                <span>＋ Submit a record</span>
+                <span aria-hidden>→</span>
+              </Link>
+            </div>
+          </div>
 
           {/* Vetters */}
           <div className="card p-4">
