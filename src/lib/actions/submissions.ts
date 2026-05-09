@@ -2,9 +2,72 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import type { RecordSubmission, RecordSubmissionPayload } from '@/types/database'
+import { headers } from 'next/headers'
+import { verifyTurnstile } from '@/lib/turnstile'
+import type {
+  RecordSubmission,
+  RecordSubmissionPayload,
+  SubmissionType,
+} from '@/types/database'
 
 type ActionResult = { success: true } | { error: string }
+
+/**
+ * Public-facing record-submission action. Anyone (anonymous or authed)
+ * can submit; we verify Cloudflare Turnstile before inserting to prevent
+ * spam pile-ups in the admin queue.
+ */
+export async function submitRecord(input: {
+  politicianId: string
+  submissionType: SubmissionType
+  payload: RecordSubmissionPayload
+  sourceUrl: string
+  sourceLabel: string
+  supportingDocumentUrl: string | null
+  explanation: string
+  submitterName: string
+  submitterEmail: string
+  captchaToken: string | null
+}): Promise<ActionResult> {
+  // Basic shape checks (the form does its own UX-level validation; this
+  // is the server-side defense in depth)
+  if (!input.politicianId) return { error: 'Missing politician.' }
+  if (!input.sourceUrl.trim()) return { error: 'Source URL is required.' }
+  if (!input.sourceLabel.trim()) return { error: 'Source label is required.' }
+  if (!input.explanation.trim()) return { error: 'Explanation is required.' }
+  if (!input.submitterName.trim() || input.submitterName.trim().length < 2) {
+    return { error: 'Please enter your name.' }
+  }
+  if (!input.submitterEmail.trim()) return { error: 'Please enter an email.' }
+
+  // CAPTCHA gate
+  const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim() ?? undefined
+  const captcha = await verifyTurnstile(input.captchaToken, ip)
+  if (!captcha.ok) return { error: captcha.error }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any
+  const { error } = await db.from('record_submissions').insert({
+    politician_id: input.politicianId,
+    submission_type: input.submissionType,
+    payload: input.payload,
+    source_url: input.sourceUrl.trim(),
+    source_label: input.sourceLabel.trim(),
+    supporting_document_url: input.supportingDocumentUrl?.trim() || null,
+    explanation: input.explanation.trim(),
+    submitter_name: input.submitterName.trim(),
+    submitter_email: input.submitterEmail.trim(),
+    submitter_user_id: user?.id ?? null,
+    status: 'pending',
+  })
+
+  if (error) return { error: error.message }
+  revalidatePath('/admin/submissions')
+  return { success: true }
+}
 
 type ReviewerAuth =
   | { ok: false; error: string }

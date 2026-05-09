@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import TurnstileWidget from './TurnstileWidget'
 
 export default function SignupForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
@@ -15,8 +17,13 @@ export default function SignupForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    setLoading(true)
 
+    if (!captchaToken) {
+      setError('Please complete the CAPTCHA challenge.')
+      return
+    }
+
+    setLoading(true)
     const supabase = createClient()
     const { error } = await supabase.auth.signUp({
       email,
@@ -24,6 +31,7 @@ export default function SignupForm() {
       options: {
         data: { display_name: displayName },
         emailRedirectTo: `${location.origin}/auth/callback`,
+        captchaToken,
       },
     })
 
@@ -31,6 +39,8 @@ export default function SignupForm() {
 
     if (error) {
       setError(error.message)
+      // Token is single-use; force the widget to issue a fresh one
+      setCaptchaToken(null)
       return
     }
 
@@ -93,9 +103,12 @@ export default function SignupForm() {
           className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
         />
       </div>
+      <div>
+        <TurnstileWidget onToken={setCaptchaToken} theme="dark" />
+      </div>
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !captchaToken}
         className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors mt-1"
       >
         {loading ? 'Creating account…' : 'Create Account'}

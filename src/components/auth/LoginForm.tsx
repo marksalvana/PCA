@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import TurnstileWidget from './TurnstileWidget'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -12,6 +13,7 @@ export default function LoginForm() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(
     callbackError === 'auth_callback_failed' ? 'Email confirmation failed. Try signing up again.' : null
   )
@@ -20,13 +22,24 @@ export default function LoginForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    setLoading(true)
 
+    if (!captchaToken) {
+      setError('Please complete the CAPTCHA challenge.')
+      return
+    }
+
+    setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: { captchaToken },
+    })
 
     if (error) {
       setError(error.message)
+      // Token is single-use; force the widget to issue a fresh one
+      setCaptchaToken(null)
       setLoading(false)
       return
     }
@@ -62,9 +75,12 @@ export default function LoginForm() {
           className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors"
         />
       </div>
+      <div>
+        <TurnstileWidget onToken={setCaptchaToken} theme="dark" />
+      </div>
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !captchaToken}
         className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors mt-1"
       >
         {loading ? 'Signing in…' : 'Sign In'}

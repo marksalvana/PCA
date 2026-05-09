@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { getMutationClient } from '@/lib/supabase/mutations'
+import TurnstileWidget from '@/components/auth/TurnstileWidget'
+import { submitRecord } from '@/lib/actions/submissions'
 import type {
   ChedAccreditation,
   CoaFinding,
@@ -86,6 +87,7 @@ export default function SubmitForm({ politicians, defaultPoliticianId, defaultTy
   const [submitterName, setSubmitterName] = useState('')
   const [submitterEmail, setSubmitterEmail] = useState('')
 
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -149,27 +151,30 @@ export default function SubmitForm({ politicians, defaultPoliticianId, defaultTy
       return
     }
 
-    setSubmitting(true)
-    const supabase = getMutationClient()
-    const { data: userData } = await supabase.auth.getUser()
+    if (!captchaToken) {
+      setError('Please complete the CAPTCHA challenge.')
+      return
+    }
 
-    const { error: insertErr } = await supabase.from('record_submissions').insert({
-      politician_id: politicianId,
-      submission_type: type,
+    setSubmitting(true)
+    const result = await submitRecord({
+      politicianId,
+      submissionType: type,
       payload,
-      source_url: sourceUrl.trim(),
-      source_label: sourceLabel.trim(),
-      supporting_document_url: supportingDocUrl.trim() || null,
-      explanation: explanation.trim(),
-      submitter_name: submitterName.trim(),
-      submitter_email: submitterEmail.trim(),
-      submitter_user_id: userData.user?.id ?? null,
-      status: 'pending',
+      sourceUrl,
+      sourceLabel,
+      supportingDocumentUrl: supportingDocUrl.trim() || null,
+      explanation,
+      submitterName,
+      submitterEmail,
+      captchaToken,
     })
 
     setSubmitting(false)
-    if (insertErr) {
-      setError(insertErr.message)
+    if ('error' in result) {
+      setError(result.error)
+      // Token is single-use; force the widget to refresh
+      setCaptchaToken(null)
       return
     }
     setSuccess(true)
@@ -540,9 +545,17 @@ export default function SubmitForm({ politicians, defaultPoliticianId, defaultTy
         </div>
       </div>
 
+      {/* CAPTCHA */}
+      <div className="card p-5">
+        <p className={labelClass}>Verify you&apos;re human <span className="text-red-600">*</span></p>
+        <div className="mt-1.5">
+          <TurnstileWidget onToken={setCaptchaToken} />
+        </div>
+      </div>
+
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || !captchaToken}
         className="bg-[#1B2A4A] hover:bg-[#243761] disabled:opacity-50 text-white font-black px-6 py-3 rounded-lg transition-colors text-sm"
       >
         {submitting ? 'Submitting…' : 'Submit for review'}

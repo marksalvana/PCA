@@ -1,13 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { getMutationClient } from '@/lib/supabase/mutations'
+import TurnstileWidget from '@/components/auth/TurnstileWidget'
+import { submitPetition } from '@/lib/actions/petitions'
 
 export default function PetitionForm() {
   const [name, setName] = useState('')
   const [position, setPosition] = useState('')
   const [reason, setReason] = useState('')
   const [email, setEmail] = useState('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -15,19 +17,24 @@ export default function PetitionForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    setLoading(true)
 
-    const supabase = getMutationClient()
-    const { error } = await supabase.from('petitions').insert({
-      politician_name: name,
-      current_position: position || null,
-      reason: reason || null,
-      requester_email: email || null,
-      status: 'pending',
+    if (!captchaToken) {
+      setError('Please complete the CAPTCHA challenge.')
+      return
+    }
+
+    setLoading(true)
+    const result = await submitPetition({
+      politicianName: name,
+      currentPosition: position,
+      reason,
+      email,
+      captchaToken,
     })
 
-    if (error) {
-      setError(error.message)
+    if ('error' in result) {
+      setError(result.error)
+      setCaptchaToken(null)
       setLoading(false)
       return
     }
@@ -96,9 +103,12 @@ export default function PetitionForm() {
           className="w-full bg-[#111827] border border-white/10 focus:border-[#1B2A4A] text-white rounded-lg px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-gray-600"
         />
       </div>
+      <div>
+        <TurnstileWidget onToken={setCaptchaToken} theme="dark" />
+      </div>
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !captchaToken}
         className="bg-[#1B2A4A] hover:bg-[#1B2A4A]/80 disabled:opacity-50 text-white font-bold px-4 py-2.5 rounded-lg transition-colors"
       >
         {loading ? 'Submitting…' : 'Submit Request'}

@@ -213,8 +213,16 @@ For MVP, politician data is imported manually via JSON files (scraped offline fr
 ## Environment Variables
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=         # From Supabase Settings > API
-NEXT_PUBLIC_SUPABASE_ANON_KEY=    # From Supabase Settings > API
+NEXT_PUBLIC_SUPABASE_URL=          # From Supabase Settings > API
+NEXT_PUBLIC_SUPABASE_ANON_KEY=     # From Supabase Settings > API
+
+# Cloudflare Turnstile — bot defense for signup/login + public forms
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=    # From Cloudflare > Turnstile > Site key
+TURNSTILE_SECRET_KEY=              # From Cloudflare > Turnstile > Secret key
+                                   # Also configured in Supabase Auth > Captcha
+                                   # so signup/login go through CAPTCHA.
+                                   # If unset, the verifier auto-bypasses with a
+                                   # console warning (dev mode).
 ```
 
 ---
