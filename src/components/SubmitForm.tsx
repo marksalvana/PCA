@@ -407,8 +407,11 @@ export default function SubmitForm({ politicians, defaultPoliticianId, defaultTy
             <p className="mt-2 font-bold">What doesn&apos;t count?</p>
             <ul className="list-disc list-inside space-y-1 mt-1">
               <li>
-                <span className="font-semibold">Demographic firsts</span> &mdash; &ldquo;first
-                female VP&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Filipino to&hellip;&rdquo;
+                <span className="font-semibold">Demographic / identity firsts</span> &mdash; &ldquo;first
+                female VP&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Muslim senator
+                since 1995&rdquo;, &ldquo;first Cebuano governor in 30 years&rdquo;. Facts about
+                who the person is (gender, age, religion, ethnicity, tenure-gap), not what they
+                did in office.
               </li>
               <li>
                 <span className="font-semibold">Election outcomes</span> &mdash; &ldquo;Won 2016
@@ -430,6 +433,10 @@ export default function SubmitForm({ politicians, defaultPoliticianId, defaultTy
             {(() => {
               const t = title.trim()
               const isDemographicFirst = /^(first|youngest|oldest|sole|only)\s/i.test(t)
+                || /\b(first|sole|only)\s+(muslim|catholic|christian|protestant|jewish|hindu|buddhist|atheist|aglipayan|iglesia|born[- ]?again)\b/i.test(t)
+                || /\b(first|sole|only)\s+(visayan|cebuano|ilocano|kapampangan|bicolano|waray|moro|maranao|tausug|maguindanao|igorot|lumad|aeta|mestizo|mindanaoan|chinese[- ]?filipino|fil[- ]?chinese)\b/i.test(t)
+                || /\b(first|sole|only)\s+.+?\s+(since|after)\s+\d{4}\b/i.test(t)
+                || /\b(first|sole|only)\s+.+?\s+in\s+\d+\s+years?\b/i.test(t)
               const isElectionOutcome =
                 /\b(won|topped|winner of)\b.*\b(election|presidential|senate|senatorial|gubernatorial|mayoral|midterm|race)\b/i.test(t)
                 || /\b(re-?elected|reelected)\b/i.test(t)
@@ -446,7 +453,7 @@ export default function SubmitForm({ politicians, defaultPoliticianId, defaultTy
                 || /\b(brand\s+ambassador|product\s+endorsement)\b/i.test(t)
               if (!isDemographicFirst && !isElectionOutcome && !isPersonal) return null
               const reason = isDemographicFirst
-                ? 'a demographic first or biographical superlative'
+                ? 'a demographic / religion / ethnicity / tenure-gap first'
                 : isElectionOutcome
                   ? 'an electoral outcome / campaign result'
                   : 'a personal accomplishment outside the office of politics'

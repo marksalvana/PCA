@@ -425,9 +425,11 @@ export default function MethodologyPage() {
             </p>
             <ul className="text-xs text-amber-900 leading-relaxed list-disc list-inside space-y-1">
               <li>
-                <span className="font-bold">Demographic firsts</span> &mdash; &ldquo;first female
-                Vice President&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Filipino X&rdquo;.
-                Facts about who the person is, not what they accomplished.
+                <span className="font-bold">Demographic / identity firsts</span> &mdash; &ldquo;first
+                female Vice President&rdquo;, &ldquo;youngest senator&rdquo;, &ldquo;first Muslim
+                senator since 1995&rdquo;, &ldquo;first Cebuano governor in 30 years&rdquo;. Facts
+                about who the person is &mdash; gender, age, religion, ethnicity, the gap since
+                the previous occupant &mdash; not what they did in office.
               </li>
               <li>
                 <span className="font-bold">Election outcomes</span> &mdash; &ldquo;won the 2016
