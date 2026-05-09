@@ -652,28 +652,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
         {/* ── Sidebar ── */}
         <aside className="mt-6 lg:mt-0 space-y-4">
 
-          {/* Actions: compare, personalize lens, submit a record */}
-          <div className="card p-4">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Actions</h3>
-            <div className="flex flex-col gap-2">
-              <Link
-                href={`/compare?a=${p.slug}`}
-                className="inline-flex items-center justify-between gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-2 rounded-lg transition-colors"
-              >
-                <span>Compare {p.preferred_name ?? p.full_name}</span>
-                <span aria-hidden>→</span>
-              </Link>
-              <LensLink />
-              <Link
-                href={`/submit?politician=${p.slug}`}
-                className="inline-flex items-center justify-between gap-2 text-xs font-bold border border-slate-200 bg-slate-50 hover:border-slate-300 hover:text-[#1B2A4A] text-slate-600 px-3 py-2 rounded-lg transition-colors"
-              >
-                <span>＋ Submit a record</span>
-                <span aria-hidden>→</span>
-              </Link>
-            </div>
-          </div>
-
           {/* Vetters */}
           <div className="card p-4">
             <h3 className="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
@@ -703,6 +681,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                 className="text-xs text-slate-400 hover:text-[#1B2A4A] transition-colors"
               >
                 Want to help verify profiles? Apply as a vetter →
+              </Link>
+            </div>
+          </div>
+
+          {/* Actions: compare, personalize lens, submit a record */}
+          <div className="card p-4">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Actions</h3>
+            <div className="flex flex-col gap-2">
+              <Link
+                href={`/compare?a=${p.slug}`}
+                className="inline-flex items-center justify-between gap-2 text-sm font-semibold text-[#1B2A4A] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3 py-2 rounded-lg transition-colors"
+              >
+                <span>Compare {p.preferred_name ?? p.full_name}</span>
+                <span aria-hidden>→</span>
+              </Link>
+              <LensLink />
+              <Link
+                href={`/submit?politician=${p.slug}`}
+                className="inline-flex items-center justify-between gap-2 text-xs font-bold border border-slate-200 bg-slate-50 hover:border-slate-300 hover:text-[#1B2A4A] text-slate-600 px-3 py-2 rounded-lg transition-colors"
+              >
+                <span>＋ Submit a record</span>
+                <span aria-hidden>→</span>
               </Link>
             </div>
           </div>
