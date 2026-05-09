@@ -38,6 +38,13 @@ CREATE TABLE IF NOT EXISTS public.forum_replies (
 -- on re-run without depending on Postgres's auto-generated constraint name.
 ALTER TABLE public.forum_replies
   DROP CONSTRAINT IF EXISTS forum_replies_depth_check;
+
+-- Clean up any rows at depth >= 2 left over from earlier 017 runs that
+-- used the previous bound (CHECK <= 2). With ON DELETE CASCADE on the
+-- parent_reply_id self-FK, deleting depth-2 leaves doesn't break depth-1
+-- parents. No-op on fresh installs.
+DELETE FROM public.forum_replies WHERE depth > 1;
+
 ALTER TABLE public.forum_replies
   ADD CONSTRAINT forum_replies_depth_check CHECK (depth >= 0 AND depth <= 1);
 
