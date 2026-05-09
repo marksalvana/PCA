@@ -47,8 +47,8 @@ export async function submitForumPost(formData: FormData) {
  * - When parent_reply_id is null/empty, this is a top-level reply at
  *   depth=0.
  * - When parent_reply_id is set, depth = parent.depth + 1. Maximum depth
- *   is 2 (i.e. 3 levels: post → reply → nested → nested-nested). The
- *   action rejects anything beyond that, with a DB CHECK as defense.
+ *   is 1 (i.e. 2 levels: post → reply → nested-reply). The action rejects
+ *   anything beyond that, with a DB CHECK as defense.
  * - Allows anonymous posting (user_id null) to match the forum_posts
  *   pattern, but author_name is always required.
  */
@@ -86,8 +86,8 @@ export async function submitReply(formData: FormData) {
     if (parent.post_id !== postId) {
       return { error: 'Parent reply belongs to a different post.' }
     }
-    if (parent.depth >= 2) {
-      return { error: 'Replies can only nest 3 levels deep.' }
+    if (parent.depth >= 1) {
+      return { error: 'Replies can only nest one level deep.' }
     }
     depth = parent.depth + 1
   }

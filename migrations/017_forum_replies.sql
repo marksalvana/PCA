@@ -1,14 +1,15 @@
 -- ============================================================
--- Migration 017: Forum replies (3-level threading) + reply reactions
+-- Migration 017: Forum replies (2-level threading) + reply reactions
 -- Run in Supabase SQL Editor AFTER migration 016.
 --
 -- Adds two tables:
 --
 -- 1. forum_replies — threaded replies on forum_posts.
 --    - Top-level reply (depth=0): parent_reply_id IS NULL, post_id set.
---    - Nested reply (depth=1, 2): parent_reply_id points to a reply.
---    - depth is enforced both at the DB (CHECK <= 2) and at the action
---      layer (validates parent.depth + 1 <= 2 before insert).
+--    - Nested reply (depth=1): parent_reply_id points to a depth=0 reply.
+--    - Maximum depth = 1 (post → reply → nested-reply). Enforced both at
+--      the DB (CHECK <= 1) and at the action layer (validates
+--      parent.depth + 1 <= 1 before insert).
 --    - Allows anonymous posting (user_id NULL, author_name required) to
 --      match the existing forum_posts pattern.
 --
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.forum_replies (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   post_id uuid REFERENCES public.forum_posts(id) ON DELETE CASCADE NOT NULL,
   parent_reply_id uuid REFERENCES public.forum_replies(id) ON DELETE CASCADE,
-  depth integer NOT NULL CHECK (depth >= 0 AND depth <= 2),
+  depth integer NOT NULL CHECK (depth >= 0 AND depth <= 1),
   user_id uuid REFERENCES public.user_profiles(id) ON DELETE SET NULL,
   author_name text NOT NULL,
   content text NOT NULL,
@@ -33,10 +34,11 @@ CREATE INDEX IF NOT EXISTS forum_replies_parent_idx     ON public.forum_replies(
 CREATE INDEX IF NOT EXISTS forum_replies_created_idx    ON public.forum_replies(created_at);
 
 COMMENT ON TABLE public.forum_replies IS
-  'Threaded replies to forum posts. depth in {0,1,2} — replies to a post
-   start at 0; nested replies at 1 and 2 only. Anonymous posting allowed
-   (user_id NULL, author_name required). Maximum thread depth enforced at
-   the action layer + this CHECK constraint as defense in depth.';
+  'Threaded replies to forum posts. depth in {0,1} — replies to a post
+   start at 0; one further level of nesting at depth=1. Anonymous posting
+   allowed (user_id NULL, author_name required). Maximum thread depth
+   enforced at the action layer + this CHECK constraint as defense in
+   depth.';
 
 ALTER TABLE public.forum_replies ENABLE ROW LEVEL SECURITY;
 

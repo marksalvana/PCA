@@ -19,7 +19,7 @@ type Props = {
   defaultAuthorName?: string
 }
 
-const MAX_DEPTH = 2  // 0,1,2 — three levels deep
+const MAX_DEPTH = 1  // depth in {0, 1} — post + one nested level
 
 /**
  * Renders all replies for a single post as a recursive thread. Bulk
@@ -79,12 +79,11 @@ function ReplyNode({
   const children = childrenByParent.get(reply.id) ?? []
   const canReply = reply.depth < MAX_DEPTH
 
-  // Indent visually based on depth using a left border
+  // Indent nested replies (depth=1) with a left border; top-level replies
+  // (depth=0) sit flush under the post.
   const indentClass = reply.depth === 0
     ? ''
-    : reply.depth === 1
-      ? 'ml-3 sm:ml-5 pl-3 border-l-2 border-slate-100'
-      : 'ml-3 sm:ml-5 pl-3 border-l-2 border-slate-100'
+    : 'ml-3 sm:ml-5 pl-3 border-l-2 border-slate-100'
 
   return (
     <li className={indentClass}>
@@ -116,9 +115,6 @@ function ReplyNode({
             >
               Reply
             </button>
-          )}
-          {!canReply && children.length === 0 && (
-            <span className="text-[10px] text-slate-400 italic">Maximum depth reached</span>
           )}
         </div>
 
