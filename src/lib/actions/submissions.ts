@@ -6,6 +6,7 @@ import { headers } from 'next/headers'
 import { verifyTurnstile } from '@/lib/turnstile'
 import { checkRateLimit, keyForIp, rateLimitError } from '@/lib/anti-abuse/rate-limit'
 import { isDisposableEmail } from '@/lib/anti-abuse/tempmail'
+import { notifyUser } from './notifications'
 import type {
   RecordSubmission,
   RecordSubmissionPayload,
@@ -257,6 +258,17 @@ export async function acceptSubmission(
     }
   }
 
+  // Notify the submitter (if they have an account)
+  if (subRow.submitter_user_id) {
+    await notifyUser({
+      userId: subRow.submitter_user_id,
+      type: 'submission_accepted',
+      title: 'Your submission was accepted',
+      body: options.adminNotes?.trim() || 'Your record was added to the platform.',
+      linkUrl: '/me',
+    })
+  }
+
   revalidatePath('/admin/submissions')
   revalidatePath(`/admin/submissions/${submissionId}`)
   return { success: true }
@@ -276,6 +288,12 @@ export async function rejectSubmission(
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
+  const { data: subRow } = await db
+    .from('record_submissions')
+    .select('submitter_user_id')
+    .eq('id', submissionId)
+    .single()
+
   const { error } = await db
     .from('record_submissions')
     .update({
@@ -288,6 +306,17 @@ export async function rejectSubmission(
     .in('status', ['pending', 'under_review'])
 
   if (error) return { error: error.message }
+
+  if (subRow?.submitter_user_id) {
+    await notifyUser({
+      userId: subRow.submitter_user_id,
+      type: 'submission_rejected',
+      title: 'Your submission was not accepted',
+      body: adminNotes.trim(),
+      linkUrl: '/me',
+    })
+  }
+
   revalidatePath('/admin/submissions')
   revalidatePath(`/admin/submissions/${submissionId}`)
   return { success: true }
@@ -303,6 +332,12 @@ export async function markDuplicate(
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
+  const { data: subRow } = await db
+    .from('record_submissions')
+    .select('submitter_user_id')
+    .eq('id', submissionId)
+    .single()
+
   const { error } = await db
     .from('record_submissions')
     .update({
@@ -315,6 +350,17 @@ export async function markDuplicate(
     .in('status', ['pending', 'under_review'])
 
   if (error) return { error: error.message }
+
+  if (subRow?.submitter_user_id) {
+    await notifyUser({
+      userId: subRow.submitter_user_id,
+      type: 'submission_rejected',
+      title: 'Your submission was marked duplicate',
+      body: adminNotes.trim() || 'A matching record already exists.',
+      linkUrl: '/me',
+    })
+  }
+
   revalidatePath('/admin/submissions')
   revalidatePath(`/admin/submissions/${submissionId}`)
   return { success: true }
@@ -327,6 +373,12 @@ export async function markUnderReview(submissionId: string): Promise<ActionResul
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
+  const { data: subRow } = await db
+    .from('record_submissions')
+    .select('submitter_user_id')
+    .eq('id', submissionId)
+    .single()
+
   const { error } = await db
     .from('record_submissions')
     .update({ status: 'under_review', reviewed_by: user.id })
@@ -334,6 +386,17 @@ export async function markUnderReview(submissionId: string): Promise<ActionResul
     .eq('status', 'pending')
 
   if (error) return { error: error.message }
+
+  if (subRow?.submitter_user_id) {
+    await notifyUser({
+      userId: subRow.submitter_user_id,
+      type: 'submission_under_review',
+      title: 'Your submission is under review',
+      body: 'A reviewer has picked up your submission. We\'ll let you know when it\'s decided.',
+      linkUrl: '/me',
+    })
+  }
+
   revalidatePath('/admin/submissions')
   revalidatePath(`/admin/submissions/${submissionId}`)
   return { success: true }

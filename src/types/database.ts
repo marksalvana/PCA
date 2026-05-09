@@ -1,7 +1,63 @@
 // Auto-generated types matching our schema.sql
 // Re-generate with: npx supabase gen types typescript --project-id YOUR_PROJECT_ID
 
-export type UserRole = 'admin' | 'vetter' | 'superadmin' | 'public'
+/**
+ * Roles in priority order:
+ *   admin/superadmin — full backend access
+ *   vetter           — backend access; verifies records
+ *   contributor      — backend access; submits records and adds politiko profiles
+ *   member           — frontend only; can post/rate/submit petitions
+ *
+ * 'public' is a legacy default that migration 020 migrates to 'member'.
+ * Kept in the type for backward compatibility while old rows clear out.
+ */
+export type UserRole = 'admin' | 'superadmin' | 'vetter' | 'contributor' | 'member' | 'public'
+
+/** Roles that have backend (admin app) access. */
+export const BACKEND_ROLES: UserRole[] = ['admin', 'superadmin', 'vetter', 'contributor']
+
+export function isBackendRole(role: UserRole | null | undefined): boolean {
+  return !!role && (BACKEND_ROLES as string[]).includes(role)
+}
+
+export type NotificationType =
+  | 'submission_accepted'
+  | 'submission_rejected'
+  | 'submission_under_review'
+  | 'contributor_app_approved'
+  | 'contributor_app_rejected'
+  | 'vetter_app_approved'
+  | 'vetter_app_rejected'
+  | 'record_verified'
+  | 'record_flagged'
+  | 'system'
+
+export interface Notification {
+  id: string
+  user_id: string
+  type: NotificationType
+  title: string
+  body: string | null
+  link_url: string | null
+  read_at: string | null
+  created_at: string
+}
+
+export interface ContributorApplication {
+  id: string
+  full_name: string
+  email: string
+  background: string
+  motivation: string
+  profile_url: string | null
+  public_display_consent: boolean
+  applicant_user_id: string | null
+  status: 'pending' | 'accepted' | 'rejected'
+  admin_notes: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
+  created_at: string
+}
 export type PoliticianStatus = 'draft' | 'under_review' | 'published' | 'flagged'
 export type ChedAccreditation =
   | 'level_1' | 'level_2' | 'level_3' | 'level_4'
@@ -376,6 +432,8 @@ export interface Database {
       awards: { Row: Award; Insert: Insertable<Award>; Update: Updatable<Award> }
       outcome_metrics: { Row: OutcomeMetric; Insert: Insertable<OutcomeMetric>; Update: Updatable<OutcomeMetric> }
       record_submissions: { Row: RecordSubmission; Insert: Insertable<RecordSubmission>; Update: Updatable<RecordSubmission> }
+      notifications: { Row: Notification; Insert: Insertable<Notification>; Update: Updatable<Notification> }
+      contributor_applications: { Row: ContributorApplication; Insert: Insertable<ContributorApplication>; Update: Updatable<ContributorApplication> }
       vetting_records: { Row: VettingRecord; Insert: Omit<VettingRecord, 'id' | 'vetted_at'>; Update: Partial<Omit<VettingRecord, 'id' | 'vetted_at'>> }
       civic_trust_ratings: { Row: CivicTrustRating; Insert: Omit<CivicTrustRating, 'id' | 'created_at'>; Update: Partial<Omit<CivicTrustRating, 'id' | 'created_at'>> }
       petitions: { Row: Petition; Insert: Omit<Petition, 'id' | 'created_at'>; Update: Partial<Omit<Petition, 'id' | 'created_at'>> }

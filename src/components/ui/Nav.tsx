@@ -5,6 +5,16 @@ import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import LanguageToggle from './LanguageToggle'
 import Logo from './Logo'
+import UserMenu from './UserMenu'
+import type { UserRole } from '@/types/database'
+
+type NavUser = {
+  id: string
+  email: string
+  displayName: string
+  role: UserRole
+  unreadCount: number
+}
 
 type DropdownItem = { href: string; label: string; description?: string }
 type DropdownKey = 'contribute' | 'learn'
@@ -19,10 +29,11 @@ const DROPDOWNS: Record<DropdownKey, { label: string; items: DropdownItem[] }> =
   contribute: {
     label: 'Contribute',
     items: [
-      { href: '/submit',       label: 'Submit a record',  description: 'Add education, track record, or achievement' },
-      { href: '/petition',     label: 'Request a profile',description: 'Suggest a new politician to add' },
-      { href: '/vetter-apply', label: 'Become a vetter',  description: 'Help verify submitted records' },
-      { href: '/forum',        label: 'Forum',            description: 'Discuss and give feedback' },
+      { href: '/submit',             label: 'Submit a record',     description: 'Add education, track record, or achievement' },
+      { href: '/petition',           label: 'Request a profile',   description: 'Suggest a new politician to add' },
+      { href: '/contributor-apply',  label: 'Become a contributor', description: 'Add profiles + submit records' },
+      { href: '/vetter-apply',       label: 'Become a vetter',     description: 'Help verify submitted records' },
+      { href: '/forum',              label: 'Forum',               description: 'Discuss and give feedback' },
     ],
   },
   learn: {
@@ -45,7 +56,7 @@ const MOBILE_GROUPS: { heading: string; items: { href: string; label: string }[]
   })),
 ]
 
-export default function Nav() {
+export default function Nav({ user }: { user: NavUser | null }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null)
   const dropdownsRef = useRef<HTMLDivElement>(null)
@@ -164,12 +175,21 @@ export default function Nav() {
           </div>
 
           <LanguageToggle />
-          <Link
-            href="/login"
-            className="ml-2 text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-1.5 rounded transition-colors"
-          >
-            Login / Sign Up
-          </Link>
+          {user ? (
+            <UserMenu
+              displayName={user.displayName}
+              email={user.email}
+              role={user.role}
+              unreadCount={user.unreadCount}
+            />
+          ) : (
+            <Link
+              href="/login"
+              className="ml-2 text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-1.5 rounded transition-colors"
+            >
+              Login / Sign Up
+            </Link>
+          )}
         </nav>
 
         {/* Mobile controls */}
@@ -226,12 +246,26 @@ export default function Nav() {
                 ))}
               </div>
             ))}
-            <Link
-              href="/login"
-              className="mt-3 text-center text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-2.5 rounded transition-colors"
-            >
-              Login / Sign Up
-            </Link>
+            {user ? (
+              <div className="mt-3 pt-3 border-t border-[#F4F2EE]">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-3 mb-1">
+                  Signed in
+                </p>
+                <UserMenu
+                  displayName={user.displayName}
+                  email={user.email}
+                  role={user.role}
+                  unreadCount={user.unreadCount}
+                />
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="mt-3 text-center text-sm bg-[#1B2A4A] hover:bg-[#243761] text-white font-semibold px-4 py-2.5 rounded transition-colors"
+              >
+                Login / Sign Up
+              </Link>
+            )}
           </nav>
         </div>
       )}

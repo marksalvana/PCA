@@ -2,19 +2,22 @@ import Link from 'next/link'
 import type { UserRole } from '@/types/database'
 
 const links = [
-  { href: '/dashboard',          label: 'Dashboard',         roles: ['admin', 'vetter', 'superadmin'] },
-  { href: '/admin/profiles',     label: 'Profiles',          roles: ['admin', 'superadmin'] },
-  { href: '/admin/profiles/new', label: '+ New Profile',     roles: ['admin', 'superadmin'] },
-  { href: '/vetting',            label: 'Vetting Queue',     roles: ['vetter', 'superadmin'] },
-  { href: '/admin/submissions',  label: 'Submissions Queue', roles: ['admin', 'vetter', 'superadmin'] },
-  { href: '/profiles',           label: '← Public Site',     roles: ['admin', 'vetter', 'superadmin'] },
+  { href: '/dashboard',                       label: 'Dashboard',                roles: ['admin', 'superadmin', 'vetter', 'contributor'] },
+  { href: '/admin/profiles',                  label: 'Profiles',                 roles: ['admin', 'superadmin', 'contributor'] },
+  { href: '/admin/profiles/new',              label: '+ New Profile',            roles: ['admin', 'superadmin', 'contributor'] },
+  { href: '/vetting',                         label: 'Vetting Queue',            roles: ['admin', 'superadmin', 'vetter'] },
+  { href: '/admin/submissions',               label: 'Submissions Queue',        roles: ['admin', 'superadmin', 'vetter', 'contributor'] },
+  { href: '/admin/contributor-applications',  label: 'Contributor Applications', roles: ['admin', 'superadmin'] },
+  { href: '/profiles',                        label: '← Public Site',            roles: ['admin', 'superadmin', 'vetter', 'contributor'] },
 ]
 
 const roleLabel: Record<UserRole, string> = {
-  admin:      'Admin',
-  vetter:     'Vetter',
-  superadmin: 'Super Admin',
-  public:     'Public',
+  admin:       'Admin',
+  superadmin:  'Super Admin',
+  vetter:      'Vetter',
+  contributor: 'Contributor',
+  member:      'Member',
+  public:      'Member',
 }
 
 export default function AdminNav({ role }: { role: UserRole }) {

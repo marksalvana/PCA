@@ -12,20 +12,23 @@ export default async function DashboardPage() {
     { count: pendingVetting },
     { count: petitions },
     { count: pendingSubmissions },
+    { count: pendingContribApps },
   ] = await Promise.all([
     supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('status', 'published'),
     supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('status', 'draft'),
     supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('status', 'under_review'),
     supabase.from('petitions').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('record_submissions').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('contributor_applications').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
   const stats = [
-    { label: 'Published Profiles', value: totalPoliticians ?? 0, href: '/profiles', color: 'text-green-400' },
-    { label: 'Drafts', value: drafts ?? 0, href: '/admin/profiles', color: 'text-amber-400' },
-    { label: 'Awaiting Vetting', value: pendingVetting ?? 0, href: '/vetting', color: 'text-[#60a5fa]' },
-    { label: 'Pending Petitions', value: petitions ?? 0, href: '/admin/petitions', color: 'text-[#fcd116]' },
-    { label: 'Pending Submissions', value: pendingSubmissions ?? 0, href: '/admin/submissions', color: 'text-orange-400' },
+    { label: 'Published Profiles',     value: totalPoliticians ?? 0,  href: '/profiles',                       color: 'text-green-400' },
+    { label: 'Drafts',                  value: drafts ?? 0,            href: '/admin/profiles',                 color: 'text-amber-400' },
+    { label: 'Awaiting Vetting',        value: pendingVetting ?? 0,    href: '/vetting',                        color: 'text-[#60a5fa]' },
+    { label: 'Pending Petitions',       value: petitions ?? 0,         href: '/admin/petitions',                color: 'text-[#fcd116]' },
+    { label: 'Pending Submissions',     value: pendingSubmissions ?? 0, href: '/admin/submissions',             color: 'text-orange-400' },
+    { label: 'Contributor Apps',        value: pendingContribApps ?? 0, href: '/admin/contributor-applications', color: 'text-emerald-400' },
   ]
 
   return (

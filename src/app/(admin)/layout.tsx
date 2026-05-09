@@ -18,7 +18,7 @@ export default async function AdminLayout({
     .eq('id', user.id)
     .single<{ role: string }>()
 
-  const allowedRoles = ['admin', 'vetter', 'superadmin']
+  const allowedRoles = ['admin', 'superadmin', 'vetter', 'contributor']
   if (!profile || !allowedRoles.includes(profile.role)) {
     redirect('/')
   }
