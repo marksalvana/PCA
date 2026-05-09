@@ -8,12 +8,12 @@
 -- failing to file a tax return (fines only) should not score the same.
 --
 -- Penalty schedule (per verified conviction row):
---   civil         -50    Civil judgment, contempt order, no PH imprisonment
---   arresto       -100   Arresto menor / mayor (1 day – 6 months)
---   correccional  -200   Prisión correccional (6 months – 6 years)
---   mayor         -350   Prisión mayor (6 – 12 years)         [DEFAULT]
---   temporal      -500   Reclusión temporal (12 – 20 years)
---   perpetua      -700   Reclusión perpetua / life
+--   civil         -40    Civil judgment, contempt order, no PH imprisonment
+--   arresto       -80    Arresto menor / mayor (1 day – 6 months)
+--   correccional  -160   Prisión correccional (6 months – 6 years)   [DEFAULT]
+--   mayor         -240   Prisión mayor (6 – 12 years)
+--   temporal      -360   Reclusión temporal (12 – 20 years)
+--   perpetua      -500   Reclusión perpetua / life
 --
 -- Policy:
 --   - Pardons do not reduce the penalty. The court's finding is the fact;
@@ -21,8 +21,9 @@
 --   - Civil judgments (incl. foreign-court contempt) score at the floor,
 --     not zero. A finding of wrongdoing in any court matters.
 --   - Multi-count cases use the highest category across the counts.
---   - 'mayor' is the fallback when status='convicted' but category is NULL,
---     matching the historical fixed -350 penalty so legacy rows don't drift.
+--   - 'correccional' is the fallback when status='convicted' but category is
+--     NULL — it matches the typical PH-conviction tier (libel, perjury,
+--     oral defamation all land in correccional under the Revised Penal Code).
 --
 -- Idempotent: safe to re-run.
 -- ============================================================
@@ -43,8 +44,8 @@ COMMENT ON COLUMN public.legal_records.sentence_category IS
   'Severity tier of the conviction sentence per PH penal classification.
    One of: civil, arresto, correccional, mayor, temporal, perpetua.
    Required when status = ''convicted''; ignored otherwise.
-   Default fallback when status=''convicted'' but column is NULL is ''mayor''
-   (matching the historical fixed -350 penalty).';
+   Default fallback when status=''convicted'' but column is NULL is
+   ''correccional'' (-160) — the typical PH-conviction tier.';
 
 
 -- ── 2. Backfill the 5 seeded convictions ───────────────────────
@@ -206,13 +207,13 @@ BEGIN
       WHEN status = 'ongoing_appeal' THEN 75
       ELSE 0 END), 0),
     COALESCE(SUM(CASE
-      WHEN status = 'convicted' AND sentence_category = 'civil'        THEN  50
-      WHEN status = 'convicted' AND sentence_category = 'arresto'      THEN 100
-      WHEN status = 'convicted' AND sentence_category = 'correccional' THEN 200
-      WHEN status = 'convicted' AND sentence_category = 'mayor'        THEN 350
-      WHEN status = 'convicted' AND sentence_category = 'temporal'     THEN 500
-      WHEN status = 'convicted' AND sentence_category = 'perpetua'     THEN 700
-      WHEN status = 'convicted'                                        THEN 350
+      WHEN status = 'convicted' AND sentence_category = 'civil'        THEN  40
+      WHEN status = 'convicted' AND sentence_category = 'arresto'      THEN  80
+      WHEN status = 'convicted' AND sentence_category = 'correccional' THEN 160
+      WHEN status = 'convicted' AND sentence_category = 'mayor'        THEN 240
+      WHEN status = 'convicted' AND sentence_category = 'temporal'     THEN 360
+      WHEN status = 'convicted' AND sentence_category = 'perpetua'     THEN 500
+      WHEN status = 'convicted'                                        THEN 160
       ELSE 0 END), 0),
     COALESCE(SUM(
       CASE ombudsman_disposition

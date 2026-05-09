@@ -32,15 +32,16 @@ export const LEGAL_PENALTIES = {
 } as const
 
 // Tiered conviction penalty by PH penal classification (migration 023).
-// 'mayor' (-350) is the default when status='convicted' but category is NULL,
-// matching the historical fixed penalty so legacy rows don't drift.
+// 'correccional' (-160) is the default when status='convicted' but category
+// is NULL — matches the typical PH-conviction tier (libel, perjury, oral
+// defamation all land in correccional under the Revised Penal Code).
 export const CONVICTION_PENALTIES: Record<SentenceCategory, number> = {
-  civil:        50,
-  arresto:     100,
-  correccional: 200,
-  mayor:        350,
-  temporal:     500,
-  perpetua:     700,
+  civil:         40,
+  arresto:       80,
+  correccional: 160,
+  mayor:        240,
+  temporal:     360,
+  perpetua:     500,
 }
 
 // Human-readable labels for each sentence category.
@@ -53,10 +54,10 @@ export const CONVICTION_CATEGORY_LABELS: Record<SentenceCategory, string> = {
   perpetua:     'Reclusión perpetua',
 }
 
-// Resolve the per-row penalty for a conviction. Falls back to 'mayor'
-// (-350) when category is null — the historical default.
+// Resolve the per-row penalty for a conviction. Falls back to 'correccional'
+// (-160) when category is null — the typical PH-conviction tier.
 export function convictionPenalty(category: SentenceCategory | null | undefined): number {
-  return CONVICTION_PENALTIES[category ?? 'mayor']
+  return CONVICTION_PENALTIES[category ?? 'correccional']
 }
 
 // Resolve the legal penalty for a record by status. Use this instead

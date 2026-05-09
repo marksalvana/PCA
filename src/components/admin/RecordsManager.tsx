@@ -410,7 +410,7 @@ function LegalEditForm({
             onChange={(e) => setSentenceCategory(e.target.value as SentenceCategory | '')}
             className={inputClass}
           >
-            <option value="">— Select sentence tier (defaults to Prisión mayor: −350 pts) —</option>
+            <option value="">— Select sentence tier (defaults to Prisión correccional: −{CONVICTION_PENALTIES.correccional} pts) —</option>
             <option value="civil">Civil — civil judgment / contempt, no PH imprisonment (−{CONVICTION_PENALTIES.civil} pts)</option>
             <option value="arresto">Arresto — 1 day to 6 months (−{CONVICTION_PENALTIES.arresto} pts)</option>
             <option value="correccional">Prisión correccional — 6 months to 6 years (−{CONVICTION_PENALTIES.correccional} pts)</option>
@@ -1063,7 +1063,7 @@ export default function RecordsManager({ politician: p }: Props) {
                   onChange={(e) => setLegalSentenceCategory(e.target.value as SentenceCategory | '')}
                   className={inputClass}
                 >
-                  <option value="">— Select sentence tier (defaults to Prisión mayor: −350 pts) —</option>
+                  <option value="">— Select sentence tier (defaults to Prisión correccional: −{CONVICTION_PENALTIES.correccional} pts) —</option>
                   <option value="civil">Civil — civil judgment / contempt, no PH imprisonment (−{CONVICTION_PENALTIES.civil} pts)</option>
                   <option value="arresto">Arresto — 1 day to 6 months (−{CONVICTION_PENALTIES.arresto} pts)</option>
                   <option value="correccional">Prisión correccional — 6 months to 6 years (−{CONVICTION_PENALTIES.correccional} pts)</option>

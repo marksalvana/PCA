@@ -189,7 +189,7 @@ export default function MethodologyPage() {
             </div>
             <div className="flex gap-3 items-start">
               <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-2 py-0.5 shrink-0 mt-0.5">EDITORIAL</span>
-              <span className="leading-relaxed">The point values assigned to each tier (e.g. CHED Level III = 70 points, not 65 or 75) · the six-tier conviction-penalty schedule keyed off the Philippine penal classification (civil −50 up to reclusión perpetua −700) · the caps on Education (200) and Achievements (300) · the +40 term completion bonus · the attendance modifier brackets.</span>
+              <span className="leading-relaxed">The point values assigned to each tier (e.g. CHED Level III = 70 points, not 65 or 75) · the six-tier conviction-penalty schedule keyed off the Philippine penal classification (civil −40 up to reclusión perpetua −500) · the caps on Education (200) and Achievements (300) · the +40 term completion bonus · the attendance modifier brackets.</span>
             </div>
           </div>
           <p className="text-sm text-slate-600 leading-relaxed mt-3">
@@ -466,7 +466,7 @@ export default function MethodologyPage() {
           <div className="flex flex-col gap-3">
             {[
               { status: 'Pending', deduction: '−75 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A case filed in court and currently being tried. Charges have not yet been proven beyond reasonable doubt, but the existence of an active case is a material fact for voters.' },
-              { status: 'Convicted', deduction: '−50 to −700, by tier', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty. The penalty scales with the severity of the sentence using the Philippine penal classification — see the six-tier table below.' },
+              { status: 'Convicted', deduction: '−40 to −500, by tier', color: 'bg-red-50 border-red-200 text-red-700', description: 'A court has found the official guilty. The penalty scales with the severity of the sentence using the Philippine penal classification — see the six-tier table below.' },
               { status: 'On Appeal', deduction: '−75 per case', color: 'bg-amber-50 border-amber-200 text-amber-700', description: 'A conviction is being appealed. Treated the same as pending — the matter is still unresolved before a higher court.' },
               { status: 'Acquitted', deduction: '0', color: 'bg-green-50 border-green-200 text-green-700', description: 'Court found the official not guilty. No deduction is applied. The record is still displayed for transparency — voters can see what cases were filed and how they resolved.' },
               { status: 'Dismissed', deduction: '0', color: 'bg-slate-50 border-slate-200 text-slate-600', description: 'Case was dismissed before reaching a verdict. No deduction. Displayed for transparency.' },
@@ -499,12 +499,12 @@ export default function MethodologyPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {[
-                  { tier: 'Civil',                   range: 'Civil judgment / contempt order, no PH imprisonment', pts: 50  },
-                  { tier: 'Arresto',                 range: '1 day – 6 months',                                     pts: 100 },
-                  { tier: 'Prisión correccional',    range: '6 months – 6 years',                                   pts: 200 },
-                  { tier: 'Prisión mayor (default)', range: '6 – 12 years',                                         pts: 350 },
-                  { tier: 'Reclusión temporal',      range: '12 – 20 years',                                        pts: 500 },
-                  { tier: 'Reclusión perpetua',      range: 'Life imprisonment',                                    pts: 700 },
+                  { tier: 'Civil',                   range: 'Civil judgment / contempt order, no PH imprisonment', pts:  40 },
+                  { tier: 'Arresto',                 range: '1 day – 6 months',                                     pts:  80 },
+                  { tier: 'Prisión correccional',    range: '6 months – 6 years',                                   pts: 160 },
+                  { tier: 'Prisión mayor (default)', range: '6 – 12 years',                                         pts: 240 },
+                  { tier: 'Reclusión temporal',      range: '12 – 20 years',                                        pts: 360 },
+                  { tier: 'Reclusión perpetua',      range: 'Life imprisonment',                                    pts: 500 },
                 ].map(({ tier, range, pts }) => (
                   <tr key={tier}>
                     <td className="py-2 pr-3 font-semibold text-slate-800">{tier}</td>
@@ -526,7 +526,7 @@ export default function MethodologyPage() {
               <strong className="text-slate-800">Multi-count cases use the highest tier across the counts.</strong> One conviction row represents one case verdict.
             </p>
             <p>
-              <strong className="text-slate-800">Default fallback is Prisión mayor (−350).</strong> If a row is marked &quot;convicted&quot; without an explicit tier, it scores at the historical default — preserving prior penalties while admins fill in categories for legacy rows.
+              <strong className="text-slate-800">Default fallback is Prisión correccional (−160).</strong> If a row is marked &quot;convicted&quot; without an explicit tier, it scores at the typical PH-conviction tier (libel, perjury, oral defamation all land here). Admins promote rows to higher tiers explicitly when the sentence warrants it.
             </p>
           </div>
         </div>
