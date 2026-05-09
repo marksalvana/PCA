@@ -28,14 +28,51 @@ export async function middleware(request: NextRequest) {
   // Refresh session — must call getUser() to keep session alive
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect admin routes
-  if (request.nextUrl.pathname.startsWith('/admin') ||
-      request.nextUrl.pathname.startsWith('/dashboard') ||
-      request.nextUrl.pathname.startsWith('/vetting')) {
+  const path = request.nextUrl.pathname
+
+  // Protect admin routes — must be signed in
+  if (path.startsWith('/admin') ||
+      path.startsWith('/dashboard') ||
+      path.startsWith('/vetting')) {
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = '/login'
       return NextResponse.redirect(url)
+    }
+  }
+
+  // Phone-verification gate. When the viewer is signed in but hasn't
+  // completed Phone OTP, hold them on /verify-phone (and the bare
+  // minimum routes needed to get there or sign out). Public pages
+  // remain readable so visitors who aren't signed in aren't affected.
+  if (user) {
+    const ALLOW_UNVERIFIED = [
+      '/verify-phone',
+      '/auth/callback',
+      '/login',
+      '/signup',
+      '/logout',
+    ]
+    const isAllowed = ALLOW_UNVERIFIED.some((p) => path === p || path.startsWith(`${p}/`))
+    const isApiRoute = path.startsWith('/api/')
+    const isAssetRoute = path.startsWith('/_next/') || path.startsWith('/auth/')
+
+    if (!isAllowed && !isApiRoute && !isAssetRoute) {
+      // Cheap check: only fetch the profile when the path isn't
+      // already an auth/asset route. Avoids a SELECT on every static
+      // asset request.
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('phone_verified')
+        .eq('id', user.id)
+        .maybeSingle<{ phone_verified: boolean }>()
+
+      if (profile && !profile.phone_verified) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/verify-phone'
+        url.search = ''
+        return NextResponse.redirect(url)
+      }
     }
   }
 

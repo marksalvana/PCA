@@ -31,6 +31,18 @@ export async function GET(request: Request) {
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
+      // Send unverified users through phone OTP before they can use the app.
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('phone_verified')
+          .eq('id', user.id)
+          .single<{ phone_verified: boolean }>()
+        if (profile && !profile.phone_verified) {
+          return NextResponse.redirect(`${origin}/verify-phone`)
+        }
+      }
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

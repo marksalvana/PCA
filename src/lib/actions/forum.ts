@@ -124,6 +124,15 @@ export async function toggleReplyReaction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Sign in to react to replies.' }
 
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('phone_verified')
+    .eq('id', user.id)
+    .single<{ phone_verified: boolean }>()
+  if (!profile?.phone_verified) {
+    return { error: 'Verify your phone number to react.' }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
 
@@ -182,6 +191,15 @@ export async function toggleReaction(
 
   if (!user) {
     return { error: 'Sign in to react to posts.' }
+  }
+
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('phone_verified')
+    .eq('id', user.id)
+    .single<{ phone_verified: boolean }>()
+  if (!profile?.phone_verified) {
+    return { error: 'Verify your phone number to react.' }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

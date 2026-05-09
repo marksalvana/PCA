@@ -27,6 +27,8 @@ export interface UserProfile {
   role: UserRole
   bio: string | null
   contribution_count: number
+  phone_verified: boolean
+  phone_e164: string | null
   created_at: string
   updated_at: string
 }
