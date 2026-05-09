@@ -14,7 +14,6 @@ type Props = {
   isLoggedIn: boolean
   /** Number of top-level replies on this post, used in the "X replies" hint */
   replyCount: number
-  defaultAuthorName?: string
 }
 
 /**
@@ -29,7 +28,6 @@ export default function PostFooter({
   userReaction,
   isLoggedIn,
   replyCount,
-  defaultAuthorName,
 }: Props) {
   const [composerOpen, setComposerOpen] = useState(false)
 
@@ -62,7 +60,6 @@ export default function PostFooter({
       {composerOpen && (
         <ReplyComposer
           postId={postId}
-          defaultAuthorName={defaultAuthorName}
           onCancel={() => setComposerOpen(false)}
           onSubmitted={() => setComposerOpen(false)}
         />

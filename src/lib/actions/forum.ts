@@ -5,13 +5,9 @@ import { revalidatePath } from 'next/cache'
 import type { ReactionType } from '@/types/database'
 
 export async function submitForumPost(formData: FormData) {
-  const authorName = (formData.get('author_name') as string | null)?.trim()
   const content = (formData.get('content') as string | null)?.trim()
   const category = (formData.get('category') as string | null) ?? 'general'
 
-  if (!authorName || authorName.length < 2) {
-    return { error: 'Please enter your name (at least 2 characters).' }
-  }
   if (!content || content.length < 10) {
     return { error: 'Please write a message (at least 10 characters).' }
   }
@@ -23,14 +19,23 @@ export async function submitForumPost(formData: FormData) {
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Sign in to post.' }
 
-  // forum_posts is added via migration; cast required until Supabase reflects the new table
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('display_name, phone_verified')
+    .eq('id', user.id)
+    .single<{ display_name: string; phone_verified: boolean }>()
+  if (!profile?.phone_verified) {
+    return { error: 'Verify your phone number to post.' }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any).from('forum_posts').insert({
-    author_name: authorName,
+    author_name: profile.display_name,
     content,
     category,
-    user_id: user?.id ?? null,
+    user_id: user.id,
   })
 
   if (error) {
@@ -49,25 +54,32 @@ export async function submitForumPost(formData: FormData) {
  * - When parent_reply_id is set, depth = parent.depth + 1. Maximum depth
  *   is 1 (i.e. 2 levels: post → reply → nested-reply). The action rejects
  *   anything beyond that, with a DB CHECK as defense.
- * - Allows anonymous posting (user_id null) to match the forum_posts
- *   pattern, but author_name is always required.
+ * - Requires phone-verified auth (legacy anonymous posting removed in
+ *   migration 019). author_name is auto-filled from the user's
+ *   user_profiles.display_name.
  */
 export async function submitReply(formData: FormData) {
   const postId = (formData.get('post_id') as string | null)?.trim()
   const parentReplyId = (formData.get('parent_reply_id') as string | null)?.trim() || null
-  const authorName = (formData.get('author_name') as string | null)?.trim()
   const content = (formData.get('content') as string | null)?.trim()
 
   if (!postId) return { error: 'Missing post.' }
-  if (!authorName || authorName.length < 2) {
-    return { error: 'Please enter your name (at least 2 characters).' }
-  }
   if (!content || content.length < 5) {
     return { error: 'Please write a reply (at least 5 characters).' }
   }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Sign in to reply.' }
+
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('display_name, phone_verified')
+    .eq('id', user.id)
+    .single<{ display_name: string; phone_verified: boolean }>()
+  if (!profile?.phone_verified) {
+    return { error: 'Verify your phone number to reply.' }
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
@@ -96,8 +108,8 @@ export async function submitReply(formData: FormData) {
     post_id: postId,
     parent_reply_id: parentReplyId,
     depth,
-    user_id: user?.id ?? null,
-    author_name: authorName,
+    user_id: user.id,
+    author_name: profile.display_name,
     content,
   })
 

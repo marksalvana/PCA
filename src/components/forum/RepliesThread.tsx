@@ -16,7 +16,6 @@ type Props = {
   postId: string
   replies: ReplyWithReactions[]
   isLoggedIn: boolean
-  defaultAuthorName?: string
 }
 
 const MAX_DEPTH = 1  // depth in {0, 1} — post + one nested level
@@ -27,7 +26,7 @@ const MAX_DEPTH = 1  // depth in {0, 1} — post + one nested level
  * parent_reply_id and render. Depth-based indentation; "Reply" button
  * hidden once we hit MAX_DEPTH.
  */
-export default function RepliesThread({ postId, replies, isLoggedIn, defaultAuthorName }: Props) {
+export default function RepliesThread({ postId, replies, isLoggedIn }: Props) {
   // Bucket replies by their parent (null parent = top-level on the post)
   const childrenByParent = new Map<string | null, ReplyWithReactions[]>()
   for (const r of replies) {
@@ -55,7 +54,6 @@ export default function RepliesThread({ postId, replies, isLoggedIn, defaultAuth
           postId={postId}
           childrenByParent={childrenByParent}
           isLoggedIn={isLoggedIn}
-          defaultAuthorName={defaultAuthorName}
         />
       ))}
     </ul>
@@ -67,13 +65,11 @@ function ReplyNode({
   postId,
   childrenByParent,
   isLoggedIn,
-  defaultAuthorName,
 }: {
   reply: ReplyWithReactions
   postId: string
   childrenByParent: Map<string | null, ReplyWithReactions[]>
   isLoggedIn: boolean
-  defaultAuthorName?: string
 }) {
   const [composerOpen, setComposerOpen] = useState(false)
   const children = childrenByParent.get(reply.id) ?? []
@@ -122,8 +118,7 @@ function ReplyNode({
           <ReplyComposer
             postId={postId}
             parentReplyId={reply.id}
-            defaultAuthorName={defaultAuthorName}
-            onCancel={() => setComposerOpen(false)}
+              onCancel={() => setComposerOpen(false)}
             onSubmitted={() => setComposerOpen(false)}
           />
         )}
@@ -138,8 +133,7 @@ function ReplyNode({
               postId={postId}
               childrenByParent={childrenByParent}
               isLoggedIn={isLoggedIn}
-              defaultAuthorName={defaultAuthorName}
-            />
+                />
           ))}
         </ul>
       )}

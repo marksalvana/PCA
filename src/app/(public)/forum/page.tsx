@@ -136,15 +136,17 @@ export default async function ForumPage({
     repliesByPost.set(r.post_id, existing)
   }
 
-  // Look up the viewer's display_name to pre-fill reply composers
-  let viewerDisplayName: string | undefined
+  // Look up viewer's phone_verified for the post-permission gate.
+  // Author name comes from the server action (auto-filled from
+  // user_profiles.display_name) so we don't need to pass it client-side.
+  let viewerCanPost = false
   if (user) {
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('display_name')
+      .select('phone_verified')
       .eq('id', user.id)
-      .maybeSingle<{ display_name: string }>()
-    viewerDisplayName = profile?.display_name
+      .maybeSingle<{ phone_verified: boolean }>()
+    viewerCanPost = !!profile?.phone_verified
   }
 
   const ALL_CATEGORIES = ['suggestion', 'feedback', 'question', 'bug_report', 'general']
@@ -163,7 +165,7 @@ export default async function ForumPage({
       </div>
 
       <Suspense>
-        <ForumForm />
+        <ForumForm canPost={viewerCanPost} />
       </Suspense>
 
       {/* Category filter pills */}
@@ -225,13 +227,11 @@ export default async function ForumPage({
                   userReaction={counts.userReaction}
                   isLoggedIn={!!user}
                   replyCount={postReplies.length}
-                  defaultAuthorName={viewerDisplayName}
                 />
                 <RepliesThread
                   postId={post.id}
                   replies={postReplies}
                   isLoggedIn={!!user}
-                  defaultAuthorName={viewerDisplayName}
                 />
               </div>
             )

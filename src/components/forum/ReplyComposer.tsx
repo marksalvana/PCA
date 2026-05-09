@@ -8,8 +8,6 @@ type Props = {
   postId: string
   /** Set when this composer is replying to an existing reply */
   parentReplyId?: string | null
-  /** Pre-fill the name field if the viewer is signed in */
-  defaultAuthorName?: string
   /** Called when the user cancels (closes the composer) */
   onCancel?: () => void
   /** Called after a successful submission so the parent can hide the composer */
@@ -19,11 +17,9 @@ type Props = {
 export default function ReplyComposer({
   postId,
   parentReplyId = null,
-  defaultAuthorName = '',
   onCancel,
   onSubmitted,
 }: Props) {
-  const [authorName, setAuthorName] = useState(defaultAuthorName)
   const [content, setContent] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
@@ -36,7 +32,6 @@ export default function ReplyComposer({
       const formData = new FormData()
       formData.set('post_id', postId)
       if (parentReplyId) formData.set('parent_reply_id', parentReplyId)
-      formData.set('author_name', authorName)
       formData.set('content', content)
       const result = await submitReply(formData)
       if ('error' in result) {
@@ -57,15 +52,6 @@ export default function ReplyComposer({
         </div>
       )}
       <div className="flex flex-col gap-2">
-        <input
-          type="text"
-          value={authorName}
-          onChange={(e) => setAuthorName(e.target.value)}
-          placeholder="Your name"
-          required
-          minLength={2}
-          className="w-full bg-white border border-slate-200 focus:border-[#1B2A4A] focus:ring-2 focus:ring-[#1B2A4A]/10 rounded-md px-2.5 py-1.5 text-xs outline-none"
-        />
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
