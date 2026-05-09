@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { checkRateLimit, keyForUser, rateLimitError } from '@/lib/anti-abuse/rate-limit'
 
 export async function submitRating(politicianId: string, slug: string, rating: number) {
   if (rating < 1 || rating > 5) {
@@ -25,6 +26,11 @@ export async function submitRating(politicianId: string, slug: string, rating: n
   if (!profile?.phone_verified) {
     return { error: 'Verify your phone number before rating.' }
   }
+
+  // Rate limit: 60 ratings per day per user (allows ample politicians
+  // to be rated without inviting bot-style flood).
+  const rl = checkRateLimit(keyForUser(user.id, 'rating'), { limit: 60, windowSec: 86400 })
+  if (!rl.ok) return { error: rateLimitError(rl, 'ratings') }
 
   // Supabase SSR client has a known type-threading issue with write operations;
   // the runtime query is correct, the cast is safe here.

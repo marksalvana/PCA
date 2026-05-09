@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { checkRateLimit, keyForUser, rateLimitError } from '@/lib/anti-abuse/rate-limit'
 import type { ReactionType } from '@/types/database'
 
 export async function submitForumPost(formData: FormData) {
@@ -29,6 +30,10 @@ export async function submitForumPost(formData: FormData) {
   if (!profile?.phone_verified) {
     return { error: 'Verify your phone number to post.' }
   }
+
+  // Rate limit: 5 posts per hour per user.
+  const rl = checkRateLimit(keyForUser(user.id, 'forum-post'), { limit: 5, windowSec: 3600 })
+  if (!rl.ok) return { error: rateLimitError(rl, 'posts') }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any).from('forum_posts').insert({
@@ -80,6 +85,10 @@ export async function submitReply(formData: FormData) {
   if (!profile?.phone_verified) {
     return { error: 'Verify your phone number to reply.' }
   }
+
+  // Rate limit: 10 replies per hour per user.
+  const rl = checkRateLimit(keyForUser(user.id, 'forum-reply'), { limit: 10, windowSec: 3600 })
+  if (!rl.ok) return { error: rateLimitError(rl, 'replies') }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
@@ -144,6 +153,10 @@ export async function toggleReplyReaction(
   if (!profile?.phone_verified) {
     return { error: 'Verify your phone number to react.' }
   }
+
+  // Rate limit: 100 reactions per hour per user.
+  const rl = checkRateLimit(keyForUser(user.id, 'forum-react'), { limit: 100, windowSec: 3600 })
+  if (!rl.ok) return { error: rateLimitError(rl, 'reactions') }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
@@ -213,6 +226,10 @@ export async function toggleReaction(
   if (!profile?.phone_verified) {
     return { error: 'Verify your phone number to react.' }
   }
+
+  // Rate limit: 100 reactions per hour per user.
+  const rl = checkRateLimit(keyForUser(user.id, 'forum-react'), { limit: 100, windowSec: 3600 })
+  if (!rl.ok) return { error: rateLimitError(rl, 'reactions') }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any

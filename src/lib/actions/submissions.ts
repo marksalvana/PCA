@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { verifyTurnstile } from '@/lib/turnstile'
+import { checkRateLimit, keyForIp, rateLimitError } from '@/lib/anti-abuse/rate-limit'
+import { isDisposableEmail } from '@/lib/anti-abuse/tempmail'
 import type {
   RecordSubmission,
   RecordSubmissionPayload,
@@ -40,10 +42,22 @@ export async function submitRecord(input: {
   }
   if (!input.submitterEmail.trim()) return { error: 'Please enter an email.' }
 
+  // Tempmail rejection — generic message so we don't tip off the spammer.
+  if (isDisposableEmail(input.submitterEmail)) {
+    return { error: 'Please use a primary email address we can reach you at.' }
+  }
+
   // CAPTCHA gate
   const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim() ?? undefined
   const captcha = await verifyTurnstile(input.captchaToken, ip)
   if (!captcha.ok) return { error: captcha.error }
+
+  // Rate limit: 5 submissions per day per (IP + email).
+  const rl = checkRateLimit(keyForIp(ip, input.submitterEmail, 'submit-record'), {
+    limit: 5,
+    windowSec: 86400,
+  })
+  if (!rl.ok) return { error: rateLimitError(rl, 'submissions') }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
