@@ -185,6 +185,9 @@ function TrackEditForm({
   const [billsAuthored, setBillsAuthored] = useState(r.bills_authored != null ? String(r.bills_authored) : '')
   const [billsPassed, setBillsPassed] = useState(r.bills_passed != null ? String(r.bills_passed) : '')
   const [billsEnacted, setBillsEnacted] = useState(r.bills_enacted_count != null ? String(r.bills_enacted_count) : '')
+  const [coAuthBills, setCoAuthBills] = useState(r.co_authored_bills != null ? String(r.co_authored_bills) : '')
+  const [resAuthored, setResAuthored] = useState(r.resolutions_authored != null ? String(r.resolutions_authored) : '')
+  const [coAuthRes, setCoAuthRes] = useState(r.co_authored_resolutions != null ? String(r.co_authored_resolutions) : '')
   const [sglg, setSglg] = useState<boolean>(r.sglg_awarded === true)
   const [attendance, setAttendance] = useState(r.attendance_rate != null ? String(r.attendance_rate) : '')
   const [notes, setNotes] = useState(r.notes ?? '')
@@ -202,6 +205,9 @@ function TrackEditForm({
       bills_authored: billsAuthored ? parseInt(billsAuthored) : null,
       bills_passed: billsPassed ? parseInt(billsPassed) : null,
       bills_enacted_count: billsEnacted ? parseInt(billsEnacted) : null,
+      co_authored_bills: coAuthBills ? parseInt(coAuthBills) : null,
+      resolutions_authored: resAuthored ? parseInt(resAuthored) : null,
+      co_authored_resolutions: coAuthRes ? parseInt(coAuthRes) : null,
       sglg_awarded: sglg,
       attendance_rate: attendance ? parseFloat(attendance) : null,
       notes: notes || null,
@@ -244,7 +250,7 @@ function TrackEditForm({
       </div>
       <div className="grid grid-cols-3 gap-2">
         <div>
-          <label className={labelClass}>Bills Authored</label>
+          <label className={labelClass}>Bills Authored <span className="text-[10px] text-blue-400 font-normal">(scored)</span></label>
           <input type="number" value={billsAuthored} onChange={(e) => setBillsAuthored(e.target.value)} placeholder="0" className={inputClass} />
         </div>
         <div>
@@ -252,8 +258,22 @@ function TrackEditForm({
           <input type="number" value={billsPassed} onChange={(e) => setBillsPassed(e.target.value)} placeholder="0" className={inputClass} />
         </div>
         <div>
-          <label className={labelClass}>Bills Enacted (RA)</label>
+          <label className={labelClass}>Bills Enacted (RA) <span className="text-[10px] text-blue-400 font-normal">(scored)</span></label>
           <input type="number" value={billsEnacted} onChange={(e) => setBillsEnacted(e.target.value)} placeholder="0" className={inputClass} />
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        <div>
+          <label className={labelClass}>Co-Authored Bills <span className="text-[10px] text-gray-500 font-normal">(not scored)</span></label>
+          <input type="number" value={coAuthBills} onChange={(e) => setCoAuthBills(e.target.value)} placeholder="0" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Authored Resolutions <span className="text-[10px] text-gray-500 font-normal">(not scored)</span></label>
+          <input type="number" value={resAuthored} onChange={(e) => setResAuthored(e.target.value)} placeholder="0" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Co-Authored Resolutions <span className="text-[10px] text-gray-500 font-normal">(not scored)</span></label>
+          <input type="number" value={coAuthRes} onChange={(e) => setCoAuthRes(e.target.value)} placeholder="0" className={inputClass} />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -554,6 +574,9 @@ export default function RecordsManager({ politician: p }: Props) {
   const [trackBillsAuthored, setTrackBillsAuthored] = useState('')
   const [trackBillsPassed, setTrackBillsPassed] = useState('')
   const [trackBillsEnacted, setTrackBillsEnacted] = useState('')
+  const [trackCoAuthBills, setTrackCoAuthBills] = useState('')
+  const [trackResAuthored, setTrackResAuthored] = useState('')
+  const [trackCoAuthRes, setTrackCoAuthRes] = useState('')
   const [trackSglg, setTrackSglg] = useState(false)
   const [trackAttendance, setTrackAttendance] = useState('')
   const [trackSourceUrl, setTrackSourceUrl] = useState('')
@@ -627,6 +650,9 @@ export default function RecordsManager({ politician: p }: Props) {
       bills_authored: trackBillsAuthored ? parseInt(trackBillsAuthored) : null,
       bills_passed: trackBillsPassed ? parseInt(trackBillsPassed) : null,
       bills_enacted_count: trackBillsEnacted ? parseInt(trackBillsEnacted) : null,
+      co_authored_bills: trackCoAuthBills ? parseInt(trackCoAuthBills) : null,
+      resolutions_authored: trackResAuthored ? parseInt(trackResAuthored) : null,
+      co_authored_resolutions: trackCoAuthRes ? parseInt(trackCoAuthRes) : null,
       sglg_awarded: trackSglg,
       attendance_rate: trackAttendance ? parseFloat(trackAttendance) : null,
       source_url: trackSourceUrl,
@@ -636,6 +662,7 @@ export default function RecordsManager({ politician: p }: Props) {
     if (error) { setError(error.message); return }
     setTrackPosition(''); setTrackStart(''); setTrackEnd('')
     setTrackBillsAuthored(''); setTrackBillsPassed(''); setTrackBillsEnacted(''); setTrackSglg(false)
+    setTrackCoAuthBills(''); setTrackResAuthored(''); setTrackCoAuthRes('')
     setTrackAttendance('')
     setTrackSourceUrl(''); setTrackSourceLabel('')
     await setUnderReview(p.id)
@@ -907,7 +934,7 @@ export default function RecordsManager({ politician: p }: Props) {
             </div>
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className={labelClass}>Bills Authored</label>
+                <label className={labelClass}>Bills Authored <span className="text-[10px] text-blue-400 font-normal">(scored)</span></label>
                 <input type="number" value={trackBillsAuthored} onChange={(e) => setTrackBillsAuthored(e.target.value)} placeholder="0" className={inputClass} />
               </div>
               <div>
@@ -915,8 +942,22 @@ export default function RecordsManager({ politician: p }: Props) {
                 <input type="number" value={trackBillsPassed} onChange={(e) => setTrackBillsPassed(e.target.value)} placeholder="0" className={inputClass} />
               </div>
               <div>
-                <label className={labelClass}>Bills Enacted (RA)</label>
+                <label className={labelClass}>Bills Enacted (RA) <span className="text-[10px] text-blue-400 font-normal">(scored)</span></label>
                 <input type="number" value={trackBillsEnacted} onChange={(e) => setTrackBillsEnacted(e.target.value)} placeholder="0" className={inputClass} />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <div>
+                <label className={labelClass}>Co-Authored Bills <span className="text-[10px] text-gray-500 font-normal">(not scored)</span></label>
+                <input type="number" value={trackCoAuthBills} onChange={(e) => setTrackCoAuthBills(e.target.value)} placeholder="0" className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Authored Resolutions <span className="text-[10px] text-gray-500 font-normal">(not scored)</span></label>
+                <input type="number" value={trackResAuthored} onChange={(e) => setTrackResAuthored(e.target.value)} placeholder="0" className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Co-Authored Resolutions <span className="text-[10px] text-gray-500 font-normal">(not scored)</span></label>
+                <input type="number" value={trackCoAuthRes} onChange={(e) => setTrackCoAuthRes(e.target.value)} placeholder="0" className={inputClass} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">

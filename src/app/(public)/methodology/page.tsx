@@ -349,6 +349,13 @@ export default function MethodologyPage() {
           </p>
         </div>
 
+        <div className="card p-4 mb-3 border-l-4 border-l-slate-300">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Co-authored bills + resolutions — shown but not scored</p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Each senator&apos;s profile also displays <strong>Co-Authored Bills</strong>, <strong>Authored Resolutions</strong>, and <strong>Co-Authored Resolutions</strong> from senate.gov.ph. These are <strong>biographical context only</strong> — they do not contribute to the Objective Score. Reason: in PH practice, co-authorship is often a courtesy / cohort signal, and resolutions are largely symbolic. Both can be inflated and don&apos;t track governance quality. Only principal-authored bills and bills enacted into law (RA) are scored.
+          </p>
+        </div>
+
         <div className="card p-5 mb-4">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Attendance modifier</p>
           <p className="text-sm text-slate-600 leading-relaxed mb-4">
@@ -440,8 +447,10 @@ export default function MethodologyPage() {
               <li>
                 <span className="font-bold">Personal accomplishments outside office</span> &mdash;
                 boxing titles (eight-division world champion, Hall of Fame), Olympic medals, acting
-                and music awards, film/TV credits, brand endorsements. Personal achievements outside
-                the office of politics, not governance work.
+                and music awards, film/TV credits, brand endorsements, broadcasting / TV-anchor
+                careers, YouTube and social-media reach (subscribers, followers, viewers),
+                journalism awards. Personal achievements outside the office of politics, not
+                governance work.
               </li>
             </ul>
           </div>

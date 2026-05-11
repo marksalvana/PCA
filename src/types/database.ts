@@ -186,6 +186,10 @@ export interface TrackRecord {
   bills_authored: number | null
   bills_passed: number | null
   bills_enacted_count: number | null
+  // Unscored legislative output counters (migration 025) — biographical only
+  co_authored_bills: number | null
+  resolutions_authored: number | null
+  co_authored_resolutions: number | null
   sglg_awarded: boolean | null
   performance_score: number | null
   notes: string | null

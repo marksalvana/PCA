@@ -351,12 +351,38 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
                               </span>
                             </p>
                           )}
-                          {rec.bills_authored != null && (
-                            <p className="text-slate-400 text-xs mt-1">
-                              {rec.bills_authored} bills authored · {rec.bills_passed ?? 0} passed
-                              {rec.bills_enacted_count != null && rec.bills_enacted_count > 0 && (
-                                <> · <span className="text-blue-700 font-semibold">{rec.bills_enacted_count} enacted (RA)</span></>
+                          {(rec.bills_authored != null
+                            || rec.bills_enacted_count != null
+                            || rec.co_authored_bills != null
+                            || rec.resolutions_authored != null
+                            || rec.co_authored_resolutions != null) && (
+                            <div className="mt-2 grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                              {/* Scored: bills_authored, bills_enacted_count */}
+                              {rec.bills_authored != null && (
+                                <LegStat label="Authored Bills" value={rec.bills_authored} tone="scored" />
                               )}
+                              {rec.co_authored_bills != null && (
+                                <LegStat label="Co-Authored Bills" value={rec.co_authored_bills} tone="bio" />
+                              )}
+                              {rec.resolutions_authored != null && (
+                                <LegStat label="Authored Resolutions" value={rec.resolutions_authored} tone="bio" />
+                              )}
+                              {rec.co_authored_resolutions != null && (
+                                <LegStat label="Co-Authored Resolutions" value={rec.co_authored_resolutions} tone="bio" />
+                              )}
+                              {rec.bills_enacted_count != null && (
+                                <LegStat label="Passed into Law" value={rec.bills_enacted_count} tone="scored" />
+                              )}
+                            </div>
+                          )}
+                          {(rec.co_authored_bills != null || rec.resolutions_authored != null || rec.co_authored_resolutions != null) && (
+                            <p className="text-[10px] text-slate-400 mt-1.5 italic">
+                              Co-authored bills + resolutions are biographical — they aren&apos;t scored.
+                            </p>
+                          )}
+                          {rec.bills_authored != null && rec.bills_passed != null && (
+                            <p className="text-[11px] text-slate-400 mt-1">
+                              {rec.bills_passed} of {rec.bills_authored} authored bills passed
                             </p>
                           )}
                           {rec.sglg_awarded === true && (
@@ -746,6 +772,23 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
         </aside>
       </div>
+    </div>
+  )
+}
+
+// Compact per-term legislative-output stat. `scored` = blue (contributes to
+// objective score). `bio` = gray (biographical only — co-authored counts and
+// resolutions are not scored, per migration 025).
+function LegStat({ label, value, tone }: { label: string; value: number; tone: 'scored' | 'bio' }) {
+  const isScored = tone === 'scored'
+  return (
+    <div className={`rounded-lg border px-2 py-1.5 ${isScored ? 'bg-blue-50/60 border-blue-100' : 'bg-slate-50 border-slate-100'}`}>
+      <p className={`text-[10px] font-bold uppercase tracking-wider leading-tight ${isScored ? 'text-blue-700' : 'text-slate-500'}`}>
+        {label}
+      </p>
+      <p className={`text-base font-black tabular-nums leading-tight mt-0.5 ${isScored ? 'text-blue-900' : 'text-slate-700'}`}>
+        {value.toLocaleString()}
+      </p>
     </div>
   )
 }
