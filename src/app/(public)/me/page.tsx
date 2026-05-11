@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import MarkAllReadButton from '@/components/me/MarkAllReadButton'
+import AccountSettings from '@/components/me/AccountSettings'
 import type {
   Notification,
   RecordSubmission,
@@ -80,15 +81,22 @@ export default async function MePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?next=/me')
 
-  // Profile (display_name + role)
+  // Profile (display_name + role + phone)
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('display_name, role')
+    .select('display_name, role, phone_verified, phone_e164')
     .eq('id', user.id)
-    .single<{ display_name: string; role: UserRole }>()
+    .single<{
+      display_name: string
+      role: UserRole
+      phone_verified: boolean | null
+      phone_e164: string | null
+    }>()
 
   const displayName = profile?.display_name ?? user.email?.split('@')[0] ?? 'You'
   const role = (profile?.role ?? 'member') as UserRole
+  const phoneVerified = profile?.phone_verified === true
+  const phoneE164 = profile?.phone_e164 ?? null
 
   // Notifications (most recent 20) + count of unread
   const { data: notifData, count: unreadCount } = await supabase
@@ -270,9 +278,19 @@ export default async function MePage() {
         )}
       </section>
 
-      {/* Settings link footer */}
+      {/* Account settings */}
+      <section className="mb-8">
+        <h2 className="text-base font-black text-slate-900 mb-3">Account settings</h2>
+        <AccountSettings
+          initialDisplayName={displayName}
+          phoneVerified={phoneVerified}
+          phoneE164={phoneE164}
+        />
+      </section>
+
+      {/* Role + apply footer */}
       <section className="mb-8 card p-5 bg-slate-50/60">
-        <h2 className="text-sm font-black text-slate-900 mb-2">Account</h2>
+        <h2 className="text-sm font-black text-slate-900 mb-2">Role</h2>
         <p className="text-xs text-slate-500 mb-3">
           Role: <span className="font-semibold text-slate-700 capitalize">{role}</span>
         </p>
