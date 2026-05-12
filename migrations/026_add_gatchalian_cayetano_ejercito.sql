@@ -11,6 +11,10 @@
 -- (migration 025) left NULL — admins fill in from senate.gov.ph stats
 -- block via the admin form. Same for SALN.
 --
+-- Idempotent: every INSERT has a NOT EXISTS guard keyed off a marker
+-- record per senator (their first education row). Safe to re-run; will
+-- not duplicate records if the senator has already been seeded.
+--
 -- Recomputes objective_score for all three at the end.
 -- ============================================================
 
@@ -41,122 +45,158 @@ ON CONFLICT (slug) DO NOTHING;
 
 
 -- ============================================================
--- SECTION 2 — education_records
+-- SECTION 2 — education_records (each row also serves as the marker
+-- for its senator — subsequent inserts guard against its presence)
 -- ============================================================
 
--- Win Gatchalian
+-- Win Gatchalian — Boston University is the marker
 INSERT INTO public.education_records (politician_id, institution, degree, field_of_study, year_started, year_ended, is_completed, ched_accreditation, source_url, source_label, is_verified)
-SELECT id, 'Boston University', 'Bachelor of Science', 'Finance and Operations Management',
+SELECT p.id, 'Boston University', 'Bachelor of Science', 'Finance and Operations Management',
        1991, 1995, true, 'foreign',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.education_records e WHERE e.politician_id = p.id AND e.institution = 'Boston University');
 
--- Alan Peter Cayetano
+-- Alan Peter Cayetano — UP Diliman is the marker, plus Ateneo Law
 INSERT INTO public.education_records (politician_id, institution, degree, field_of_study, year_started, year_ended, is_completed, ched_accreditation, source_url, source_label, is_verified)
-SELECT id, 'University of the Philippines Diliman', 'Bachelor of Arts', 'Political Science',
+SELECT p.id, 'University of the Philippines Diliman', 'Bachelor of Arts', 'Political Science',
        1989, 1993, true, 'autonomous',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.education_records e WHERE e.politician_id = p.id AND e.institution = 'University of the Philippines Diliman');
 
 INSERT INTO public.education_records (politician_id, institution, degree, field_of_study, year_started, year_ended, is_completed, ched_accreditation, source_url, source_label, is_verified)
-SELECT id, 'Ateneo de Manila University School of Law', 'Juris Doctor', 'Law',
+SELECT p.id, 'Ateneo de Manila University School of Law', 'Juris Doctor', 'Law',
        1994, 1997, true, 'autonomous',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.education_records e WHERE e.politician_id = p.id AND e.institution = 'Ateneo de Manila University School of Law');
 
--- JV Ejercito
+-- JV Ejercito — De La Salle University is the marker
 INSERT INTO public.education_records (politician_id, institution, degree, field_of_study, year_started, year_ended, is_completed, ched_accreditation, source_url, source_label, is_verified)
-SELECT id, 'De La Salle University', 'Bachelor of Arts', 'Political Science',
+SELECT p.id, 'De La Salle University', 'Bachelor of Arts', 'Political Science',
        NULL, NULL, true, 'autonomous',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.education_records e WHERE e.politician_id = p.id AND e.institution = 'De La Salle University');
 
 
 -- ============================================================
 -- SECTION 3 — track_records (positions held)
+-- All inserts guard on the senator's marker education row so re-runs no-op.
 -- ============================================================
 
 -- ── Win Gatchalian — Rep, Mayor, Rep, Senator ──
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'House Representative — Valenzuela 1st District', '2001-06-30', '2004-06-30', false, 'unknown',
+SELECT p.id, 'House Representative — Valenzuela 1st District', '2001-06-30', '2004-06-30', false, 'unknown',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'House Representative — Valenzuela 1st District' AND t.start_date = '2001-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'Mayor of Valenzuela', '2004-06-30', '2013-06-30', false, 'unknown',
+SELECT p.id, 'Mayor of Valenzuela', '2004-06-30', '2013-06-30', false, 'unknown',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Mayor of Valenzuela' AND t.start_date = '2004-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'House Representative — Valenzuela 1st District', '2013-06-30', '2016-06-30', false, 'unknown',
+SELECT p.id, 'House Representative — Valenzuela 1st District', '2013-06-30', '2016-06-30', false, 'unknown',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'House Representative — Valenzuela 1st District' AND t.start_date = '2013-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'Senator of the Philippines', '2016-06-30', NULL, true, 'not_applicable',
+SELECT p.id, 'Senator of the Philippines', '2016-06-30', NULL, true, 'not_applicable',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Senator of the Philippines' AND t.start_date = '2016-06-30');
 
--- ── Alan Peter Cayetano — long career: councilor, vice mayor, rep, senator, DFA sec, speaker, senator ──
+-- ── Alan Peter Cayetano — Rep, Senator, DFA Sec, Rep+Speaker, Senator ──
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'House Representative — Taguig–Pateros (at-large)', '1998-06-30', '2007-06-30', false, 'unknown',
+SELECT p.id, 'House Representative — Taguig–Pateros (at-large)', '1998-06-30', '2007-06-30', false, 'unknown',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'House Representative — Taguig–Pateros (at-large)' AND t.start_date = '1998-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'Senator of the Philippines', '2007-06-30', '2017-05-17', false, 'not_applicable',
+SELECT p.id, 'Senator of the Philippines', '2007-06-30', '2017-05-17', false, 'not_applicable',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Senator of the Philippines' AND t.start_date = '2007-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, notes, source_url, source_label, is_verified)
-SELECT id, 'Secretary of Foreign Affairs', '2017-05-18', '2018-10-17', false, 'unknown',
+SELECT p.id, 'Secretary of Foreign Affairs', '2017-05-18', '2018-10-17', false, 'unknown',
        'Appointed by President Rodrigo Duterte',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Secretary of Foreign Affairs' AND t.start_date = '2017-05-18');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, notes, source_url, source_label, is_verified)
-SELECT id, 'House Representative — Taguig–Pateros 1st District (incl. Speaker of the House 2019–2020)', '2019-06-30', '2022-06-30', false, 'unknown',
+SELECT p.id, 'House Representative — Taguig–Pateros 1st District (incl. Speaker of the House 2019–2020)', '2019-06-30', '2022-06-30', false, 'unknown',
        'Served as 26th Speaker of the House July 22, 2019 – October 13, 2020 under term-sharing agreement',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'House Representative — Taguig–Pateros 1st District (incl. Speaker of the House 2019–2020)' AND t.start_date = '2019-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, notes, source_url, source_label, is_verified)
-SELECT id, 'Senator of the Philippines', '2022-06-30', NULL, true, 'not_applicable',
+SELECT p.id, 'Senator of the Philippines', '2022-06-30', NULL, true, 'not_applicable',
        'Elected 33rd President of the Senate May 11, 2026',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Senator of the Philippines' AND t.start_date = '2022-06-30');
 
 -- ── JV Ejercito — Mayor, Rep (w/ bills data), Senator, Senator ──
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, notes, source_url, source_label, is_verified)
-SELECT id, 'Mayor of San Juan', '2001-06-30', '2010-06-30', false, 'unknown',
+SELECT p.id, 'Mayor of San Juan', '2001-06-30', '2010-06-30', false, 'unknown',
        'Municipality of San Juan converted to highly urbanized city (2007) during his term',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Mayor of San Juan' AND t.start_date = '2001-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, bills_authored, bills_passed, source_url, source_label, is_verified)
-SELECT id, 'House Representative — San Juan (Lone District)', '2010-06-30', '2013-06-30', false, 'not_applicable',
+SELECT p.id, 'House Representative — San Juan (Lone District)', '2010-06-30', '2013-06-30', false, 'not_applicable',
        161, 5,
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'House Representative — San Juan (Lone District)' AND t.start_date = '2010-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'Senator of the Philippines', '2013-06-30', '2019-06-30', false, 'not_applicable',
+SELECT p.id, 'Senator of the Philippines', '2013-06-30', '2019-06-30', false, 'not_applicable',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Senator of the Philippines' AND t.start_date = '2013-06-30');
 
 INSERT INTO public.track_records (politician_id, position, start_date, end_date, is_current, coa_finding, source_url, source_label, is_verified)
-SELECT id, 'Senator of the Philippines', '2022-06-30', NULL, true, 'not_applicable',
+SELECT p.id, 'Senator of the Philippines', '2022-06-30', NULL, true, 'not_applicable',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.track_records t WHERE t.politician_id = p.id AND t.position = 'Senator of the Philippines' AND t.start_date = '2022-06-30');
 
 
 -- ============================================================
--- SECTION 4 — legal_records
+-- SECTION 4 — legal_records (guarded on case_title)
 -- ============================================================
 
 -- JV Ejercito — Sandiganbayan calamity funds case, acquitted 2017
 INSERT INTO public.legal_records (politician_id, case_title, case_type, status, court, charge, filing_date, resolution_date, resolution_summary, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Misuse of P2.1M Calamity Funds (San Juan mayoral term)',
        'criminal', 'acquitted',
        'Sandiganbayan, Fifth Division',
@@ -164,11 +204,13 @@ SELECT id,
        NULL, '2017-08-01',
        'Sandiganbayan acquitted Ejercito and co-accused in August 2017 after arrest warrant was issued April 6, 2016',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.legal_records l WHERE l.politician_id = p.id AND l.case_title = 'Misuse of P2.1M Calamity Funds (San Juan mayoral term)');
 
 -- Alan Peter Cayetano — 2007 citizenship disqualification case, resolved in favor
 INSERT INTO public.legal_records (politician_id, case_title, case_type, status, court, charge, filing_date, resolution_date, resolution_summary, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Citizenship Disqualification Petition (2007 elections)',
        'electoral', 'dismissed',
        'Commission on Elections, Second Division',
@@ -176,11 +218,13 @@ SELECT id,
        '2007-03-08', '2007-04-19',
        'COMELEC ruled Cayetano is a natural-born Filipino citizen and dismissed the petition',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.legal_records l WHERE l.politician_id = p.id AND l.case_title = 'Citizenship Disqualification Petition (2007 elections)');
 
 -- Alan Peter Cayetano — 2019 residency disqualification case, dismissed
 INSERT INTO public.legal_records (politician_id, case_title, case_type, status, court, charge, filing_date, resolution_date, resolution_summary, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Residency Disqualification Petition (2019 elections)',
        'electoral', 'dismissed',
        'Commission on Elections, Second Division',
@@ -188,126 +232,152 @@ SELECT id,
        '2018-11-01', '2019-05-07',
        'COMELEC denied the petition',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.legal_records l WHERE l.politician_id = p.id AND l.case_title = 'Residency Disqualification Petition (2019 elections)');
 
 
 -- ============================================================
--- SECTION 5 — achievements (key authored laws, awards)
+-- SECTION 5 — achievements (guarded on title)
 -- ============================================================
 
--- Win Gatchalian — RA 10931 (Universal Access to Quality Tertiary Education)
 INSERT INTO public.achievements (politician_id, title, description, category, year, impact_scope, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Author — Universal Access to Quality Tertiary Education Act (RA 10931)',
        'Filed the original version (House Bill 5905) in July 2015 providing free tuition and other school fees in state universities, colleges, and TESDA-accredited institutions',
        'legislation', 2017, 'national_landmark',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.achievements a WHERE a.politician_id = p.id AND a.title = 'Author — Universal Access to Quality Tertiary Education Act (RA 10931)');
 
--- Win Gatchalian — Lee Kuan Yew Exchange Fellowship (international award)
 INSERT INTO public.achievements (politician_id, title, description, category, year, impact_scope, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Lee Kuan Yew Exchange Fellow',
        'Named 69th Lee Kuan Yew Exchange Fellow by the government of Singapore',
        'international', 2019, 'national_standard',
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian', true
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.achievements a WHERE a.politician_id = p.id AND a.title = 'Lee Kuan Yew Exchange Fellow');
 
--- Alan Peter Cayetano — 2019 SEA Games organizing committee chair (large national event)
 INSERT INTO public.achievements (politician_id, title, description, category, year, impact_scope, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Chairman — Philippine SEA Games Organizing Committee (PHISGOC)',
        'Chaired the organizing committee of the 30th Southeast Asian Games hosted by the Philippines, November 30 – December 11, 2019, with a ₱6-billion budget',
        'international', 2019, 'national_standard',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano', true
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.achievements a WHERE a.politician_id = p.id AND a.title = 'Chairman — Philippine SEA Games Organizing Committee (PHISGOC)');
 
--- JV Ejercito — RA 11229 (Child Safety in Motor Vehicles Act)
 INSERT INTO public.achievements (politician_id, title, description, category, year, impact_scope, source_url, source_label, is_verified)
-SELECT id,
+SELECT p.id,
        'Principal Sponsor — Child Safety in Motor Vehicles Act (RA 11229)',
        'Authored and sponsored the law mandating child restraint systems (car seats) for children 12 years old and below or shorter than 1.50m',
        'legislation', 2019, 'national_standard',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito', true
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.achievements a WHERE a.politician_id = p.id AND a.title = 'Principal Sponsor — Child Safety in Motor Vehicles Act (RA 11229)');
 
 
 -- ============================================================
--- SECTION 6 — dynasty_connections
+-- SECTION 6 — dynasty_connections (guarded on related_name)
 -- ============================================================
 
 -- Win Gatchalian — three brothers in politics
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Rex Gatchalian', 'Brother',
+SELECT p.id, 'Rex Gatchalian', 'Brother',
        'Secretary of Social Welfare and Development (2023–present); former Mayor of Valenzuela',
        true, false, NULL,
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian'
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Rex Gatchalian');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Weslie ''Wes'' Gatchalian', 'Brother',
+SELECT p.id, 'Weslie ''Wes'' Gatchalian', 'Brother',
        'Incumbent Mayor of Valenzuela',
        true, false, NULL,
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian'
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Weslie ''Wes'' Gatchalian');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Kenneth Gatchalian', 'Brother',
+SELECT p.id, 'Kenneth Gatchalian', 'Brother',
        'Valenzuela City Councilor',
        true, false, NULL,
        'https://en.wikipedia.org/wiki/Sherwin_Gatchalian', 'Wikipedia — Sherwin Gatchalian'
-FROM public.politicians WHERE slug = 'win-gatchalian';
+FROM public.politicians p
+WHERE p.slug = 'win-gatchalian'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Kenneth Gatchalian');
 
 -- Alan Peter Cayetano — father, sister, brother, wife
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Rene Cayetano', 'Father',
+SELECT p.id, 'Rene Cayetano', 'Father',
        'Former Senator of the Philippines (1998–2003)',
        false, false, NULL,
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano'
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Rene Cayetano');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Pia Cayetano', 'Sister',
+SELECT p.id, 'Pia Cayetano', 'Sister',
        'Incumbent Senator (2025–2031); served previous terms 2004–2016 and 2019–2025',
        true, false, NULL,
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano'
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Pia Cayetano');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Lino Cayetano', 'Younger brother',
+SELECT p.id, 'Lino Cayetano', 'Younger brother',
        'Former House Representative and former Mayor of Taguig',
        false, false, NULL,
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano'
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Lino Cayetano');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Lani Cayetano', 'Wife',
+SELECT p.id, 'Lani Cayetano', 'Wife',
        'Incumbent Mayor of Taguig (2022–present); former House Representative',
        true, true, 'lani-cayetano',
        'https://en.wikipedia.org/wiki/Alan_Peter_Cayetano', 'Wikipedia — Alan Peter Cayetano'
-FROM public.politicians WHERE slug = 'alan-peter-cayetano';
+FROM public.politicians p
+WHERE p.slug = 'alan-peter-cayetano'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Lani Cayetano');
 
--- JV Ejercito — father (Joseph Estrada), mother, half-brother (Jinggoy will be added in batch 3)
+-- JV Ejercito — father (Joseph Estrada), mother, half-brother
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Joseph Ejercito Estrada', 'Father',
+SELECT p.id, 'Joseph Ejercito Estrada', 'Father',
        '13th President of the Philippines (1998–2001); former Senator; former Mayor of Manila',
        false, true, 'joseph-estrada',
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito'
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Joseph Ejercito Estrada');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Guia Gomez', 'Mother',
+SELECT p.id, 'Guia Gomez', 'Mother',
        'Former Mayor of San Juan (2010–2019)',
        false, false, NULL,
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito'
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Guia Gomez');
 
 INSERT INTO public.dynasty_connections (politician_id, related_name, relationship, position_held, is_current, in_dataset, related_slug, source_url, source_label)
-SELECT id, 'Jose ''Jinggoy'' Ejercito Estrada Jr.', 'Half-brother (with Loi Ejercito)',
+SELECT p.id, 'Jose ''Jinggoy'' Ejercito Estrada Jr.', 'Half-brother (with Loi Ejercito)',
        'Incumbent Senator (2022–2028); former Senator (2004–2016); former Mayor of San Juan',
        true, false, NULL,
        'https://en.wikipedia.org/wiki/JV_Ejercito', 'Wikipedia — JV Ejercito'
-FROM public.politicians WHERE slug = 'jv-ejercito';
+FROM public.politicians p
+WHERE p.slug = 'jv-ejercito'
+  AND NOT EXISTS (SELECT 1 FROM public.dynasty_connections d WHERE d.politician_id = p.id AND d.related_name = 'Jose ''Jinggoy'' Ejercito Estrada Jr.');
 
 
 -- ============================================================
