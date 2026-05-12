@@ -12,9 +12,11 @@
 --   co_authored_resolutions  (biographical, migration 025)
 --   bills_enacted_count      (SCORED — passed into law / RA)
 --
--- Source: senate.gov.ph/senators/20-congress-senators stats block.
--- Numbers are LIFETIME (all-congress) totals — the senate.gov.ph view
--- aggregates across a senator's full career when "All" is selected.
+-- Source: senate.gov.ph/senators/20-congress-senators stats block,
+-- "Select Congress: All" view — the consolidated lifetime totals
+-- across a senator's full career in the Senate. Numbers attach to the
+-- current (in-office) Senate term row; previous Senate terms in
+-- track_records keep their original (possibly null) bills data.
 --
 -- The 9 senators not yet on the platform (Loren Legarda, Migz Zubiri,
 -- Joel Villanueva, Jinggoy Estrada, Bong Go, Bato dela Rosa, Pia
@@ -27,210 +29,210 @@
 -- Helper: update the current senate term for a given slug with the 5 stats.
 -- Each statement is independent; if a slug isn't present, it silently no-ops.
 
--- alan-peter-cayetano: 20 / 5 / 3 / 9 / 0
+-- alan-peter-cayetano: 96 / 68 / 81 / 245 / 29
 UPDATE public.track_records
-   SET bills_authored = 20,
-       co_authored_bills = 5,
-       resolutions_authored = 3,
-       co_authored_resolutions = 9,
-       bills_enacted_count = 0,
+   SET bills_authored = 96,
+       co_authored_bills = 68,
+       resolutions_authored = 81,
+       co_authored_resolutions = 245,
+       bills_enacted_count = 29,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'alan-peter-cayetano')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- bam-aquino: 43 / 5 / 7 / 12 / 0
+-- bam-aquino: 275 / 70 / 118 / 148 / 42
 UPDATE public.track_records
-   SET bills_authored = 43,
-       co_authored_bills = 5,
-       resolutions_authored = 7,
-       co_authored_resolutions = 12,
-       bills_enacted_count = 0,
+   SET bills_authored = 275,
+       co_authored_bills = 70,
+       resolutions_authored = 118,
+       co_authored_resolutions = 148,
+       bills_enacted_count = 42,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'bam-aquino')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- chiz-escudero: 53 / 4 / 2 / 9 / 0
+-- chiz-escudero: 746 / 301 / 87 / 328 / 124
 UPDATE public.track_records
-   SET bills_authored = 53,
-       co_authored_bills = 4,
-       resolutions_authored = 2,
-       co_authored_resolutions = 9,
-       bills_enacted_count = 0,
+   SET bills_authored = 746,
+       co_authored_bills = 301,
+       resolutions_authored = 87,
+       co_authored_resolutions = 328,
+       bills_enacted_count = 124,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'chiz-escudero')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- win-gatchalian: 98 / 5 / 7 / 10 / 0
+-- win-gatchalian: 506 / 232 / 206 / 309 / 122
 UPDATE public.track_records
-   SET bills_authored = 98,
-       co_authored_bills = 5,
-       resolutions_authored = 7,
-       co_authored_resolutions = 10,
-       bills_enacted_count = 0,
+   SET bills_authored = 506,
+       co_authored_bills = 232,
+       resolutions_authored = 206,
+       co_authored_resolutions = 309,
+       bills_enacted_count = 122,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'win-gatchalian')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- risa-hontiveros: 82 / 10 / 15 / 13 / 0
+-- risa-hontiveros: 337 / 127 / 196 / 323 / 60
 UPDATE public.track_records
-   SET bills_authored = 82,
-       co_authored_bills = 10,
-       resolutions_authored = 15,
-       co_authored_resolutions = 13,
-       bills_enacted_count = 0,
+   SET bills_authored = 337,
+       co_authored_bills = 127,
+       resolutions_authored = 196,
+       co_authored_resolutions = 323,
+       bills_enacted_count = 60,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'risa-hontiveros')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- ping-lacson: 25 / 1 / 0 / 13 / 0
+-- ping-lacson: 242 / 97 / 65 / 245 / 53
 UPDATE public.track_records
-   SET bills_authored = 25,
-       co_authored_bills = 1,
-       resolutions_authored = 0,
-       co_authored_resolutions = 13,
-       bills_enacted_count = 0,
+   SET bills_authored = 242,
+       co_authored_bills = 97,
+       resolutions_authored = 65,
+       co_authored_resolutions = 245,
+       bills_enacted_count = 53,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'ping-lacson')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- bong-go: 56 / 13 / 50 / 14 / 0   (added here in case profile exists; otherwise no-op)
+-- bong-go: 190 / 136 / 113 / 216 / 64   (no-op until profile is added in Batch 3)
 UPDATE public.track_records
-   SET bills_authored = 56,
-       co_authored_bills = 13,
-       resolutions_authored = 50,
-       co_authored_resolutions = 14,
-       bills_enacted_count = 0,
+   SET bills_authored = 190,
+       co_authored_bills = 136,
+       resolutions_authored = 113,
+       co_authored_resolutions = 216,
+       bills_enacted_count = 64,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'bong-go')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- imee-marcos: 106 / 5 / 13 / 10 / 0
+-- imee-marcos: 790 / 120 / 142 / 226 / 58
 UPDATE public.track_records
-   SET bills_authored = 106,
-       co_authored_bills = 5,
-       resolutions_authored = 13,
-       co_authored_resolutions = 10,
-       bills_enacted_count = 0,
+   SET bills_authored = 790,
+       co_authored_bills = 120,
+       resolutions_authored = 142,
+       co_authored_resolutions = 226,
+       bills_enacted_count = 58,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'imee-marcos')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- robin-padilla: 57 / 11 / 21 / 12 / 0
+-- robin-padilla: 130 / 65 / 84 / 140 / 29
 UPDATE public.track_records
-   SET bills_authored = 57,
-       co_authored_bills = 11,
-       resolutions_authored = 21,
-       co_authored_resolutions = 12,
-       bills_enacted_count = 0,
+   SET bills_authored = 130,
+       co_authored_bills = 65,
+       resolutions_authored = 84,
+       co_authored_resolutions = 140,
+       bills_enacted_count = 29,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'robin-padilla')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- kiko-pangilinan: 45 / 11 / 9 / 10 / 0
+-- kiko-pangilinan: 250 / 124 / 188 / 242 / 67
 UPDATE public.track_records
-   SET bills_authored = 45,
-       co_authored_bills = 11,
-       resolutions_authored = 9,
-       co_authored_resolutions = 10,
-       bills_enacted_count = 0,
+   SET bills_authored = 250,
+       co_authored_bills = 124,
+       resolutions_authored = 188,
+       co_authored_resolutions = 242,
+       bills_enacted_count = 67,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'kiko-pangilinan')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- tito-sotto: 18 / 3 / 6 / 8 / 0
+-- tito-sotto: 844 / 345 / 350 / 338 / 272
 UPDATE public.track_records
-   SET bills_authored = 18,
-       co_authored_bills = 3,
-       resolutions_authored = 6,
-       co_authored_resolutions = 8,
-       bills_enacted_count = 0,
+   SET bills_authored = 844,
+       co_authored_bills = 345,
+       resolutions_authored = 350,
+       co_authored_resolutions = 338,
+       bills_enacted_count = 272,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'tito-sotto')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- raffy-tulfo: 77 / 13 / 17 / 11 / 0
+-- raffy-tulfo: 218 / 71 / 104 / 140 / 29
 UPDATE public.track_records
-   SET bills_authored = 77,
-       co_authored_bills = 13,
-       resolutions_authored = 17,
-       co_authored_resolutions = 11,
-       bills_enacted_count = 0,
+   SET bills_authored = 218,
+       co_authored_bills = 71,
+       resolutions_authored = 104,
+       co_authored_resolutions = 140,
+       bills_enacted_count = 29,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'raffy-tulfo')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- erwin-tulfo: 68 / 11 / 29 / 11 / 0
+-- erwin-tulfo: 68 / 13 / 29 / 11 / 0   (only 1st senate term — newly elected 2025)
 UPDATE public.track_records
    SET bills_authored = 68,
-       co_authored_bills = 11,
+       co_authored_bills = 13,
        resolutions_authored = 29,
        co_authored_resolutions = 11,
        bills_enacted_count = 0,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'erwin-tulfo')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- jv-ejercito: 65 / 10 / 8 / 11 / 0
+-- jv-ejercito: 509 / 135 / 124 / 269 / 73
 UPDATE public.track_records
-   SET bills_authored = 65,
-       co_authored_bills = 10,
-       resolutions_authored = 8,
-       co_authored_resolutions = 11,
-       bills_enacted_count = 0,
+   SET bills_authored = 509,
+       co_authored_bills = 135,
+       resolutions_authored = 124,
+       co_authored_resolutions = 269,
+       bills_enacted_count = 73,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'jv-ejercito')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- camille-villar: 49 / 5 / 8 / 11 / 0
+-- camille-villar: 196 / 76 / 75 / 59 / 24
 UPDATE public.track_records
-   SET bills_authored = 49,
-       co_authored_bills = 5,
-       resolutions_authored = 8,
-       co_authored_resolutions = 11,
-       bills_enacted_count = 0,
+   SET bills_authored = 196,
+       co_authored_bills = 76,
+       resolutions_authored = 75,
+       co_authored_resolutions = 59,
+       bills_enacted_count = 24,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'camille-villar')
    AND is_current = true
    AND position ILIKE '%Senator%';
 
--- mark-villar: 96 / 4 / 4 / 11 / 0
+-- mark-villar: 258 / 81 / 28 / 140 / 28
 UPDATE public.track_records
-   SET bills_authored = 96,
-       co_authored_bills = 4,
-       resolutions_authored = 4,
-       co_authored_resolutions = 11,
-       bills_enacted_count = 0,
+   SET bills_authored = 258,
+       co_authored_bills = 81,
+       resolutions_authored = 28,
+       co_authored_resolutions = 140,
+       bills_enacted_count = 28,
        source_url = 'https://senate.gov.ph/senators/20-congress-senators',
-       source_label = 'Senate of the Philippines — 20th Congress Member Stats'
+       source_label = 'Senate of the Philippines — Lifetime Member Stats (All Congresses)'
  WHERE politician_id = (SELECT id FROM public.politicians WHERE slug = 'mark-villar')
    AND is_current = true
    AND position ILIKE '%Senator%';
